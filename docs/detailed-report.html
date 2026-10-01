@@ -1,0 +1,461 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NOPerf: Nuclear Option server performance report</title>
+<meta name="description" content="Overnight test results for four BepInEx performance plugins on the Nuclear Option 0.34.1 Linux dedicated server.">
+<style>
+:root{--ink:#1b2733;--muted:#566476;--faint:#8794a3;--line:#d9e0e8;--rail:#f1f4f7;--soft:#f6f8fa;--blue:#2b5a8a;--teal:#0b766c;--focus:#1d64c8}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+@media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
+body{margin:0;font:16px/1.7 Arial,"Helvetica Neue",system-ui,sans-serif;color:var(--ink);background:#fff}
+a{color:var(--blue);text-underline-offset:2px}
+:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+.skip{position:absolute;left:-999px;top:8px;background:#fff;padding:6px 10px;z-index:5}
+.skip:focus{left:8px}
+.layout{display:grid;grid-template-columns:228px minmax(0,1fr)}
+.rail{position:sticky;top:0;height:100vh;overflow:auto;background:var(--rail);border-right:1px solid var(--line);padding:28px 16px}
+.rail .id{margin:0 0 22px 10px;font-size:13px;line-height:1.45;color:var(--muted)}
+.rail .id b{display:block;font-size:15px;color:var(--ink)}
+.rail ol{list-style:none;margin:0;padding:0;counter-reset:ch}
+.rail li{counter-increment:ch}
+.rail a{display:block;padding:7px 10px;border-left:2px solid transparent;color:var(--muted);text-decoration:none;font-size:14px;line-height:1.4}
+.rail a::before{content:counter(ch) ". ";color:var(--faint)}
+.rail a:hover{color:var(--ink)}
+.rail a[aria-current]{color:var(--ink);border-left-color:var(--teal);background:#fff;font-weight:700}
+main{padding:44px clamp(18px,5vw,72px) 72px;min-width:0}
+[hidden]{display:none!important}
+main>:not(section),section>*{max-width:68ch}
+section>.wide,section>figure{max-width:60rem}
+section{padding-top:12px;margin-top:44px;border-top:1px solid var(--line)}
+.eyebrow{font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:0}
+h1{font-size:36px;line-height:1.2;margin:8px 0 10px;max-width:26ch}
+h2{font-size:32px;line-height:1.25;margin:18px 0 12px}
+h3{font-size:24px;line-height:1.3;margin:30px 0 8px}
+.meta{font-size:14px;color:var(--muted);margin:0 0 26px}
+.lead{font-size:19px;line-height:1.6}
+.findings{padding:0;list-style:none;margin:22px 0}
+.findings li{padding:12px 0 12px 16px;border-left:3px solid var(--line);margin:0 0 10px}
+.findings li strong{display:block}
+.findings li.key{border-left-color:var(--teal)}
+.note{border-left:3px solid var(--blue);background:var(--soft);padding:12px 16px;margin:20px 0}
+.note p{margin:0 0 6px}.note p:last-child{margin:0}
+.num{font-variant-numeric:tabular-nums;white-space:nowrap}
+code,pre{font-family:Consolas,"SFMono-Regular",Menlo,monospace;font-size:14px}
+code{background:var(--soft);padding:1px 4px;border-radius:3px}
+pre{background:var(--soft);border:1px solid var(--line);padding:12px 14px;overflow:auto;margin:0}
+.tw{overflow-x:auto;margin:16px 0}
+table{border-collapse:collapse;width:100%;font-size:15px;line-height:1.5}
+caption{text-align:left;font-size:14px;color:var(--muted);padding:0 0 6px}
+th,td{text-align:left;vertical-align:top;padding:8px 10px;border-bottom:1px solid var(--line)}
+thead th{font-size:13px;color:var(--muted);border-bottom:2px solid var(--ink);font-weight:700}
+td.r,th.r{text-align:right;font-variant-numeric:tabular-nums}
+.plugins td:first-child{font-weight:700}
+figure{margin:26px 0;padding:0}
+figcaption{font-size:14px;color:var(--muted);margin-top:8px;max-width:68ch}
+figcaption b{color:var(--ink)}
+.controls{display:flex;flex-wrap:wrap;gap:10px 28px;align-items:center;margin:0 0 8px;font-size:15px}
+.controls fieldset{border:0;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:4px 16px;align-items:center}
+.controls legend{float:left;font-size:13px;color:var(--muted);margin-right:10px}
+.controls label{display:inline-flex;align-items:center;gap:6px;cursor:pointer;min-height:32px}
+input{accent-color:var(--teal);width:16px;height:16px;margin:0}
+.sw{display:inline-block;width:22px;height:0;border-top:3px solid}
+.sw.a{border-color:var(--blue)}.sw.b{border-color:var(--teal);border-top-style:dashed}
+.tabs{display:flex;flex-wrap:wrap;gap:0;border-bottom:1px solid var(--line);margin:0 0 10px}
+.tabs button{font:inherit;font-size:15px;background:none;border:0;border-bottom:3px solid transparent;color:var(--muted);padding:8px 12px;cursor:pointer;margin-bottom:-1px}
+.tabs button[aria-selected=true]{color:var(--ink);border-bottom-color:var(--teal);font-weight:700}
+.legend{display:flex;flex-wrap:wrap;gap:4px 20px;font-size:14px;margin:0 0 4px;padding:0;list-style:none}
+.legend li{display:inline-flex;align-items:center;gap:6px}
+.plot{width:100%;min-height:120px}
+.plot svg{display:block;font-family:Arial,system-ui,sans-serif}
+.nojs{font-size:14px;color:var(--muted);border:1px dashed var(--line);padding:12px}
+.status{font-size:14px;color:var(--muted);margin:2px 0 0;min-height:1.5em}
+.grid{stroke:#e3e8ee}.axis{stroke:#9aa6b3}.bound{stroke:#e3e8ee;stroke-dasharray:2 3}
+.tk{fill:#566476;font-size:12px}.ul{fill:#1b2733;font-size:12px;font-weight:700}
+.ln{fill:none;stroke-width:2.5}.ln.a{stroke:#2b5a8a}.ln.b{stroke:#0b766c;stroke-dasharray:7 4}
+.lb{font-size:12px;font-weight:700;paint-order:stroke;stroke:#fff;stroke-width:3px;stroke-linejoin:round}
+.lb.a{fill:#2b5a8a}.lb.b{fill:#0b766c}
+.rg.a{fill:#2b5a8a;fill-opacity:.25;stroke:#2b5a8a;stroke-width:1.5}.rg.b{fill:#0b766c;fill-opacity:.25;stroke:#0b766c;stroke-width:1.5;stroke-dasharray:4 2}
+details{border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin:14px 0;padding:0 2px}
+summary{cursor:pointer;padding:9px 0;font-size:15px;font-weight:700;color:var(--blue)}
+details[open]>summary{margin-bottom:4px}
+details ul{padding-left:20px}
+.copyrow{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;margin:10px 0}
+button.copy{font:inherit;font-size:15px;padding:7px 14px;border:1px solid var(--blue);background:#fff;color:var(--blue);border-radius:4px;cursor:pointer}
+button.copy:hover{background:var(--soft)}
+ol.steps li,ul.tight li{margin-bottom:6px}
+.dl{list-style:none;padding:0;margin:14px 0}
+.dl li{padding:10px 0;border-bottom:1px solid var(--line)}
+.dl a{font-weight:700}
+.dl span{display:block;font-size:14px;color:var(--muted)}
+footer{margin-top:40px;font-size:13px;color:var(--muted)}
+@media (max-width:860px){
+ .layout{display:block}
+ .rail{position:static;height:auto;border-right:0;border-bottom:1px solid var(--line);padding:12px 14px}
+ .rail .id{margin:0 0 6px 4px}.rail .id b{display:inline;font-size:14px}
+ .rail ol{display:flex;flex-wrap:wrap;gap:2px 2px}
+ .rail a{border-left:0;border-bottom:2px solid transparent;padding:4px 7px;font-size:14px}
+ .rail a[aria-current]{background:none;border-bottom-color:var(--teal)}
+ main{padding-top:24px}
+ h1{font-size:28px}h2{font-size:26px}h3{font-size:21px}.lead{font-size:17px}
+ .hour-summary thead{display:none}
+ .hour-summary tr{display:block;border-bottom:2px solid var(--line);padding:10px 0}
+ .hour-summary th{display:block;border:0;padding:4px 0}
+ .hour-summary td{display:grid;grid-template-columns:1fr auto;gap:12px;border:0;padding:3px 0;text-align:right}
+ .hour-summary td::before{content:attr(data-l);text-align:left;color:var(--muted);font-size:14px}
+ .plugins thead{display:none}
+ .plugins tr{display:block;border-bottom:2px solid var(--line);padding:6px 0}
+ .plugins td{display:block;border:0;padding:3px 0}
+ .plugins td::before{content:attr(data-l);display:block;font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+ .plugins td:first-child::before{content:none}
+}
+@media print{
+ .rail,.controls,.tabs,.copyrow,.skip{display:none!important}
+ .layout{display:block}main{padding:0}
+ body{font-size:11pt;line-height:1.5}
+ section{break-inside:auto;margin-top:18pt}
+ figure,table,.note{break-inside:avoid}
+ .dl a::after{content:" (" attr(href) ")";font-weight:400}
+ h2,h3{break-after:avoid}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#content">Skip to report</a>
+<div class="layout">
+<nav class="rail" aria-label="Chapters">
+ <p class="id"><b>NOPerf</b> server performance report</p>
+ <ol>
+  <li><a href="#findings">Findings</a></li>
+  <li><a href="#missions">Mission results</a></li>
+  <li><a href="#aging">Late-mission slowdown</a></li>
+  <li><a href="#validation">Validation and clients</a></li>
+  <li><a href="#install">Install and audits</a></li>
+  <li><a href="#downloads">Downloads</a></li>
+ </ol>
+</nav>
+<main id="content">
+<p class="eyebrow">Overnight test batch · completed 1 October 2026</p>
+<h1>Nuclear Option server mods: what the overnight tests showed</h1>
+<p class="meta">Linux dedicated server · Nuclear Option 0.34.1, Steam build 24724541, game build <code>cb745d6c44f1</code> · BepInEx 5.4.23.3 · No production deployment was performed.</p>
+
+<section id="findings" aria-labelledby="h-findings">
+<h2 id="h-findings">Findings</h2><p><a href="how-it-works.html">Watch the simple explanation</a> · <a href="https://github.com/clankagent/noperf">Source and installation guide</a> · <a href="index.html">Plain-language overview</a></p>
+<p class="lead">Three optional optimizers reduce specific method costs in benchmarks; a fourth plugin provides diagnostics. Extensive parity tests reproduce the original method results. <strong>A whole-server speedup has not been established.</strong> The shorter Escalation trials stayed within baseline variation, and the paired hour involved different combat workloads.</p>
+<ul class="findings">
+ <li class="key"><strong>Method gains are real but small in context.</strong> Spatial cut its target method's time by about 28–33% in benchmarks. In a full Escalation hour that method cost roughly <span class="num">0.031 ms</span> per game frame, which limits the expected loop-time gain in that observed workload.</li>
+ <li class="key"><strong>One paired hour is inconclusive.</strong> With all three optimizers on, mean loop time was <span class="num">21.68 ms</span> versus <span class="num">20.05 ms</span> with all off (8.1% higher), yet the final segment was lower (<span class="num">37.15</span> vs <span class="num">38.80 ms</span>). The runs saw different combat workloads.</li>
+ <li><strong>Both long runs aged heavily.</strong> An instrumented unoptimized hour shows more physics steps per game frame and higher cost per step late in the mission. The underlying cause is unproven.</li>
+ <li><strong>Vanilla clients are not live-tested.</strong> Static inspection found no new network messages, but live joining and rejoining with an unmodded client were not tested in this isolated lab.</li>
+</ul>
+<p>Defaults: <strong>Spatial on</strong>; Wrecks, Navigation and Diagnostics off. A runtime guard requires the exact tested <code>Assembly-CSharp.dll</code> SHA256.</p>
+<div class="wide tw">
+<table class="plugins">
+<caption>Each percentage comes from its own benchmark and input; compare within a row, not across rows.</caption>
+<thead><tr><th scope="col">Plugin</th><th scope="col">Default</th><th scope="col">Change</th><th scope="col">Method evidence</th><th scope="col">Whole-server effect</th></tr></thead>
+<tbody>
+<tr><td>Spatial</td><td data-l="Default">On</td><td data-l="Change">Fuses the unit-candidate grid traversal into the output list; keeps cell bounds, reverse unit order, duplicates and nulls.</td><td data-l="Method evidence">Game-Mono method benchmark: about 28–31% less time; later larger-range repeats 31–33%.</td><td data-l="Whole-server effect">Not established in four 10-minute Escalation runs.</td></tr>
+<tr><td>Wrecks</td><td data-l="Default">Off, experimental</td><td data-l="Change">Reuses a collector's temporary candidate snapshot inside a guarded search scope.</td><td data-l="Method evidence">Full-method 128-candidate ABBA benchmark: 0.9–3.5% faster, fewer GC API0 collections; empty-search overhead 0.006–0.65 µs.</td><td data-l="Whole-server effect">Unproven. Leave off unless your workload benefits.</td></tr>
+<tr><td>Navigation</td><td data-l="Default">Off, experimental</td><td data-l="Change">Caches dense road-node membership; original sort and route decisions retained.</td><td data-l="Method evidence">Synthetic road graphs: 6–13% faster.</td><td data-l="Whole-server effect">Unproven; steady Escalation pathfinding was sparse.</td></tr>
+<tr><td>Diagnostics</td><td data-l="Default">Off</td><td data-l="Change">Reports existing game timing, heap and GC counters; method and phase probes are opt-in.</td><td data-l="Method evidence">Instrumentation with its own overhead.</td><td data-l="Whole-server effect">Not an optimization.</td></tr>
+</tbody></table>
+</div>
+<p>No optimization changes simulation rates, RNG calls, physics parameters, AI update cadence, network formats or mission content. A candidate wreck-grid fusion was removed after it regressed.</p>
+</section>
+
+<section id="missions" aria-labelledby="h-missions">
+<h2 id="h-missions">Mission results</h2>
+<p>Four ten-minute Escalation comparisons, with extra instrumentation off and four startup windows excluded, gave baseline/Spatial loop means of <span class="num">14.04/14.03 ms</span> and <span class="num">14.43/14.00 ms</span>. Differences of about 0.1% and 3.0% fall within baseline variation.</p>
+<p><em>Loop time</em> is the game's own total of update, accumulated fixed update and late update per game frame. It is not FPS or wall-clock frame latency and excludes frame-rate pacing.</p>
+<h3>Two hour-long Escalation runs</h3>
+<div class="wide tw" role="region" aria-label="Hour-long run summary" tabindex="0">
+<table class="hour-summary">
+<thead><tr><th scope="col">Run</th><th scope="col" class="r">Mean loop ms</th><th scope="col" class="r">First 20 windows</th><th scope="col" class="r">Final 15 windows</th><th scope="col" class="r">Unit range</th><th scope="col" class="r">Final heap MB</th></tr></thead>
+<tbody>
+<tr><th scope="row">All optimizers off</th><td class="r" data-l="Mean loop ms">20.05</td><td class="r" data-l="First 20 windows ms">14.28</td><td class="r" data-l="Final 15 windows ms">38.80</td><td class="r" data-l="Unit range">891–1,164</td><td class="r" data-l="Final heap MB">189.1</td></tr>
+<tr><th scope="row">All three on</th><td class="r" data-l="Mean loop ms">21.68</td><td class="r" data-l="First 20 windows ms">14.77</td><td class="r" data-l="Final 15 windows ms">37.15</td><td class="r" data-l="Unit range">1,006–1,187</td><td class="r" data-l="Final heap MB">206.5</td></tr>
+</tbody></table>
+</div>
+<figure id="fig1" aria-labelledby="fig1-cap">
+ <div class="controls" hidden>
+  <fieldset><legend>Measure</legend>
+   <label><input type="radio" name="m1" value="loop" checked> Loop ms per game frame</label>
+   <label><input type="radio" name="m1" value="units"> Unit population range</label>
+  </fieldset>
+  <fieldset><legend>Runs</legend>
+   <label><input type="checkbox" value="off" checked> <span class="sw a" aria-hidden="true"></span> All optimizers off</label>
+   <label><input type="checkbox" value="on" checked> <span class="sw b" aria-hidden="true"></span> All three on</label>
+  </fieldset>
+ </div>
+ <div class="plot" id="plot1"><p class="nojs">This chart is drawn with JavaScript. The same segment values are in the table below.</p></div>
+ <p class="status" id="status1" aria-live="polite"></p>
+ <figcaption id="fig1-cap"><b>Figure 1. Segment means, not raw windows.</b> Each step is one saved segment summary across nominal window indices 5–119 (startup windows 1–4 excluded); windows are not exact minutes. Unit population shows each segment's minimum–maximum. The runs had different combat workloads, so this single pair cannot show a causal improvement or regression.</figcaption>
+ <details class="data" open data-js-close>
+  <summary>Segment data for Figure 1</summary>
+  <div class="tw"><table>
+  <thead><tr><th scope="col">Windows</th><th scope="col" class="r">Off: loop ms</th><th scope="col" class="r">On: loop ms</th><th scope="col" class="r">Off: units</th><th scope="col" class="r">On: units</th></tr></thead>
+  <tbody>
+  <tr><th scope="row">5–24</th><td class="r">14.28</td><td class="r">14.77</td><td class="r">1,006–1,074</td><td class="r">1,017–1,071</td></tr>
+  <tr><th scope="row">25–44</th><td class="r">17.00</td><td class="r">15.69</td><td class="r">1,006–1,098</td><td class="r">1,013–1,082</td></tr>
+  <tr><th scope="row">45–64</th><td class="r">17.86</td><td class="r">21.79</td><td class="r">1,029–1,060</td><td class="r">1,006–1,106</td></tr>
+  <tr><th scope="row">65–84</th><td class="r">18.68</td><td class="r">23.59</td><td class="r">1,017–1,087</td><td class="r">1,043–1,140</td></tr>
+  <tr><th scope="row">85–104</th><td class="r">32.25</td><td class="r">34.93</td><td class="r">932–1,164</td><td class="r">1,113–1,187</td></tr>
+  <tr><th scope="row">105–119</th><td class="r">38.80</td><td class="r">37.15</td><td class="r">891–1,052</td><td class="r">1,090–1,178</td></tr>
+  </tbody></table></div>
+ </details>
+</figure>
+<p>Both runs completed without a crash. Managed heap grew in both; the baseline also reported 15 steady GC API0 collections against 14, with no swap or major page faults. These facts do not identify a memory leak.</p>
+</section>
+
+<section id="aging" aria-labelledby="h-aging">
+<h2 id="h-aging">Late-mission slowdown</h2>
+<p>A final <strong>unoptimized</strong> Escalation hour ran with sampled methods and four phase probes. Its 115 steady reports recorded 141,754 game frames and 206,105 physics steps; loop work averaged <span class="num">20.54 ms</span> per game frame. It is an observation, not an optimizer comparison.</p>
+<p>Units matter here. <em>Accumulated fixed</em> time sums <strong>all fixed steps within a game frame</strong>, so it is per game frame. Phase probes report time <strong>per physics step</strong>. Multiply cost per step by steps per frame to relate them.</p>
+<figure id="fig2" aria-labelledby="fig2-cap">
+ <div class="tabs" role="tablist" aria-label="Aging profile measures" hidden>
+  <button role="tab" id="tab-0" aria-controls="panel2" aria-selected="true">Loop and fixed, ms/game frame</button>
+  <button role="tab" id="tab-1" aria-controls="panel2" aria-selected="false" tabindex="-1">Physics steps/game frame</button>
+  <button role="tab" id="tab-2" aria-controls="panel2" aria-selected="false" tabindex="-1">Cost, ms/physics step</button>
+ </div>
+ <div id="panel2" role="tabpanel" aria-labelledby="tab-0">
+  <ul class="legend" id="legend2"></ul>
+  <div class="plot" id="plot2"><p class="nojs">This chart is drawn with JavaScript. The same segment values are in the table below.</p></div>
+  <p class="status" id="status2"></p>
+ </div>
+ <figcaption id="fig2-cap"><b>Figure 2. Unoptimized hour, six segment means.</b> Nominal window indices, not exact minutes. Phase probes cover selected phases only; values include instrumentation overhead.</figcaption>
+ <details class="data" open data-js-close>
+  <summary>Segment data for Figure 2</summary>
+  <div class="tw"><table>
+  <thead><tr><th scope="col">Windows</th><th scope="col" class="r">Loop ms/frame</th><th scope="col" class="r">Accum. fixed ms/frame</th><th scope="col" class="r">Physics steps/frame</th><th scope="col" class="r">Physics ms/step</th><th scope="col" class="r">Fixed scripts ms/step</th></tr></thead>
+  <tbody>
+  <tr><th scope="row">5–24</th><td class="r">13.85</td><td class="r">9.32</td><td class="r">1.05</td><td class="r">4.37</td><td class="r">1.85</td></tr>
+  <tr><th scope="row">25–44</th><td class="r">14.81</td><td class="r">9.94</td><td class="r">1.09</td><td class="r">4.65</td><td class="r">1.75</td></tr>
+  <tr><th scope="row">45–64</th><td class="r">18.52</td><td class="r">13.07</td><td class="r">1.30</td><td class="r">5.01</td><td class="r">2.28</td></tr>
+  <tr><th scope="row">65–84</th><td class="r">20.98</td><td class="r">15.56</td><td class="r">1.44</td><td class="r">5.48</td><td class="r">2.40</td></tr>
+  <tr><th scope="row">85–104</th><td class="r">37.86</td><td class="r">30.94</td><td class="r">2.51</td><td class="r">6.19</td><td class="r">3.02</td></tr>
+  <tr><th scope="row">105–119</th><td class="r">48.08</td><td class="r">36.85</td><td class="r">3.37</td><td class="r">5.54</td><td class="r">2.87</td></tr>
+  </tbody></table></div>
+ </details>
+</figure>
+<p>From the first to the final segment, loop time rose from 13.85 to 48.08 ms per game frame and accumulated fixed time from 9.32 to 36.85 ms. Physics steps per game frame tripled, 1.05 to 3.37, while physics cost per step rose from 4.37 to 5.54 ms after peaking at 6.19 ms in windows 85–104; fixed scripts went from 1.85 to 2.87 ms per step.</p>
+<p>More steps and dearer steps coincide with the slowdown. That explains part of the fixed-time growth; it does not establish the root cause or a behavior-preserving way to remove that work. No physics or AI cadence was changed.</p>
+<p>The paths targeted by the optimizers were small in this unoptimized profile: unit-grid queries cost roughly 0.031 ms per game frame and fully timed road pathfinding about 0.075 ms per game frame over 1,299 calls. These inclusive estimates overlap and carry observer cost, so they cannot be summed.</p>
+</section>
+
+<section id="validation" aria-labelledby="h-validation">
+<h2 id="h-validation">Validation and client coverage</h2>
+<p>The baseline is Harmony reverse patches of the actual shipped game methods. Runtime6 passed 1,843,424 assertions. Two runtime10 processes repeated those checks with added edge cases, each passing 2,458,591 assertions, a count that includes a separate empty-only lab experiment. Assertions are checks over many inputs, not independent confidence samples.</p>
+<p>Live reload tests took baseline and all-optimizer configurations through three mission transitions across four populated Terminal Control/Escalation phases, with 106,391 and 106,423 live-query/state assertions respectively.</p>
+<details>
+ <summary>What the parity assertions cover</summary>
+ <ul class="tight">
+  <li>Candidate identity and order, target/state results, road route, status, parent and bitwise float parity.</li>
+  <li>Nested and off-thread fallbacks, exception cleanup, capacity trimming and Unity RNG state.</li>
+  <li>Runtime10 added 1,488 fractional/nonfinite spatial cases and null cell/output exception parity.</li>
+  <li>Current DLLs passed independent loading, all-disabled mode and rejection of an unknown game assembly.</li>
+  <li>Historical <code>terminal-*-06</code> runs were actually Free Flight (the launcher split the mission argument); later runs verify the mission from logs.</li>
+ </ul>
+</details>
+<div class="note" role="note">
+ <p><strong>Limits.</strong> Wreck parity uses an inactive attached Unit and does not exercise every live depot/navigation callback. Long missions exercise live simulation but are not deterministic equivalence replays.</p>
+ <p><strong>Clients.</strong> Clients install nothing, and static inspection found no new messages or plugin-list requirement, but <strong>unmodded client join and rejoin were not live-tested</strong>. Tests used isolated offline hosting without human players; Steamworks reported a startup exception, so authentication and client-flown aircraft are outside measured coverage.</p>
+ <p><strong>Safety.</strong> On an unknown game assembly the plugins fail closed and the original methods stay active. Targets already modified by another prefix or transpiler are skipped at startup; third-party patches installed later are not covered. Revalidate after every game update.</p>
+</div>
+</section>
+
+<section id="install" aria-labelledby="h-install">
+<h2 id="h-install">Install and further audits</h2>
+<ol class="steps">
+ <li>Install BepInEx 5 for the Linux server, and in <code>BepInEx/config/BepInEx.cfg</code> set the line below. Without it, the tested build skipped later plugin lifecycle callbacks.</li>
+ <li>Copy only the DLLs you want into <code>BepInEx/plugins/</code> and restart.</li>
+ <li>Enable or disable each plugin in its <code>agent.noperf.*.cfg</code>, then restart again.</li>
+ <li>To uninstall, stop the server and remove the DLLs.</li>
+</ol>
+<pre id="cfg">[Chainloader]
+HideManagerGameObject = true</pre>
+<div class="copyrow" hidden><button type="button" class="copy" id="copy">Copy setting</button><span id="copy-status" class="status" role="status"></span></div>
+<h3>Other audits</h3>
+<ul class="tight">
+ <li>Detector raycasts were already batched and network writers already pooled; objective checks and send cadence were too cheap to justify a large patch.</li>
+ <li>Weapons: a 15-minute profile logged over a million trajectory calls. Blast and penetration averaged 0.227 and 0.199 ms inclusive; no large, safe patch was justified.</li>
+ <li>Effects, debris and wreck lifetimes consume RNG or apply forces and callbacks, so skipping them needs further behavioral proof.</li>
+ <li>The unit registry keeps historical references used later by tracking and message code; pruning them is not demonstrated safe.</li>
+ <li>The job manager orders dependent native jobs, pilot inputs and results; moving or skipping those points has not been demonstrated safe.</li>
+ <li>Worker-pool trials (14.20/14.02/14.03/14.36 ms) gave no tuning recommendation.</li>
+</ul>
+<h3>Next tests</h3>
+<ol class="steps">
+ <li>Live unmodded-client join, rejoin and authentication on a Steam-initialized server with human-flown aircraft.</li>
+ <li>Repeated, order-balanced long Escalation pairs to separate optimizer effect from workload variation.</li>
+ <li>Find what drives late-mission growth in fixed steps and per-step physics cost, without changing cadence.</li>
+ <li>Wrecks parity against live ground-vehicle depot and navigation callbacks.</li>
+ <li>Revalidation after game updates and alongside any third-party Harmony plugins you run.</li>
+</ol>
+</section>
+
+<section id="downloads" aria-labelledby="h-downloads">
+<h2 id="h-downloads">Downloads</h2>
+<p>Downloads are hosted in the GitHub release. The report itself works offline.</p>
+<ul class="dl">
+ <li><a href="https://github.com/clankagent/noperf/releases/download/v0.1.0/NOPerf-0.1.0-build24724541.zip" download>NOPerf-0.1.0-build24724541.zip</a><span>Release for game build 24724541: plugin DLLs, README and hash manifest.</span></li>
+ <li><a href="https://github.com/clankagent/noperf/releases/download/v0.1.0/NOPerf-source.zip" download>NOPerf-source.zip</a><span>Authored code, runtime test harness, documentation, aggregate evidence and summary scripts.</span></li>
+</ul>
+<p>No proprietary files are included: no game, Unity, BepInEx or Harmony binaries, decompiled game files or raw native traces.</p>
+<footer>Published by <a href="https://github.com/clankagent/noperf">clankagent / NOPerf</a> · MIT · Report design assistance: Claude Opus 5.5.</footer>
+</section>
+</main>
+</div>
+<script>
+(()=>{
+'use strict';
+const SEG=[[5,24],[25,44],[45,64],[65,84],[85,104],[105,119]];
+// Segment summaries from runs.json (escalation-baseline-long-13, escalation-all-long-06)
+const MIS={
+ off:{cls:'a',name:'All optimizers off',
+  loop:[14.27728,16.99726,17.85985,18.68044,32.24976,38.79697],
+  units:[[1006,1074],[1006,1098],[1029,1060],[1017,1087],[932,1164],[891,1052]]},
+ on:{cls:'b',name:'All three on',
+  loop:[14.76816,15.69132,21.79275,23.58829,34.92956,37.14848],
+  units:[[1017,1071],[1013,1082],[1006,1106],[1043,1140],[1113,1187],[1090,1178]]}};
+// Segment summaries from phases.json (escalation-agingprofile-14)
+const AGE={
+ loop:[13.84722,14.80523,18.52375,20.98352,37.86318,48.07853],
+ fixed:[9.32414,9.94113,13.07301,15.56278,30.93860,36.85450],
+ steps:[1.05002,1.09317,1.30481,1.44296,2.51235,3.37023],
+ phys:[4.37046,4.64853,5.01139,5.48387,6.18744,5.53677],
+ scr:[1.85100,1.74554,2.28193,2.40438,3.01994,2.87061]};
+const NS='http://www.w3.org/2000/svg';
+const el=(t,a,p,txt)=>{const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);if(txt!=null)e.textContent=txt;if(p)p.appendChild(e);return e};
+const niceStep=raw=>{const p=Math.pow(10,Math.floor(Math.log10(raw)));return[1,2,2.5,5,10].find(f=>f*p>=raw)*p};
+const segName=i=>`windows ${SEG[i][0]}–${SEG[i][1]}`;
+const fmtR=r=>r.map(v=>v.toLocaleString('en-US')).join('–');
+
+// spec: {id,title,unit,kind:'step'|'range',series:[{cls,name,vals,on}]}
+function render(host,s){
+ const W=Math.max(260,Math.floor(host.clientWidth)),narrow=W<520,H=narrow?280:330;
+ const m={l:44,r:10,t:32,b:narrow?46:50},iw=W-m.l-m.r,ih=H-m.t-m.b;
+ const vis=s.series.filter(x=>x.on);
+ let y0,y1,step;
+ if(s.kind==='range'){y0=850;y1=1220;step=narrow?100:50}
+ else{const mx=Math.max(...s.series.flatMap(x=>x.vals));step=niceStep(mx*1.12/5);y0=0;y1=Math.ceil(mx*1.12/step)*step}
+ const x=w=>m.l+(w-5)/115*iw, y=v=>m.t+ih-(v-y0)/(y1-y0)*ih;
+ const svg=el('svg',{viewBox:`0 0 ${W} ${H}`,width:W,height:H,role:'img','aria-labelledby':`${s.id}-t ${s.id}-d`});
+ el('title',{id:`${s.id}-t`},svg,s.title);
+ const d=vis.length?vis.map(x=>`${x.name}: `+x.vals.map((v,i)=>`${segName(i)} ${s.kind==='range'?fmtR(v)+' units':v.toFixed(2)}`).join(', ')).join('. ')+'.':'No series selected.';
+ el('desc',{id:`${s.id}-d`},svg,`${s.unit}. ${d}`);
+ el('text',{x:0,y:14,class:'ul'},svg,s.unit);
+ const dec=(String(step).split('.')[1]||'').length;
+ for(let v=Math.ceil(y0/step)*step;v<=y1+1e-9;v+=step){
+  el('line',{x1:m.l,x2:W-m.r,y1:y(v),y2:y(v),class:'grid'},svg);
+  el('text',{x:m.l-6,y:y(v)+4,'text-anchor':'end',class:'tk'},svg,v.toFixed(dec));
+ }
+ SEG.forEach(([f,l],i)=>{
+  if(i)el('line',{x1:x(f),x2:x(f),y1:m.t,y2:m.t+ih,class:'bound'},svg);
+  el('text',{x:(x(f)+x(l+1))/2,y:m.t+ih+17,'text-anchor':'middle',class:'tk'},svg,narrow?String(f):`${f}–${l}`);
+ });
+ el('line',{x1:m.l,x2:W-m.r,y1:m.t+ih,y2:m.t+ih,class:'axis'},svg);
+ el('text',{x:m.l+iw/2,y:H-6,'text-anchor':'middle',class:'tk'},svg,narrow?'Segment start, nominal window index':'Nominal window index of each segment (not exact minutes)');
+ if(s.kind==='step'){
+  vis.forEach(sr=>{let p='';SEG.forEach(([f,l],i)=>{const yy=y(sr.vals[i]).toFixed(1);p+=i?`V${yy}H${x(l+1)}`:`M${x(f)} ${yy}H${x(l+1)}`});el('path',{d:p,class:'ln '+sr.cls},svg)});
+  SEG.forEach(([f,l],i)=>{
+   if(narrow && i!==0 && i!==5) return;
+   const cx=(x(f)+x(l+1))/2,sw=x(l+1)-x(f),dp=2;
+   [...vis].sort((a,b)=>b.vals[i]-a.vals[i]).forEach((sr,k,arr)=>{
+    const below=arr.length>1&&k===arr.length-1,yy=y(sr.vals[i]);
+    el('text',{x:cx,y:below?yy+15:yy-6,'text-anchor':'middle',class:'lb '+sr.cls},svg,sr.vals[i].toFixed(dp));
+   });
+  });
+ }else{
+  SEG.forEach(([f,l],i)=>{
+   const c=(x(f)+x(l+1))/2,sw=x(l+1)-x(f),n=vis.length,bw=Math.min(14,sw/(n*3)),lab=n&&sw/n>=34;
+   vis.forEach((sr,j)=>{
+    const cx=n>1?c+(j?1:-1)*sw/4:c,[lo,hi]=sr.vals[i];
+    el('rect',{x:cx-bw/2,y:y(hi),width:bw,height:Math.max(1,y(lo)-y(hi)),class:'rg '+sr.cls},svg);
+    if(lab){el('text',{x:cx,y:y(hi)-5,'text-anchor':'middle',class:'lb '+sr.cls},svg,hi);el('text',{x:cx,y:y(lo)+14,'text-anchor':'middle',class:'lb '+sr.cls},svg,lo)}
+   });
+  });
+ }
+ host.replaceChildren(svg);
+}
+const observe=(host,fn)=>{let w=0;const go=()=>{const cw=Math.floor(host.clientWidth);if(cw&&cw!==w){w=cw;fn()}};
+ if('ResizeObserver'in window)new ResizeObserver(go).observe(host);else addEventListener('resize',go);go()};
+
+// Figure 1
+const f1=document.getElementById('fig1'),p1=document.getElementById('plot1'),st1=document.getElementById('status1');
+f1.querySelector('.controls').hidden=false;
+const draw1=()=>{
+ const metric=f1.querySelector('input[name=m1]:checked').value;
+ const on={};f1.querySelectorAll('input[type=checkbox]').forEach(c=>on[c.value]=c.checked);
+ const units=metric==='units';
+ const series=['off','on'].map(k=>({cls:MIS[k].cls,name:MIS[k].name,vals:MIS[k][metric],on:on[k]}));
+ render(p1,{id:'f1svg',kind:units?'range':'step',unit:units?'Unit population (min–max per segment)':'Loop ms per game frame',
+  title:units?'Unit population range per segment, two hour-long Escalation runs':'Loop milliseconds per game frame, segment means, two hour-long Escalation runs',series});
+ const shown=series.filter(s=>s.on).map(s=>s.name.toLowerCase());
+ st1.textContent=shown.length?`Showing ${units?'unit population range':'loop ms per game frame'} for ${shown.join(' and ')}.${units&&shown.length>1?' Value labels appear when there is room; see the table for all values.':''}`:'No run selected. Tick a run above to show it.';
+};
+f1.addEventListener('change',draw1);
+observe(p1,draw1);
+
+// Figure 2
+const TABS=[
+ {unit:'ms per game frame',title:'Loop and accumulated fixed-update milliseconds per game frame, unoptimized hour',
+  note:'Accumulated fixed time sums every fixed step in the frame and is part of loop time.',
+  series:[{cls:'a',name:'Game loop',vals:AGE.loop},{cls:'b',name:'Accumulated fixed update',vals:AGE.fixed}]},
+ {unit:'Physics steps per game frame',title:'Physics fixed steps per game frame, unoptimized hour',
+  note:'A count, not a time: 1.05 steps per frame early, 3.37 in the final segment.',
+  series:[{cls:'a',name:'Physics steps per game frame',vals:AGE.steps}]},
+ {unit:'ms per physics step',title:'Physics and fixed-update script milliseconds per physics step, unoptimized hour',
+  note:'Per-step cost: multiply by steps per frame to compare with per-frame time.',
+  series:[{cls:'a',name:'Physics',vals:AGE.phys},{cls:'b',name:'Fixed-update scripts',vals:AGE.scr}]}];
+const tl=document.querySelector('#fig2 [role=tablist]'),tabs=[...tl.querySelectorAll('[role=tab]')];
+const panel=document.getElementById('panel2'),p2=document.getElementById('plot2'),lg=document.getElementById('legend2'),st2=document.getElementById('status2');
+let cur=0;tl.hidden=false;
+const draw2=()=>{
+ const t=TABS[cur];
+ lg.replaceChildren(...t.series.map(s=>{const li=document.createElement('li');li.innerHTML=`<span class="sw ${s.cls}" aria-hidden="true"></span>`;li.append(s.name);return li}));
+ render(p2,{id:'f2svg',kind:'step',unit:t.unit,title:t.title,series:t.series.map(s=>({...s,on:true}))});
+ st2.textContent=t.note;
+};
+const select=(i,focus)=>{cur=i;tabs.forEach((b,j)=>{b.setAttribute('aria-selected',j===i);b.tabIndex=j===i?0:-1});
+ panel.setAttribute('aria-labelledby',tabs[i].id);if(focus)tabs[i].focus();draw2()};
+tabs.forEach((b,i)=>b.addEventListener('click',()=>select(i)));
+tl.addEventListener('keydown',e=>{const n=tabs.length;let i=null;
+ if(e.key==='ArrowRight')i=(cur+1)%n;else if(e.key==='ArrowLeft')i=(cur+n-1)%n;else if(e.key==='Home')i=0;else if(e.key==='End')i=n-1;
+ if(i!==null){e.preventDefault();select(i,true)}});
+observe(p2,draw2);
+
+// Data tables open without JS; collapse them once charts render
+document.querySelectorAll('[data-js-close]').forEach(d=>d.open=false);
+let closed=[];
+addEventListener('beforeprint',()=>{closed=[...document.querySelectorAll('details:not([open])')];closed.forEach(d=>d.open=true)});
+addEventListener('afterprint',()=>{closed.forEach(d=>d.open=false);closed=[]});
+
+// Copy setting
+const btn=document.getElementById('copy'),out=document.getElementById('copy-status'),pre=document.getElementById('cfg');
+btn.parentElement.hidden=false;
+btn.addEventListener('click',async()=>{
+ const txt=pre.textContent;
+ try{await navigator.clipboard.writeText(txt);out.textContent='Copied the setting to the clipboard.'}
+ catch(_){
+  const r=document.createRange();r.selectNodeContents(pre);const sel=getSelection();sel.removeAllRanges();sel.addRange(r);
+  let ok=false;try{ok=document.execCommand('copy')}catch(__){}
+  out.textContent=ok?'Copied the setting to the clipboard.':'Clipboard unavailable here. The setting is selected; press Ctrl+C (Cmd+C on Mac) to copy it.';
+ }
+});
+
+// Active chapter in the rail
+const links=[...document.querySelectorAll('.rail a')],secs=links.map(a=>document.querySelector(a.getAttribute('href')));
+const mark=id=>links.forEach(a=>a.getAttribute('href')==='#'+id?a.setAttribute('aria-current','location'):a.removeAttribute('aria-current'));
+if('IntersectionObserver'in window){
+ const vis=new Set();
+ const io=new IntersectionObserver(es=>{es.forEach(e=>e.isIntersecting?vis.add(e.target):vis.delete(e.target));
+  const first=secs.find(s=>vis.has(s));if(first)mark(first.id)},{rootMargin:'-15% 0px -70% 0px'});
+ secs.forEach(s=>io.observe(s));
+}
+mark('findings');
+})();
+</script>
+</body>
+</html>

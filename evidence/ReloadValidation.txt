@@ -1,0 +1,33 @@
+PLUGIN_SHA256 NOPerf.Spatial.dll=cc79e30de0622d9b4958ab5c93159cae03992ad152443f5a1fc06aaa4483341e
+PLUGIN_SHA256 NOPerf.Wrecks.dll=f6ac61e31094b6cba8d10d488fe5df758e0de24905fe232fb397a0fa8aff47ea
+PLUGIN_SHA256 NOPerf.Navigation.dll=5a0b2a75cfc0a8d33034ae841f90217cdc4eb807767d722cbb5f36b05b5f1b28
+PLUGIN_SHA256 NOPerf.Diagnostics.dll=fcc48efc5ac7cbe1f22b2fe7af7682795b7515ee503d881bc0cdaf5ca0ab6e32
+RELOAD_READY phase=0 mission=Terminal Control units=698 fixed_delta=0.0166666675
+RELOAD_SETTLED phase=0 rounds=24 units=712 heap_bytes=101056512
+RELOAD_BEGIN phase=1 mission=Escalation
+RELOAD_READY phase=1 mission=Escalation units=1064 fixed_delta=0.0166666675
+RELOAD_SETTLED phase=1 rounds=25 units=1062 heap_bytes=121475072
+RELOAD_BEGIN phase=2 mission=Terminal Control
+RELOAD_READY phase=2 mission=Terminal Control units=698 fixed_delta=0.0166666675
+RELOAD_SETTLED phase=2 rounds=25 units=712 heap_bytes=116113408
+RELOAD_BEGIN phase=3 mission=Escalation
+RELOAD_READY phase=3 mission=Escalation units=1064 fixed_delta=0.0166666675
+RELOAD_SETTLED phase=3 rounds=25 units=1080 heap_bytes=121880576
+RELOAD_PASS transitions=3 phases=4 optimizers=False assertions=106391
+
+PLUGIN_SHA256 NOPerf.Spatial.dll=cc79e30de0622d9b4958ab5c93159cae03992ad152443f5a1fc06aaa4483341e
+PLUGIN_SHA256 NOPerf.Wrecks.dll=f6ac61e31094b6cba8d10d488fe5df758e0de24905fe232fb397a0fa8aff47ea
+PLUGIN_SHA256 NOPerf.Navigation.dll=5a0b2a75cfc0a8d33034ae841f90217cdc4eb807767d722cbb5f36b05b5f1b28
+PLUGIN_SHA256 NOPerf.Diagnostics.dll=fcc48efc5ac7cbe1f22b2fe7af7682795b7515ee503d881bc0cdaf5ca0ab6e32
+RELOAD_READY phase=0 mission=Terminal Control units=698 fixed_delta=0.0166666675
+RELOAD_SETTLED phase=0 rounds=24 units=713 heap_bytes=101588992
+RELOAD_BEGIN phase=1 mission=Escalation
+RELOAD_READY phase=1 mission=Escalation units=1064 fixed_delta=0.0166666675
+RELOAD_SETTLED phase=1 rounds=25 units=1086 heap_bytes=120250368
+RELOAD_BEGIN phase=2 mission=Terminal Control
+RELOAD_READY phase=2 mission=Terminal Control units=698 fixed_delta=0.0166666675
+RELOAD_SETTLED phase=2 rounds=25 units=712 heap_bytes=116731904
+RELOAD_BEGIN phase=3 mission=Escalation
+RELOAD_READY phase=3 mission=Escalation units=1064 fixed_delta=0.0166666675
+RELOAD_SETTLED phase=3 rounds=25 units=1077 heap_bytes=121434112
+RELOAD_PASS transitions=3 phases=4 optimizers=True assertions=106423

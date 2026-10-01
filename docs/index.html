@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>What we learned about Nuclear Option’s server · NOPerf</title>
+<meta name="description" content="A plain-language, visual summary of the NOPerf tests on the Nuclear Option dedicated server: what changed, whether it helped, why the server still slows down and what was tested.">
+<style>
+:root{--ink:#1b2733;--muted:#4f5d6e;--line:#d9e0e8;--soft:#f3f6f9;--track:#e8edf2;--blue:#2b5a8a;--teal:#0b766c;--slate:#8a97a6;--focus:#1d64c8}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;font:16px/1.65 system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;color:var(--ink);background:#fff}
+a{color:var(--blue);text-underline-offset:2px}
+:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+.skip{position:absolute;left:-999px;top:8px;background:#fff;padding:6px 10px}
+.skip:focus{left:8px}
+main{max-width:44rem;margin:0 auto;padding:40px 20px 64px}
+.kicker{margin:0;color:var(--muted)}
+h1{font-size:2.1rem;line-height:1.2;margin:6px 0 14px}
+h2{font-size:1.5rem;line-height:1.3;margin:0 0 10px}
+section{border-top:1px solid var(--line);margin-top:40px;padding-top:24px}
+.verdict{font-size:1.15rem;margin:0 0 12px}
+.def{background:var(--soft);border-left:3px solid var(--slate);padding:10px 14px;margin:18px 0}
+.def p{margin:0}
+figure{margin:22px 0}
+figcaption{font-weight:700;margin:0 0 10px}
+.src{color:var(--muted);margin:10px 0 0}
+/* bars */
+.bar{margin:0 0 14px}
+.bar .lab{display:flex;flex-wrap:wrap;justify-content:space-between;gap:0 12px}
+.bar .val{font-variant-numeric:tabular-nums;font-weight:700;white-space:nowrap}
+.track{position:relative;height:24px;background:var(--track);border-radius:3px;margin-top:4px;overflow:hidden}
+.fill{height:100%;background:var(--blue)}
+.fill.t{background:var(--teal)}
+.fill.s{background:var(--slate)}
+.fill.thin{min-width:1px}
+.zoom{border:1px dashed var(--slate);border-radius:4px;padding:12px 14px 2px;margin:16px 0 0}
+.zoom p{margin:0 0 10px}
+.more{position:absolute;right:6px;top:0;line-height:24px;color:#fff;font-weight:700}
+.say{margin:14px 0 0}
+/* plugin rows */
+.rows{list-style:none;padding:0;margin:16px 0}
+.rows li{display:flex;flex-wrap:wrap;justify-content:space-between;gap:2px 12px;padding:10px 0;border-bottom:1px solid var(--line)}
+.rows li:first-child{border-top:1px solid var(--line)}
+.state{font-weight:700;color:var(--muted);white-space:nowrap}
+.state.on{color:var(--teal)}
+/* physics updates per frame */
+.frames{display:flex;flex-wrap:wrap;gap:16px 32px;margin:18px 0 4px}
+.frame p{margin:0 0 6px}
+.box{display:flex;gap:8px;align-items:center;width:10.5rem;height:48px;padding:0 10px;border:2px solid var(--ink);border-radius:4px}
+.tick{width:24px;height:24px;border-radius:50%;background:var(--blue)}
+/* checklist */
+.check{list-style:none;padding:0;margin:16px 0}
+.check li{display:grid;grid-template-columns:2.1rem 1fr;gap:0 10px;padding:10px 0;border-bottom:1px solid var(--line)}
+.check li:first-child{border-top:1px solid var(--line)}
+.mark{width:1.9rem;height:1.9rem;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;margin-top:2px}
+.pass .mark{background:var(--teal);color:#fff}
+.todo .mark{border:2px solid var(--slate);color:var(--muted)}
+.check b{display:block}
+.pass b span{color:var(--teal)}.todo b span{color:var(--muted)}
+/* numbers */
+details{border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin:16px 0 0}
+summary{cursor:pointer;padding:10px 0;font-weight:700;color:var(--blue)}
+.tw{overflow-x:auto;margin:0 0 12px}
+table{border-collapse:collapse;width:100%}
+th,td{text-align:left;padding:6px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+thead th{border-bottom:2px solid var(--ink)}
+td.r,th.r{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.links{padding-left:20px}
+.links li{margin:0 0 8px}
+footer{margin-top:40px;color:var(--muted);border-top:1px solid var(--line);padding-top:16px}
+@media (max-width:480px){h1{font-size:1.7rem}h2{font-size:1.3rem}main{padding:28px 16px 48px}}
+@media print{.skip{display:none}details{display:block}}
+</style>
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<main id="content">
+<p class="kicker">NOPerf · plugins for the Nuclear Option Linux dedicated server</p>
+<h1>What we learned about Nuclear Option’s server</h1>
+<p class="verdict">We made a few small server jobs cheaper. We have <strong>not</strong> shown that the server as a whole runs faster, and we have <strong>not yet</strong> tested real players joining.</p>
+<div class="def"><p><strong>Reading the charts:</strong> smaller bars mean less work for the server. “ms” means milliseconds. We timed the work in each simulation cycle, excluding waiting for the frame-rate limit. These numbers are not FPS.</p></div>
+
+<section aria-labelledby="h1-changed">
+<h2 id="h1-changed">What changed</h2>
+<p>Three optional plugins do small, often-repeated jobs with less effort. A fourth only measures. The aim is to keep the game’s choices unchanged.</p>
+<ul class="rows">
+ <li><span>Find nearby units with less bookkeeping</span><span class="state on">On by default</span></li>
+ <li><span>Reuse temporary wreck lists</span><span class="state">Off · experimental</span></li>
+ <li><span>Check road points faster</span><span class="state">Off · experimental</span></li>
+ <li><span>Optional measurement</span><span class="state">Off</span></li>
+</ul>
+<p><a href="how-it-works.html">Watch how finding nearby units works</a></p>
+</section>
+
+<section aria-labelledby="h1-faster">
+<h2 id="h1-faster">Did it make the server faster?</h2>
+<p>Not that we could show.</p>
+<figure aria-labelledby="f1-cap">
+ <figcaption id="f1-cap">The task we improved is tiny next to the whole server’s work</figcaption>
+ <div class="bar"><div class="lab"><span>Whole server, per game frame</span><span class="val">20.54 ms</span></div><div class="track" aria-hidden="true"><div class="fill" style="width:100%"></div></div></div>
+ <div class="bar"><div class="lab"><span>Finding nearby units, per game frame</span><span class="val">about 0.031 ms</span></div><div class="track" aria-hidden="true"><div class="fill t thin" style="width:0.151%"></div></div></div>
+ <div class="zoom">
+  <p><strong>Zoomed in:</strong> the same two bars, showing only 0 to 0.1 ms.</p>
+  <div class="bar"><div class="lab"><span>Whole server</span><span class="val">20.54 ms, far off this scale</span></div><div class="track" aria-hidden="true"><div class="fill" style="width:100%"></div><span class="more">→</span></div></div>
+  <div class="bar"><div class="lab"><span>Finding nearby units</span><span class="val">about 0.031 ms</span></div><div class="track" aria-hidden="true"><div class="fill t" style="width:31%"></div></div></div>
+ </div>
+ <p class="src">Source: one hour-long Escalation mission, plugins off, no players, extra timing on.</p>
+</figure>
+<p class="say">We made this small task cheaper. The rest of the server still has work to do.</p>
+
+<figure aria-labelledby="f2-cap">
+ <figcaption id="f2-cap">Time spent working per game frame, one hour each</figcaption>
+ <div class="bar"><div class="lab"><span>All plugins off</span><span class="val">20.05 ms</span></div><div class="track" aria-hidden="true"><div class="fill s" style="width:80.2%"></div></div></div>
+ <div class="bar"><div class="lab"><span>All three plugins on</span><span class="val">21.68 ms</span></div><div class="track" aria-hidden="true"><div class="fill t" style="width:86.72%"></div></div></div>
+ <p class="src">Bars run from 0 to 25 ms. Source: two hour-long Escalation missions, no players.</p>
+</figure>
+<p class="say">Lower means less work, but the two battles played out differently, so this cannot show whether the plugins helped or hurt.</p>
+<details>
+ <summary>Show the numbers</summary>
+ <div class="tw"><table>
+  <thead><tr><th scope="col">Measurement</th><th scope="col" class="r">Value</th></tr></thead>
+  <tbody>
+   <tr><td>Whole server, average per game frame (plugins off, timing hour)</td><td class="r">20.54 ms</td></tr>
+   <tr><td>Finding nearby units, same hour (includes everything it calls)</td><td class="r">≈ 0.031 ms</td></tr>
+   <tr><td>Comparison hour, all plugins off</td><td class="r">20.05 ms</td></tr>
+   <tr><td>Comparison hour, all three on</td><td class="r">21.68 ms</td></tr>
+   <tr><td>Last part of the hour, off / on</td><td class="r">38.80 / 37.15 ms</td></tr>
+  </tbody>
+ </table></div>
+</details>
+</section>
+
+<section aria-labelledby="h1-slow">
+<h2 id="h1-slow">What we saw when it slowed down</h2>
+<figure aria-labelledby="f3-cap">
+ <figcaption id="f3-cap">Same mission, same hour, plugins off: early versus late</figcaption>
+ <div class="bar"><div class="lab"><span>Early in the mission</span><span class="val">13.85 ms</span></div><div class="track" aria-hidden="true"><div class="fill s" style="width:27.7%"></div></div></div>
+ <div class="bar"><div class="lab"><span>Late in the mission</span><span class="val">48.08 ms</span></div><div class="track" aria-hidden="true"><div class="fill" style="width:96.16%"></div></div></div>
+ <p class="src">Time spent working per game frame. Bars run from 0 to 50 ms.</p>
+ <div class="frames">
+  <div class="frame"><p>Early: about 1 physics update per frame</p><div class="box" aria-hidden="true"><span class="tick"></span></div></div>
+  <div class="frame"><p>Late: about 3 physics updates per frame</p><div class="box" aria-hidden="true"><span class="tick"></span><span class="tick"></span><span class="tick"></span></div></div>
+ </div>
+ <p class="src">Each box is one game frame; each dot is one physics update. Source: one hour-long Escalation mission, no players.</p>
+</figure>
+<p class="say">Late in the mission, the game did more physics updates in each frame. Each update also took more time. We have not yet found the cause.</p>
+<details>
+ <summary>Show the numbers</summary>
+ <div class="tw"><table>
+  <thead><tr><th scope="col">Measurement</th><th scope="col" class="r">Early</th><th scope="col" class="r">Late</th></tr></thead>
+  <tbody>
+   <tr><td>Work per game frame</td><td class="r">13.85 ms</td><td class="r">48.08 ms</td></tr>
+   <tr><td>Physics updates per frame</td><td class="r">1.05</td><td class="r">3.37</td></tr>
+   <tr><td>Physics time per update</td><td class="r">4.37 ms</td><td class="r">5.54 ms</td></tr>
+  </tbody>
+ </table></div>
+ <p>Early is reports 5–24; late is reports 105–119. Reports are about 30 seconds apart.</p>
+</details>
+</section>
+
+<section aria-labelledby="h1-tested">
+<h2 id="h1-tested">What we tested</h2>
+<ul class="check">
+ <li class="pass"><span class="mark" aria-hidden="true">✓</span><div><b><span>Passed:</span> old and modded game code compared automatically</b>Every tested case gave the same result.</div></li>
+ <li class="pass"><span class="mark" aria-hidden="true">✓</span><div><b><span>Passed:</span> real missions run and reloaded repeatedly</b>The completed test runs passed their checks.</div></li>
+ <li class="todo"><span class="mark" aria-hidden="true">–</span><div><b><span>Not yet:</span> real players connecting</b>Players install nothing, but joining has not been tried.</div></li>
+ <li class="todo"><span class="mark" aria-hidden="true">–</span><div><b><span>Not yet:</span> every change automatically runs the game</b>GitHub’s checks on each commit verify the docs and evidence files only, not the game.</div></li>
+</ul>
+<p>Tests run inside the actual server. The overnight runs are finished; no game test is running now.</p>
+<p><a href="https://github.com/clankagent/noperf/blob/main/docs/testing.md">Testing guide: what is tested, and what is not yet</a></p>
+</section>
+
+<section aria-labelledby="h1-more">
+<h2 id="h1-more">Try it / read more</h2>
+<ul class="links">
+ <li><a href="https://github.com/clankagent/noperf/releases/tag/v0.1.0">Download NOPerf v0.1.0</a></li>
+ <li><a href="how-it-works.html">Animation: how finding nearby units works</a></li>
+ <li><a href="https://github.com/clankagent/noperf/blob/main/docs/developer-guide.md">Developer guide: install, settings, build</a></li>
+ <li><a href="detailed-report.html">Detailed technical report</a></li>
+</ul>
+<footer>NOPerf is unofficial and MIT-licensed. Nuclear Option belongs to its developers. <a href="https://github.com/clankagent/noperf">Source on GitHub</a>.</footer>
+</section>
+</main>
+</body>
+</html>

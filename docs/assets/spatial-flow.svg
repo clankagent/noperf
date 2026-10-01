@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 476" width="600" height="476" role="img" aria-labelledby="t d" font-family="Arial, Helvetica, sans-serif">
+<title id="t">Spatial query traversal: original staging versus fused append</title>
+<desc id="d">Synthetic 2 by 2 example, not game data or a measurement. Cells are visited with x as the outer loop and z as the inner loop, in the order A, C, B, D. The original method first stages the selected cells, then walks each cell's units from last to first. NOPerf.Spatial visits the same cells and appends units directly, also last to first. Both produce A2, A1, A1, null, B1, D2, D1: the same entries in the same order, with the duplicate A1 and the null entry kept.</desc>
+<style>
+.ink{fill:#1b2733}.mut{fill:#566476}.blue{fill:#2b5a8a}.teal{fill:#0b766c}
+.lane{fill:#f6f8fa;stroke:#d9e0e8}
+.chip{fill:#fff;stroke-width:1.5}.cb{stroke:#2b5a8a}.ct{stroke:#0b766c}
+.nul{stroke-dasharray:4 3}
+.v{font-size:16px;text-anchor:middle;fill:#1b2733}
+.tag{font-size:13px;text-anchor:middle;fill:#566476}
+</style>
+<rect width="600" height="476" fill="#fff"/>
+<text x="16" y="32" class="ink" font-size="20" font-weight="700">Spatial query traversal: staged vs fused</text>
+<text x="16" y="56" class="mut" font-size="15">Synthetic 2×2 example. Visit order x outer, z inner: A, C, B, D.</text>
+
+<rect class="lane" x="12" y="76" width="576" height="174" rx="8"/>
+<text x="28" y="102" class="blue" font-size="17" font-weight="700">Original (shipped method)</text>
+<text x="28" y="136" class="ink" font-size="15">1. Stage the selected cells</text>
+<g font-size="15" text-anchor="middle" class="ink">
+<rect class="chip cb" x="250" y="116" width="40" height="28" rx="4"/><text x="270" y="135">A</text>
+<rect class="chip cb" x="298" y="116" width="40" height="28" rx="4"/><text x="318" y="135">C</text>
+<rect class="chip cb" x="346" y="116" width="40" height="28" rx="4"/><text x="366" y="135">B</text>
+<rect class="chip cb" x="394" y="116" width="40" height="28" rx="4"/><text x="414" y="135">D</text>
+</g>
+<text x="446" y="135" class="mut" font-size="14">intermediate pass</text>
+<text x="28" y="172" class="ink" font-size="15">2. Walk each staged cell, last unit first</text>
+<g>
+<rect class="chip cb" x="28" y="182" width="70" height="34" rx="4"/><text x="63" y="205" class="v">A2</text>
+<rect class="chip cb" x="106" y="182" width="70" height="34" rx="4"/><text x="141" y="205" class="v">A1</text>
+<rect class="chip cb" x="184" y="182" width="70" height="34" rx="4"/><text x="219" y="205" class="v">A1</text>
+<rect class="chip cb nul" x="262" y="182" width="70" height="34" rx="4"/><text x="297" y="205" class="v" font-style="italic">null</text>
+<rect class="chip cb" x="340" y="182" width="70" height="34" rx="4"/><text x="375" y="205" class="v">B1</text>
+<rect class="chip cb" x="418" y="182" width="70" height="34" rx="4"/><text x="453" y="205" class="v">D2</text>
+<rect class="chip cb" x="496" y="182" width="70" height="34" rx="4"/><text x="531" y="205" class="v">D1</text>
+<text x="63" y="236" class="tag">from A</text><text x="141" y="236" class="tag">from A</text>
+<text x="219" y="236" class="tag">from C</text><text x="297" y="236" class="tag">from C</text>
+<text x="375" y="236" class="tag">from B</text><text x="453" y="236" class="tag">from D</text>
+<text x="531" y="236" class="tag">from D</text>
+</g>
+
+<rect class="lane" x="12" y="266" width="576" height="140" rx="8"/>
+<text x="28" y="292" class="teal" font-size="17" font-weight="700">NOPerf.Spatial (fused)</text>
+<text x="28" y="320" class="ink" font-size="15">Visit the same cells and append directly, last unit first</text>
+<g>
+<rect class="chip ct" x="28" y="332" width="70" height="34" rx="4"/><text x="63" y="355" class="v">A2</text>
+<rect class="chip ct" x="106" y="332" width="70" height="34" rx="4"/><text x="141" y="355" class="v">A1</text>
+<rect class="chip ct" x="184" y="332" width="70" height="34" rx="4"/><text x="219" y="355" class="v">A1</text>
+<rect class="chip ct nul" x="262" y="332" width="70" height="34" rx="4"/><text x="297" y="355" class="v" font-style="italic">null</text>
+<rect class="chip ct" x="340" y="332" width="70" height="34" rx="4"/><text x="375" y="355" class="v">B1</text>
+<rect class="chip ct" x="418" y="332" width="70" height="34" rx="4"/><text x="453" y="355" class="v">D2</text>
+<rect class="chip ct" x="496" y="332" width="70" height="34" rx="4"/><text x="531" y="355" class="v">D1</text>
+<text x="63" y="386" class="tag">from A</text><text x="141" y="386" class="tag">from A</text>
+<text x="219" y="386" class="tag">from C</text><text x="297" y="386" class="tag">from C</text>
+<text x="375" y="386" class="tag">from B</text><text x="453" y="386" class="tag">from D</text>
+<text x="531" y="386" class="tag">from D</text>
+</g>
+
+<text x="16" y="436" class="ink" font-size="15">Same entries, same order. Duplicate A1 and the null entry are kept.</text>
+<text x="16" y="460" class="mut" font-size="14">Illustration only: not game data and not a timing measurement.</text>
+</svg>

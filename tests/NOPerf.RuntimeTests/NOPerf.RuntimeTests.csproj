@@ -1,0 +1,6 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup><AssemblyName>NOPerf.RuntimeTests</AssemblyName></PropertyGroup>
+  <ItemGroup><ProjectReference Include="../../src/NOPerf.Wrecks/NOPerf.Wrecks.csproj" /></ItemGroup>
+  <ItemGroup><ProjectReference Include="../../src/NOPerf.Navigation/NOPerf.Navigation.csproj" /></ItemGroup>
+  <ItemGroup><Reference Include="UniTask"><HintPath>$(ManagedPath)/UniTask.dll</HintPath><Private>false</Private></Reference></ItemGroup>
+</Project>

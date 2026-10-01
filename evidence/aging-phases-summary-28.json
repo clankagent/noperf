@@ -1,0 +1,1139 @@
+{
+  "input": "escalation-agingprofile-14-bepinex.txt",
+  "discarded_initial_windows": 4,
+  "limits": "Instrumented observations, not an optimizer comparison. Inclusive method estimates overlap. Fixed-stride sampling can alias workload order. Missing window estimates are unknown, not measured zero. Phase timings cover selected phases, not the full loop. Window numbers are nominal intervals, not exact elapsed time.",
+  "steady": {
+    "first_window": 5,
+    "last_window": 119,
+    "windows": 115,
+    "game_frames": 141754,
+    "loop_mean_ms_per_game_frame": 20.53976148115749,
+    "accumulated_fixed_mean_ms_per_game_frame": 14.986706569126797,
+    "phases": {
+      "PhysicsFixedUpdate": {
+        "reported_windows": 115,
+        "calls": 206105,
+        "calls_per_game_frame": 1.4539624984127433,
+        "weighted_mean_ms_per_invocation": 5.18964980519638,
+        "observed_ms_per_game_frame": 7.5455561966505345,
+        "max_ms": 13.914
+      },
+      "ScriptRunBehaviourFixedUpdate": {
+        "reported_windows": 115,
+        "calls": 206105,
+        "calls_per_game_frame": 1.4539624984127433,
+        "weighted_mean_ms_per_invocation": 2.337899195070473,
+        "observed_ms_per_game_frame": 3.3992177547018056,
+        "max_ms": 47.957
+      },
+      "ScriptRunBehaviourLateUpdate": {
+        "reported_windows": 115,
+        "calls": 141754,
+        "calls_per_game_frame": 1.0,
+        "weighted_mean_ms_per_invocation": 0.19524841838678278,
+        "observed_ms_per_game_frame": 0.19524841838678278,
+        "max_ms": 2.28
+      },
+      "ScriptRunBehaviourUpdate": {
+        "reported_windows": 115,
+        "calls": 141754,
+        "calls_per_game_frame": 1.0,
+        "weighted_mean_ms_per_invocation": 1.6806264098367596,
+        "observed_ms_per_game_frame": 1.6806264098367596,
+        "max_ms": 721.441
+      }
+    },
+    "methods": {
+      "BattlefieldGrid.GetUnitsInRangeNonAlloc": {
+        "reported_windows": 115,
+        "timed_windows": 115,
+        "calls": 420763,
+        "samples": 6522,
+        "calls_without_window_estimate": 0,
+        "rough_observed_inclusive_ms_per_game_frame": 0.031386063179874996
+      },
+      "CombatAI.GetSafeStandoffDist": {
+        "reported_windows": 11,
+        "timed_windows": 0,
+        "calls": 74,
+        "samples": 0,
+        "calls_without_window_estimate": 74,
+        "rough_observed_inclusive_ms_per_game_frame": null
+      },
+      "CombatAI.LookForMissileTargets": {
+        "reported_windows": 104,
+        "timed_windows": 0,
+        "calls": 380,
+        "samples": 0,
+        "calls_without_window_estimate": 380,
+        "rough_observed_inclusive_ms_per_game_frame": null
+      },
+      "FactionHQ.Update": {
+        "reported_windows": 115,
+        "timed_windows": 115,
+        "calls": 283508,
+        "samples": 4372,
+        "calls_without_window_estimate": 0,
+        "rough_observed_inclusive_ms_per_game_frame": 0.03765114211944637
+      },
+      "JobManager.FinishJobs": {
+        "reported_windows": 115,
+        "timed_windows": 115,
+        "calls": 206105,
+        "samples": 3190,
+        "calls_without_window_estimate": 0,
+        "rough_observed_inclusive_ms_per_game_frame": 0.9218512352385119
+      },
+      "JobManager.FixedUpdateEarly": {
+        "reported_windows": 115,
+        "timed_windows": 115,
+        "calls": 206105,
+        "samples": 3190,
+        "calls_without_window_estimate": 0,
+        "rough_observed_inclusive_ms_per_game_frame": 2.4038566812929445
+      },
+      "MissionManager.Update": {
+        "reported_windows": 115,
+        "timed_windows": 115,
+        "calls": 141754,
+        "samples": 2158,
+        "calls_without_window_estimate": 0,
+        "rough_observed_inclusive_ms_per_game_frame": 0.17174753446110871
+      },
+      "PathfindingAgent.GetSteerpoint": {
+        "reported_windows": 115,
+        "timed_windows": 115,
+        "calls": 7287908,
+        "samples": 113819,
+        "calls_without_window_estimate": 0,
+        "rough_observed_inclusive_ms_per_game_frame": 0.05539737855721885
+      },
+      "Pilot.Update": {
+        "reported_windows": 115,
+        "timed_windows": 115,
+        "calls": 2330206,
+        "samples": 36358,
+        "calls_without_window_estimate": 0,
+        "rough_observed_inclusive_ms_per_game_frame": 0.004062671952819675
+      },
+      "Radar.RadarCheck": {
+        "reported_windows": 115,
+        "timed_windows": 115,
+        "calls": 36030,
+        "samples": 520,
+        "calls_without_window_estimate": 0,
+        "rough_observed_inclusive_ms_per_game_frame": 0.015586156298940413
+      },
+      "RoadNetwork.TryGetNearestRoad": {
+        "reported_windows": 114,
+        "timed_windows": 7,
+        "calls": 2554,
+        "samples": 7,
+        "calls_without_window_estimate": 1944,
+        "rough_observed_inclusive_ms_per_game_frame": 0.00019470350043032295
+      },
+      "RoadPathfinder.TryPathfind": {
+        "reported_windows": 114,
+        "timed_windows": 114,
+        "calls": 1299,
+        "samples": 1299,
+        "calls_without_window_estimate": 0,
+        "rough_observed_inclusive_ms_per_game_frame": 0.07483245622698477
+      },
+      "SendTransformBatcher.LateUpdate": {
+        "reported_windows": 115,
+        "timed_windows": 115,
+        "calls": 141754,
+        "samples": 2158,
+        "calls_without_window_estimate": 0,
+        "rough_observed_inclusive_ms_per_game_frame": 0.07793360328456338
+      },
+      "TargetDetector.VisualCheck": {
+        "reported_windows": 115,
+        "timed_windows": 115,
+        "calls": 379323,
+        "samples": 5873,
+        "calls_without_window_estimate": 0,
+        "rough_observed_inclusive_ms_per_game_frame": 0.1185349267040083
+      },
+      "ThreatTracker.CheckThreats": {
+        "reported_windows": 115,
+        "timed_windows": 115,
+        "calls": 283508,
+        "samples": 4372,
+        "calls_without_window_estimate": 0,
+        "rough_observed_inclusive_ms_per_game_frame": 0.034885788055363506
+      }
+    }
+  },
+  "segments": [
+    {
+      "first_window": 5,
+      "last_window": 24,
+      "windows": 20,
+      "game_frames": 34288,
+      "loop_mean_ms_per_game_frame": 13.84721526481568,
+      "accumulated_fixed_mean_ms_per_game_frame": 9.324138969902004,
+      "phases": {
+        "PhysicsFixedUpdate": {
+          "reported_windows": 20,
+          "calls": 36003,
+          "calls_per_game_frame": 1.050017498833411,
+          "weighted_mean_ms_per_invocation": 4.370457061911507,
+          "observed_ms_per_game_frame": 4.58905639290714,
+          "max_ms": 10.133
+        },
+        "ScriptRunBehaviourFixedUpdate": {
+          "reported_windows": 20,
+          "calls": 36003,
+          "calls_per_game_frame": 1.050017498833411,
+          "weighted_mean_ms_per_invocation": 1.851002313696081,
+          "observed_ms_per_game_frame": 1.9435848197620158,
+          "max_ms": 18.084
+        },
+        "ScriptRunBehaviourLateUpdate": {
+          "reported_windows": 20,
+          "calls": 34288,
+          "calls_per_game_frame": 1.0,
+          "weighted_mean_ms_per_invocation": 0.18530822445170322,
+          "observed_ms_per_game_frame": 0.18530822445170322,
+          "max_ms": 1.002
+        },
+        "ScriptRunBehaviourUpdate": {
+          "reported_windows": 20,
+          "calls": 34288,
+          "calls_per_game_frame": 1.0,
+          "weighted_mean_ms_per_invocation": 1.4963016361409238,
+          "observed_ms_per_game_frame": 1.4963016361409238,
+          "max_ms": 238.652
+        }
+      },
+      "methods": {
+        "BattlefieldGrid.GetUnitsInRangeNonAlloc": {
+          "reported_windows": 20,
+          "timed_windows": 20,
+          "calls": 77848,
+          "samples": 1206,
+          "calls_without_window_estimate": 0,
+          "rough_observed_inclusive_ms_per_game_frame": 0.02537039197386842
+        },
+        "CombatAI.LookForMissileTargets": {
+          "reported_windows": 20,
+          "timed_windows": 0,
+          "calls": 92,
+          "samples": 0,
+          "calls_without_window_estimate": 92,
+          "rough_observed_inclusive_ms_per_game_frame": null
+        },
+        "FactionHQ.Update": {
+          "reported_windows": 20,
+          "timed_windows": 20,
+          "calls": 68576,
+          "samples": 1059,
+          "calls_without_window_estimate": 0,
+          "rough_observed_inclusive_ms_per_game_frame": 0.02492417172188521
+        },
+        "JobManager.FinishJobs": {
+          "reported_windows": 20,
+          "timed_windows": 20,
+          "calls": 36003,
+          "samples": 559,
+          "calls_without_window_estimate": 0,
+          "rough_observed_inclusive_ms_per_game_frame": 0.6265923938404107
+        },
+        "JobManager.FixedUpdateEarly": {
+          "reported_windows": 20,
+          "timed_windows": 20,
+          "calls": 36003,
+          "samples": 559,
+          "calls_without_window_estimate": 0,
+          "rough_observed_inclusive_ms_per_game_frame": 1.6936391740550634
+        },
+        "MissionManager.Update": {
+          "reported_windows": 20,
+          "timed_windows": 20,
+          "calls": 34288,
+          "samples": 526,
+          "calls_without_window_estimate": 0,
+          "rough_observed_inclusive_ms_per_game_frame": 0.24734601026598227
+        },
+        "PathfindingAgent.GetSteerpoint": {
+          "reported_windows": 20,
+          "timed_windows": 20,
+          "calls": 1289623,
+          "samples": 20140,
+          "calls_without_window_estimate": 0,
+          "rough_observed_inclusive_ms_per_game_frame": 0.03148040130657956
+        },
+        "Pilot.Update": {
+          "reported_windows": 20,
+          "timed_windows": 20,
+          "calls": 549556,
+          "samples": 8576,
+          "calls_without_window_estimate": 0,
+          "rough_observed_inclusive_ms_per_game_frame": 0.003336444237050863
+        },
+        "Radar.RadarCheck": {
+          "reported_windows": 20,
+          "timed_windows": 20,
+          "calls": 6755,
+          "samples": 100,
+          "calls_without_window_estimate": 0,
+          "rough_observed_inclusive_ms_per_game_frame": 0.006611642557162855
+        },
+        "RoadNetwork.TryGetNearestRoad": {
+          "reported_windows": 19,
+          "timed_windows": 0,
+          "calls": 156,
+          "samples": 0,
+          "calls_without_window_estimate": 156,
+          "rough_observed_inclusive_ms_per_game_frame": null
+        },
+        "RoadPathfinder.TryPathfind": {
+          "reported_windows": 19,
+          "timed_windows": 19,
+          "calls": 83,
+          "samples": 83,
+          "calls_without_window_estimate": 0,
+          "rough_observed_inclusive_ms_per_game_frame": 0.0033772748483434432
+        },
+        "SendTransformBatcher.LateUpdate": {
+          "reported_windows": 20,
+          "timed_windows": 20,
+          "calls": 34288,
+          "samples": 526,
+          "calls_without_window_estimate": 0,
+          "rough_observed_inclusive_ms_per_game_frame": 0.07060487634157724
+        },
+        "TargetDetector.VisualCheck": {
+          "reported_windows": 20,
+          "timed_windows": 20,
+          "calls": 69514,
+          "samples": 1077,
+          "calls_without_window_estimate": 0,
+          "rough_observed_inclusive_ms_per_game_frame": 0.09423705086327575
+        },
+        "ThreatTracker.CheckThreats": {
+          "reported_windows": 20,
+          "timed_windows": 20,
+          "calls": 68576,
+          "samples": 1059,
+          "calls_without_window_estimate": 0,
+          "rough_observed_inclusive_ms_per_game_frame": 0.022153523098460106
+        }
+      }
+    },
+    {
+      "first_window": 25,
+      "last_window": 44,
+      "windows": 20,
+      "game_frames": 32919,
+      "loop_mean_ms_per_game_frame": 14.805229624229169,
+      "accumulated_fixed_mean_ms_per_game_frame": 9.941130866672742,
+      "phases": {
+        "PhysicsFixedUpdate": {
+          "reported_windows": 20,
+          "calls": 35986,
+          "calls_per_game_frame": 1.0931680792247638,
+          "weighted_mean_ms_per_invocation": 4.648533707552937,
+          "observed_ms_per_game_frame": 5.081628664297214,
+          "max_ms": 10.021
+        },
+        "ScriptRunBehaviourFixedUpdate": {
+          "reported_windows": 20,
+          "calls": 35986,
+          "calls_per_game_frame": 1.0931680792247638,
+          "weighted_mean_ms_per_invocation": 1.7455409714889125,
+          "observed_ms_per_game_frame": 1.9081696710106628,
+          "max_ms": 21.867
+        },
+        "ScriptRunBehaviourLateUpdate": {
+          "reported_windows": 20,
+          "calls": 32919,
+          "calls_per_game_frame": 1.0,
+          "weighted_mean_ms_per_invocation": 0.18439921929584738,
+          "observed_ms_per_game_frame": 0.18439921929584738,
+          "max_ms": 2.28
+        },
+        "ScriptRunBehaviourUpdate": {
+          "reported_windows": 20,
+          "calls": 32919,
+          "calls_per_game_frame": 1.0,
+          "weighted_mean_ms_per_invocation": 1.5454025881709652,
+          "observed_ms_per_game_frame": 1.5454025881709652,
+          "max_ms": 337.366
+        }
+      },
+      "methods": {
+        "BattlefieldGrid.GetUnitsInRangeNonAlloc": {
+          "reported_windows": 20,
+          "timed_windows": 20,
+          "calls": 74824,
+          "samples": 1159,
+          "calls_without_window_estimate": 0,
+          "rough_observed_inclusive_ms_per_game_frame": 0.02480330508217139
+        },
+        "CombatAI.GetSafeStandoffDist": {
+          "reported_windows": 1,
+          "timed_windows": 0,
+          "calls": 10,
+          "samples": 0,
+          "calls_without_window_estimate": 10,
+          "rough_observed_inclusive_ms_per_game_frame": null
+        },
+        "CombatAI.LookForMissileTargets": {
+          "reported_windows": 16,
+          "timed_windows": 0,
+          "calls": 56,
+          "samples": 0,
+          "calls_without_window_estimate": 56,
+          "rough_observed_inclusive_ms_per_game_frame": null
+        },
+        "FactionHQ.Update": {
+          "reported_windows": 20,
+          "timed_windows": 20,
+          "calls": 65838,
+          "samples": 1019,
+          "calls_without_window_estimate": 0,
+          "rough_observed_inclusive_ms_per_game_frame": 0.034925119232054436
+        },
+        "JobManager.FinishJobs": {
+          "reported_windows": 20,
+          "timed_windows": 20,
+          "calls": 35986,
+          "samples": 559,
+          "calls_without_window_estimate": 0,
+          "rough_observed_inclusive_ms_per_game_frame": 0.6493301740636108
+        },
+        "JobManager.FixedUpdateEarly": {
+          "reported_windows": 20,
+          "timed_windows": 20,
+          "calls": 35986,
+          "samples": 559,
+          "calls_without_window_estimate": 0,
+          "rough_observed_inclusive_ms_per_game_frame": 1.770242109420092
+        },
+        "MissionManager.Update": {
+          "reported_windows": 20,
+          "timed_windows": 20,
+          "calls": 32919,
+          "samples": 505,
+          "calls_without_window_estimate": 0,
+          "rough_observed_inclusive_ms_per_game_frame": 0.24364045080348737
+        },
+        "PathfindingAgent.GetSteerpoint": {
+          "reported_windows": 20,
+          "timed_windows": 20,
+          "calls": 1288816,
+          "samples": 20130,
+          "calls_without_window_estimate": 0,
+          "rough_observed_inclusive_ms_per_game_frame": 0.03540812296849843
+        },
+        "Pilot.Update": {
+          "reported_windows": 20,
+          "timed_windows": 20,
+          "calls": 531355,
+          "samples": 8295,
+          "calls_without_window_estimate": 0,
+          "rough_observed_inclusive_ms_per_game_frame": 0.0040918618427048204
+        },
+        "Radar.RadarCheck": {
+          "reported_windows": 20,
+          "timed_windows": 20,
+          "calls": 6557,
+          "samples": 96,
+          "calls_without_window_estimate": 0,
+          "rough_observed_inclusive_ms_per_game_frame": 0.00716607430359367
+        },
+        "RoadNetwork.TryGetNearestRoad": {
+          "reported_windows": 20,
+          "timed_windows": 2,
+          "calls": 482,
+          "samples": 2,
+          "calls_without_window_estimate": 278,
+          "rough_observed_inclusive_ms_per_game_frame": 0.00025517178529116917
+        },
+        "RoadPathfinder.TryPathfind": {
+          "reported_windows": 20,
+          "timed_windows": 20,
+          "calls": 245,
+          "samples": 245,
+          "calls_without_window_estimate": 0,
+          "rough_observed_inclusive_ms_per_game_frame": 0.054719159148212286
+        },
+        "SendTransformBatcher.LateUpdate": {
+          "reported_windows": 20,
+          "timed_windows": 20,
+          "calls": 32919,
+          "samples": 505,
+          "calls_without_window_estimate": 0,
+          "rough_observed_inclusive_ms_per_game_frame": 0.06974999240560163
+        },
+        "TargetDetector.VisualCheck": {
+          "reported_windows": 20,
+          "timed_windows": 20,
+          "calls": 66760,
+          "samples": 1032,
+          "calls_without_window_estimate": 0,
+          "rough_observed_inclusive_ms_per_game_frame": 0.09361159208967466
+        },
+        "ThreatTracker.CheckThreats": {
+          "reported_windows": 20,
+          "timed_windows": 20,
+          "calls": 65838,
+          "samples": 1019,
+          "calls_without_window_estimate": 0,
+          "rough_observed_inclusive_ms_per_game_frame": 0.0324128922506759
+        }
+      }
+    },
+    {
+      "first_window": 45,
+      "last_window": 64,
+      "windows": 20,
+      "game_frames": 27601,
+      "loop_mean_ms_per_game_frame": 18.523750806130213,
+      "accumulated_fixed_mean_ms_per_game_frame": 13.073009564870839,
+      "phases": {
+        "PhysicsFixedUpdate": {
+          "reported_windows": 20,
+          "calls": 36014,
+          "calls_per_game_frame": 1.3048077968189558,
+          "weighted_mean_ms_per_invocation": 5.011393144332758,
+          "observed_ms_per_game_frame": 6.538904847650445,
+          "max_ms": 10.247
+        },
+        "ScriptRunBehaviourFixedUpdate": {
+          "reported_windows": 20,
+          "calls": 36014,
+          "calls_per_game_frame": 1.3048077968189558,
+          "weighted_mean_ms_per_invocation": 2.281930452046427,
+          "observed_ms_per_game_frame": 2.977480645628782,
+          "max_ms": 10.82
+        },
+        "ScriptRunBehaviourLateUpdate": {
+          "reported_windows": 20,
+          "calls": 27601,
+          "calls_per_game_frame": 1.0,
+          "weighted_mean_ms_per_invocation": 0.19010000000000005,
+          "observed_ms_per_game_frame": 0.19010000000000005,
+          "max_ms": 1.178
+        },
+        "ScriptRunBehaviourUpdate": {
+          "reported_windows": 20,
+          "calls": 27601,
+          "calls_per_game_frame": 1.0,
+          "weighted_mean_ms_per_invocation": 1.5849171660447086,
+          "observed_ms_per_game_frame": 1.5849171660447086,
+          "max_ms": 43.5
+        }
+      },
+      "methods": {
+        "BattlefieldGrid.GetUnitsInRangeNonAlloc": {
+          "reported_windows": 20,
+          "timed_windows": 20,
+          "calls": 73188,
+          "samples": 1134,
+          "calls_without_window_estimate": 0,
+          "rough_observed_inclusive_ms_per_game_frame": 0.0297308068548241
+        },
+        "CombatAI.GetSafeStandoffDist": {
+          "reported_windows": 3,
+          "timed_windows": 0,
+          "calls": 15,
+          "samples": 0,
+          "calls_without_window_estimate": 15,
+          "rough_observed_inclusive_ms_per_game_frame": null
+        },
+        "CombatAI.LookForMissileTargets": {
+          "reported_windows": 20,
+          "timed_windows": 0,
+          "calls": 71,
+          "samples": 0,
+          "calls_without_window_estimate": 71,
+          "rough_observed_inclusive_ms_per_game_frame": null
+        },
+        "FactionHQ.Update": {
+          "reported_windows": 20,
+          "timed_windows": 20,
+          "calls": 55202,
+          "samples": 851,
+          "calls_without_window_estimate": 0,
+          "rough_observed_inclusive_ms_per_game_frame": 0.036335640013043
+        },
+        "JobManager.FinishJobs": {
+          "reported_windows": 20,
+          "timed_windows": 20,
+          "calls": 36014,
+          "samples": 560,
+          "calls_without_window_estimate": 0,
+          "rough_observed_inclusive_ms_per_game_frame": 0.8415129886598312
+        },
+        "JobManager.FixedUpdateEarly": {
+          "reported_windows": 20,
+          "timed_windows": 20,
+          "calls": 36014,
+          "samples": 560,
+          "calls_without_window_estimate": 0,
+          "rough_observed_inclusive_ms_per_game_frame": 2.1553349516321876
+        },
+        "MissionManager.Update": {
+          "reported_windows": 20,
+          "timed_windows": 20,
+          "calls": 27601,
+          "samples": 419,
+          "calls_without_window_estimate": 0,
+          "rough_observed_inclusive_ms_per_game_frame": 0.1447121481105757
+        },
+        "PathfindingAgent.GetSteerpoint": {
+          "reported_windows": 20,
+          "timed_windows": 20,
+          "calls": 1279314,
+          "samples": 19978,
+          "calls_without_window_estimate": 0,
+          "rough_observed_inclusive_ms_per_game_frame": 0.04629542407883772
+        },
+        "Pilot.Update": {
+          "reported_windows": 20,
+          "timed_windows": 20,
+          "calls": 467132,
+          "samples": 7290,
+          "calls_without_window_estimate": 0,
+          "rough_observed_inclusive_ms_per_game_frame": 0.004590413390819172
+        },
+        "Radar.RadarCheck": {
+          "reported_windows": 20,
+          "timed_windows": 20,
+          "calls": 5902,
+          "samples": 87,
+          "calls_without_window_estimate": 0,
+          "rough_observed_inclusive_ms_per_game_frame": 0.011604652005362122
+        },
+        "RoadNetwork.TryGetNearestRoad": {
+          "reported_windows": 20,
+          "timed_windows": 0,
+          "calls": 390,
+          "samples": 0,
+          "calls_without_window_estimate": 390,
+          "rough_observed_inclusive_ms_per_game_frame": null
+        },
+        "RoadPathfinder.TryPathfind": {
+          "reported_windows": 20,
+          "timed_windows": 20,
+          "calls": 197,
+          "samples": 197,
+          "calls_without_window_estimate": 0,
+          "rough_observed_inclusive_ms_per_game_frame": 0.05586391797398645
+        },
+        "SendTransformBatcher.LateUpdate": {
+          "reported_windows": 20,
+          "timed_windows": 20,
+          "calls": 27601,
+          "samples": 419,
+          "calls_without_window_estimate": 0,
+          "rough_observed_inclusive_ms_per_game_frame": 0.0742147023658563
+        },
+        "TargetDetector.VisualCheck": {
+          "reported_windows": 20,
+          "timed_windows": 20,
+          "calls": 65836,
+          "samples": 1019,
+          "calls_without_window_estimate": 0,
+          "rough_observed_inclusive_ms_per_game_frame": 0.11059381906452664
+        },
+        "ThreatTracker.CheckThreats": {
+          "reported_windows": 20,
+          "timed_windows": 20,
+          "calls": 55202,
+          "samples": 851,
+          "calls_without_window_estimate": 0,
+          "rough_observed_inclusive_ms_per_game_frame": 0.033618347161334744
+        }
+      }
+    },
+    {
+      "first_window": 65,
+      "last_window": 84,
+      "windows": 20,
+      "game_frames": 24867,
+      "loop_mean_ms_per_game_frame": 20.98351614589617,
+      "accumulated_fixed_mean_ms_per_game_frame": 15.56277846141473,
+      "phases": {
+        "PhysicsFixedUpdate": {
+          "reported_windows": 20,
+          "calls": 35882,
+          "calls_per_game_frame": 1.4429565287328587,
+          "weighted_mean_ms_per_invocation": 5.483868755922189,
+          "observed_ms_per_game_frame": 7.912984224072063,
+          "max_ms": 12.796
+        },
+        "ScriptRunBehaviourFixedUpdate": {
+          "reported_windows": 20,
+          "calls": 35882,
+          "calls_per_game_frame": 1.4429565287328587,
+          "weighted_mean_ms_per_invocation": 2.4043783819185114,
+          "observed_ms_per_game_frame": 3.469413483733463,
+          "max_ms": 11.293
+        },
+        "ScriptRunBehaviourLateUpdate": {
+          "reported_windows": 20,
+          "calls": 24867,
+          "calls_per_game_frame": 1.0,
+          "weighted_mean_ms_per_invocation": 0.2034707081674509,
+          "observed_ms_per_game_frame": 0.2034707081674509,
+          "max_ms": 2.27
+        },
+        "ScriptRunBehaviourUpdate": {
+          "reported_windows": 20,
+          "calls": 24867,
+          "calls_per_game_frame": 1.0,
+          "weighted_mean_ms_per_invocation": 1.6879810672779187,
+          "observed_ms_per_game_frame": 1.6879810672779187,
+          "max_ms": 721.441
+        }
+      },
+      "methods": {
+        "BattlefieldGrid.GetUnitsInRangeNonAlloc": {
+          "reported_windows": 20,
+          "timed_windows": 20,
+          "calls": 75068,
+          "samples": 1166,
+          "calls_without_window_estimate": 0,
+          "rough_observed_inclusive_ms_per_game_frame": 0.03238428439297061
+        },
+        "CombatAI.GetSafeStandoffDist": {
+          "reported_windows": 1,
+          "timed_windows": 0,
+          "calls": 3,
+          "samples": 0,
+          "calls_without_window_estimate": 3,
+          "rough_observed_inclusive_ms_per_game_frame": null
+        },
+        "CombatAI.LookForMissileTargets": {
+          "reported_windows": 17,
+          "timed_windows": 0,
+          "calls": 47,
+          "samples": 0,
+          "calls_without_window_estimate": 47,
+          "rough_observed_inclusive_ms_per_game_frame": null
+        },
+        "FactionHQ.Update": {
+          "reported_windows": 20,
+          "timed_windows": 20,
+          "calls": 49734,
+          "samples": 768,
+          "calls_without_window_estimate": 0,
+          "rough_observed_inclusive_ms_per_game_frame": 0.04364016568142518
+        },
+        "JobManager.FinishJobs": {
+          "reported_windows": 20,
+          "timed_windows": 20,
+          "calls": 35882,
+          "samples": 554,
+          "calls_without_window_estimate": 0,
+          "rough_observed_inclusive_ms_per_game_frame": 0.9993244058390639
+        },
+        "JobManager.FixedUpdateEarly": {
+          "reported_windows": 20,
+          "timed_windows": 20,
+          "calls": 35882,
+          "samples": 554,
+          "calls_without_window_estimate": 0,
+          "rough_observed_inclusive_ms_per_game_frame": 2.5210198254715084
+        },
+        "MissionManager.Update": {
+          "reported_windows": 20,
+          "timed_windows": 20,
+          "calls": 24867,
+          "samples": 379,
+          "calls_without_window_estimate": 0,
+          "rough_observed_inclusive_ms_per_game_frame": 0.09274942695138133
+        },
+        "PathfindingAgent.GetSteerpoint": {
+          "reported_windows": 20,
+          "timed_windows": 20,
+          "calls": 1310351,
+          "samples": 20465,
+          "calls_without_window_estimate": 0,
+          "rough_observed_inclusive_ms_per_game_frame": 0.059532714038685805
+        },
+        "Pilot.Update": {
+          "reported_windows": 20,
+          "timed_windows": 20,
+          "calls": 442937,
+          "samples": 6913,
+          "calls_without_window_estimate": 0,
+          "rough_observed_inclusive_ms_per_game_frame": 0.004125950054288815
+        },
+        "Radar.RadarCheck": {
+          "reported_windows": 20,
+          "timed_windows": 20,
+          "calls": 6498,
+          "samples": 92,
+          "calls_without_window_estimate": 0,
+          "rough_observed_inclusive_ms_per_game_frame": 0.01822495677001649
+        },
+        "RoadNetwork.TryGetNearestRoad": {
+          "reported_windows": 20,
+          "timed_windows": 3,
+          "calls": 652,
+          "samples": 3,
+          "calls_without_window_estimate": 404,
+          "rough_observed_inclusive_ms_per_game_frame": 0.0004906100454417501
+        },
+        "RoadPathfinder.TryPathfind": {
+          "reported_windows": 20,
+          "timed_windows": 20,
+          "calls": 332,
+          "samples": 332,
+          "calls_without_window_estimate": 0,
+          "rough_observed_inclusive_ms_per_game_frame": 0.1309607109824265
+        },
+        "SendTransformBatcher.LateUpdate": {
+          "reported_windows": 20,
+          "timed_windows": 20,
+          "calls": 24867,
+          "samples": 379,
+          "calls_without_window_estimate": 0,
+          "rough_observed_inclusive_ms_per_game_frame": 0.08752161499175613
+        },
+        "TargetDetector.VisualCheck": {
+          "reported_windows": 20,
+          "timed_windows": 20,
+          "calls": 68097,
+          "samples": 1056,
+          "calls_without_window_estimate": 0,
+          "rough_observed_inclusive_ms_per_game_frame": 0.11799171592874087
+        },
+        "ThreatTracker.CheckThreats": {
+          "reported_windows": 20,
+          "timed_windows": 20,
+          "calls": 49734,
+          "samples": 768,
+          "calls_without_window_estimate": 0,
+          "rough_observed_inclusive_ms_per_game_frame": 0.040973981582016324
+        }
+      }
+    },
+    {
+      "first_window": 85,
+      "last_window": 104,
+      "windows": 20,
+      "game_frames": 14211,
+      "loop_mean_ms_per_game_frame": 37.86318098655971,
+      "accumulated_fixed_mean_ms_per_game_frame": 30.938604390964745,
+      "phases": {
+        "PhysicsFixedUpdate": {
+          "reported_windows": 20,
+          "calls": 35703,
+          "calls_per_game_frame": 2.512349588347055,
+          "weighted_mean_ms_per_invocation": 6.187437716718484,
+          "observed_ms_per_game_frame": 15.545006600520725,
+          "max_ms": 13.211
+        },
+        "ScriptRunBehaviourFixedUpdate": {
+          "reported_windows": 20,
+          "calls": 35703,
+          "calls_per_game_frame": 2.512349588347055,
+          "weighted_mean_ms_per_invocation": 3.019936081001597,
+          "observed_ms_per_game_frame": 7.587135169938781,
+          "max_ms": 47.957
+        },
+        "ScriptRunBehaviourLateUpdate": {
+          "reported_windows": 20,
+          "calls": 14211,
+          "calls_per_game_frame": 1.0,
+          "weighted_mean_ms_per_invocation": 0.22375094644993315,
+          "observed_ms_per_game_frame": 0.22375094644993315,
+          "max_ms": 1.029
+        },
+        "ScriptRunBehaviourUpdate": {
+          "reported_windows": 20,
+          "calls": 14211,
+          "calls_per_game_frame": 1.0,
+          "weighted_mean_ms_per_invocation": 2.116855604813173,
+          "observed_ms_per_game_frame": 2.116855604813173,
+          "max_ms": 96.471
+        }
+      },
+      "methods": {
+        "BattlefieldGrid.GetUnitsInRangeNonAlloc": {
+          "reported_windows": 20,
+          "timed_windows": 20,
+          "calls": 77443,
+          "samples": 1201,
+          "calls_without_window_estimate": 0,
+          "rough_observed_inclusive_ms_per_game_frame": 0.05329674196045317
+        },
+        "CombatAI.GetSafeStandoffDist": {
+          "reported_windows": 6,
+          "timed_windows": 0,
+          "calls": 46,
+          "samples": 0,
+          "calls_without_window_estimate": 46,
+          "rough_observed_inclusive_ms_per_game_frame": null
+        },
+        "CombatAI.LookForMissileTargets": {
+          "reported_windows": 16,
+          "timed_windows": 0,
+          "calls": 43,
+          "samples": 0,
+          "calls_without_window_estimate": 43,
+          "rough_observed_inclusive_ms_per_game_frame": null
+        },
+        "FactionHQ.Update": {
+          "reported_windows": 20,
+          "timed_windows": 20,
+          "calls": 28422,
+          "samples": 436,
+          "calls_without_window_estimate": 0,
+          "rough_observed_inclusive_ms_per_game_frame": 0.06071353177116319
+        },
+        "JobManager.FinishJobs": {
+          "reported_windows": 20,
+          "timed_windows": 20,
+          "calls": 35703,
+          "samples": 550,
+          "calls_without_window_estimate": 0,
+          "rough_observed_inclusive_ms_per_game_frame": 1.7498205615368374
+        },
+        "JobManager.FixedUpdateEarly": {
+          "reported_windows": 20,
+          "timed_windows": 20,
+          "calls": 35703,
+          "samples": 550,
+          "calls_without_window_estimate": 0,
+          "rough_observed_inclusive_ms_per_game_frame": 4.619660826120611
+        },
+        "MissionManager.Update": {
+          "reported_windows": 20,
+          "timed_windows": 20,
+          "calls": 14211,
+          "samples": 214,
+          "calls_without_window_estimate": 0,
+          "rough_observed_inclusive_ms_per_game_frame": 0.07604672436844698
+        },
+        "PathfindingAgent.GetSteerpoint": {
+          "reported_windows": 20,
+          "timed_windows": 20,
+          "calls": 1372954,
+          "samples": 21443,
+          "calls_without_window_estimate": 0,
+          "rough_observed_inclusive_ms_per_game_frame": 0.1248680599535571
+        },
+        "Pilot.Update": {
+          "reported_windows": 20,
+          "timed_windows": 20,
+          "calls": 219936,
+          "samples": 3429,
+          "calls_without_window_estimate": 0,
+          "rough_observed_inclusive_ms_per_game_frame": 0.004552811202589544
+        },
+        "Radar.RadarCheck": {
+          "reported_windows": 20,
+          "timed_windows": 20,
+          "calls": 6448,
+          "samples": 91,
+          "calls_without_window_estimate": 0,
+          "rough_observed_inclusive_ms_per_game_frame": 0.046238829076067835
+        },
+        "RoadNetwork.TryGetNearestRoad": {
+          "reported_windows": 20,
+          "timed_windows": 1,
+          "calls": 550,
+          "samples": 1,
+          "calls_without_window_estimate": 484,
+          "rough_observed_inclusive_ms_per_game_frame": 0.00021110407430863416
+        },
+        "RoadPathfinder.TryPathfind": {
+          "reported_windows": 20,
+          "timed_windows": 20,
+          "calls": 278,
+          "samples": 278,
+          "calls_without_window_estimate": 0,
+          "rough_observed_inclusive_ms_per_game_frame": 0.16224051790866229
+        },
+        "SendTransformBatcher.LateUpdate": {
+          "reported_windows": 20,
+          "timed_windows": 20,
+          "calls": 14211,
+          "samples": 214,
+          "calls_without_window_estimate": 0,
+          "rough_observed_inclusive_ms_per_game_frame": 0.09718527900921821
+        },
+        "TargetDetector.VisualCheck": {
+          "reported_windows": 20,
+          "timed_windows": 20,
+          "calls": 70430,
+          "samples": 1092,
+          "calls_without_window_estimate": 0,
+          "rough_observed_inclusive_ms_per_game_frame": 0.21406656815143202
+        },
+        "ThreatTracker.CheckThreats": {
+          "reported_windows": 20,
+          "timed_windows": 20,
+          "calls": 28422,
+          "samples": 436,
+          "calls_without_window_estimate": 0,
+          "rough_observed_inclusive_ms_per_game_frame": 0.05732179297727113
+        }
+      }
+    },
+    {
+      "first_window": 105,
+      "last_window": 119,
+      "windows": 15,
+      "game_frames": 7868,
+      "loop_mean_ms_per_game_frame": 48.078529613624816,
+      "accumulated_fixed_mean_ms_per_game_frame": 36.854497076766656,
+      "phases": {
+        "PhysicsFixedUpdate": {
+          "reported_windows": 15,
+          "calls": 26517,
+          "calls_per_game_frame": 3.3702338586680223,
+          "weighted_mean_ms_per_invocation": 5.536768612588151,
+          "observed_ms_per_game_frame": 18.660205045754957,
+          "max_ms": 13.914
+        },
+        "ScriptRunBehaviourFixedUpdate": {
+          "reported_windows": 15,
+          "calls": 26517,
+          "calls_per_game_frame": 3.3702338586680223,
+          "weighted_mean_ms_per_invocation": 2.870608047667534,
+          "observed_ms_per_game_frame": 9.674620437214031,
+          "max_ms": 16.631
+        },
+        "ScriptRunBehaviourLateUpdate": {
+          "reported_windows": 15,
+          "calls": 7868,
+          "calls_per_game_frame": 1.0,
+          "weighted_mean_ms_per_invocation": 0.22455224961870868,
+          "observed_ms_per_game_frame": 0.22455224961870868,
+          "max_ms": 1.139
+        },
+        "ScriptRunBehaviourUpdate": {
+          "reported_windows": 15,
+          "calls": 7868,
+          "calls_per_game_frame": 1.0,
+          "weighted_mean_ms_per_invocation": 2.574257613116421,
+          "observed_ms_per_game_frame": 2.574257613116421,
+          "max_ms": 92.362
+        }
+      },
+      "methods": {
+        "BattlefieldGrid.GetUnitsInRangeNonAlloc": {
+          "reported_windows": 15,
+          "timed_windows": 15,
+          "calls": 42392,
+          "samples": 656,
+          "calls_without_window_estimate": 0,
+          "rough_observed_inclusive_ms_per_game_frame": 0.04822064056939501
+        },
+        "CombatAI.LookForMissileTargets": {
+          "reported_windows": 15,
+          "timed_windows": 0,
+          "calls": 71,
+          "samples": 0,
+          "calls_without_window_estimate": 71,
+          "rough_observed_inclusive_ms_per_game_frame": null
+        },
+        "FactionHQ.Update": {
+          "reported_windows": 15,
+          "timed_windows": 15,
+          "calls": 15736,
+          "samples": 239,
+          "calls_without_window_estimate": 0,
+          "rough_observed_inclusive_ms_per_game_frame": 0.04855109303507881
+        },
+        "JobManager.FinishJobs": {
+          "reported_windows": 15,
+          "timed_windows": 15,
+          "calls": 26517,
+          "samples": 408,
+          "calls_without_window_estimate": 0,
+          "rough_observed_inclusive_ms_per_game_frame": 1.8902770716827655
+        },
+        "JobManager.FixedUpdateEarly": {
+          "reported_windows": 15,
+          "timed_windows": 15,
+          "calls": 26517,
+          "samples": 408,
+          "calls_without_window_estimate": 0,
+          "rough_observed_inclusive_ms_per_game_frame": 4.649288256227758
+        },
+        "MissionManager.Update": {
+          "reported_windows": 15,
+          "timed_windows": 15,
+          "calls": 7868,
+          "samples": 115,
+          "calls_without_window_estimate": 0,
+          "rough_observed_inclusive_ms_per_game_frame": 0.05887137773258769
+        },
+        "PathfindingAgent.GetSteerpoint": {
+          "reported_windows": 15,
+          "timed_windows": 15,
+          "calls": 746850,
+          "samples": 11663,
+          "calls_without_window_estimate": 0,
+          "rough_observed_inclusive_ms_per_game_frame": 0.136642094560244
+        },
+        "Pilot.Update": {
+          "reported_windows": 15,
+          "timed_windows": 15,
+          "calls": 119290,
+          "samples": 1855,
+          "calls_without_window_estimate": 0,
+          "rough_observed_inclusive_ms_per_game_frame": 0.004168784951703101
+        },
+        "Radar.RadarCheck": {
+          "reported_windows": 15,
+          "timed_windows": 15,
+          "calls": 3870,
+          "samples": 54,
+          "calls_without_window_estimate": 0,
+          "rough_observed_inclusive_ms_per_game_frame": 0.04018810371123537
+        },
+        "RoadNetwork.TryGetNearestRoad": {
+          "reported_windows": 15,
+          "timed_windows": 1,
+          "calls": 324,
+          "samples": 1,
+          "calls_without_window_estimate": 232,
+          "rough_observed_inclusive_ms_per_game_frame": 0.0005083884087442806
+        },
+        "RoadPathfinder.TryPathfind": {
+          "reported_windows": 15,
+          "timed_windows": 15,
+          "calls": 164,
+          "samples": 164,
+          "calls_without_window_estimate": 0,
+          "rough_observed_inclusive_ms_per_game_frame": 0.20165226232841893
+        },
+        "SendTransformBatcher.LateUpdate": {
+          "reported_windows": 15,
+          "timed_windows": 15,
+          "calls": 7868,
+          "samples": 115,
+          "calls_without_window_estimate": 0,
+          "rough_observed_inclusive_ms_per_game_frame": 0.09208185053380781
+        },
+        "TargetDetector.VisualCheck": {
+          "reported_windows": 15,
+          "timed_windows": 15,
+          "calls": 38686,
+          "samples": 597,
+          "calls_without_window_estimate": 0,
+          "rough_observed_inclusive_ms_per_game_frame": 0.18572699542450433
+        },
+        "ThreatTracker.CheckThreats": {
+          "reported_windows": 15,
+          "timed_windows": 15,
+          "calls": 15736,
+          "samples": 239,
+          "calls_without_window_estimate": 0,
+          "rough_observed_inclusive_ms_per_game_frame": 0.04539908490086425
+        }
+      }
+    }
+  ]
+}

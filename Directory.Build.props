@@ -1,0 +1,30 @@
+<Project>
+  <PropertyGroup>
+    <TargetFramework>net48</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <GameServerPath Condition="'$(GameServerPath)' == ''">$(MSBuildThisFileDirectory)vendor/server</GameServerPath>
+    <BepInExPath Condition="'$(BepInExPath)' == ''">$(MSBuildThisFileDirectory)vendor/bepinex</BepInExPath>
+    <ManagedPath>$(GameServerPath)/NuclearOptionServer_Data/Managed</ManagedPath>
+    <Deterministic>true</Deterministic>
+    <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
+    <EnableSourceLink>false</EnableSourceLink>
+    <EnableSourceControlManagerQueries>false</EnableSourceControlManagerQueries>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="all" />
+    <Reference Include="BepInEx"><HintPath>$(BepInExPath)/BepInEx/core/BepInEx.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="0Harmony"><HintPath>$(BepInExPath)/BepInEx/core/0Harmony.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="Assembly-CSharp"><HintPath>$(ManagedPath)/Assembly-CSharp.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="UnityEngine"><HintPath>$(ManagedPath)/UnityEngine.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="UnityEngine.CoreModule"><HintPath>$(ManagedPath)/UnityEngine.CoreModule.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="UnityEngine.PhysicsModule"><HintPath>$(ManagedPath)/UnityEngine.PhysicsModule.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="Mirage"><HintPath>$(ManagedPath)/Mirage.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="Mirage.SocketLayer"><HintPath>$(ManagedPath)/Mirage.SocketLayer.dll</HintPath><Private>false</Private></Reference>
+    <Compile Include="$(MSBuildThisFileDirectory)src/Common/BuildGuard.cs" Link="BuildGuard.cs" />
+  </ItemGroup>
+  <Target Name="CheckInputs" BeforeTargets="ResolveReferences">
+    <Error Condition="!Exists('$(ManagedPath)/Assembly-CSharp.dll')" Text="Set GameServerPath to the Linux dedicated server (Steam app 3930080)." />
+    <Error Condition="!Exists('$(BepInExPath)/BepInEx/core/BepInEx.dll')" Text="Set BepInExPath to the extracted BepInEx 5 Linux package." />
+  </Target>
+</Project>

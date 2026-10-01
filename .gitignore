@@ -1,0 +1,11 @@
+bin/
+obj/
+vendor/
+work/
+artifacts/
+*.user
+*.log
+*.dmp
+*.trace
+*.zip
+__pycache__/

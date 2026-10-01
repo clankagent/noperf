@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How finding nearby units works · NOPerf</title>
+<meta name="description" content="A simple step-by-step animation of how the NOPerf Spatial plugin builds the same list of nearby units with less bookkeeping.">
+<style>
+:root{--ink:#1b2733;--muted:#4f5d6e;--line:#d9e0e8;--soft:#f3f6f9;--blue:#2b5a8a;--teal:#0b766c;--slate:#8a97a6;--bluebg:#e8eff6;--tealbg:#e3f2ef;--focus:#1d64c8}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;font:16px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;color:var(--ink);background:#fff}
+a{color:var(--blue);text-underline-offset:2px}
+:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+.skip{position:absolute;left:-999px;top:8px;background:#fff;padding:6px 10px}
+.skip:focus{left:8px}
+main{max-width:60rem;margin:0 auto;padding:40px 20px 64px}
+.prose{max-width:44rem}
+.kicker{margin:0;color:var(--muted)}
+h1{font-size:2.1rem;line-height:1.2;margin:6px 0 14px}
+.lead{font-size:1.15rem}
+.tag{display:inline-block;color:var(--muted);border:1px dashed var(--slate);border-radius:4px;padding:2px 10px;margin:4px 0 16px}
+.ctl{display:flex;flex-wrap:wrap;gap:8px 10px;align-items:center;margin:0 0 8px;position:sticky;top:0;z-index:2;background:#fff;padding:8px 0}
+.ctl button{font:inherit;min-height:40px;padding:6px 16px;border:1px solid var(--blue);background:#fff;color:var(--blue);border-radius:4px;cursor:pointer}
+.ctl button:hover{background:var(--soft)}
+.ctl button:disabled{border-color:var(--line);color:var(--slate);cursor:not-allowed;background:#fff}
+.ctl #play{background:var(--blue);color:#fff;min-width:6em}
+.ctl #play:disabled{background:var(--soft);color:var(--slate)}
+.count{color:var(--muted);font-variant-numeric:tabular-nums}
+.rm{color:var(--muted);margin:0 0 8px}
+.status{margin:0 0 16px;padding:10px 14px;background:var(--soft);border-left:3px solid var(--teal);min-height:3.4em}
+.lanes{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.lane{border:1px solid var(--line);border-radius:6px;padding:14px 16px}
+.lane h2{font-size:1.25rem;margin:0}
+.lane .how{margin:0 0 12px;color:var(--muted)}
+.lane.b h2{color:var(--blue)}.lane.a h2{color:var(--teal)}
+.map{display:grid;grid-template-columns:1fr 1fr;gap:6px;max-width:20rem;margin:0 0 14px}
+.area{border:1px solid var(--line);border-radius:4px;padding:6px 10px;background:#fff;min-height:4.2rem}
+.area small{display:block;font-size:16px;color:var(--muted)}
+.area .u{font-weight:700}
+.area.on{border-color:var(--ink);box-shadow:inset 0 0 0 2px var(--ink)}
+.b .area.on{background:var(--bluebg)}.a .area.on{background:var(--tealbg)}
+.lab{margin:0 0 4px;font-weight:700}
+.list{list-style:none;margin:0 0 12px;padding:0;display:flex;flex-wrap:wrap;gap:6px;min-height:2.4rem;align-items:center}
+.list li{border:1px solid var(--line);border-radius:4px;padding:2px 10px;background:#fff}
+.list li.on{border-color:var(--ink);font-weight:700}
+.b .list.res li{background:var(--bluebg)}.a .list.res li{background:var(--tealbg)}
+.list .none{border:0;background:none;padding:0;color:var(--muted)}
+.list .empty{border-style:dashed;color:var(--muted)}
+.done{margin:0;color:var(--muted);min-height:1.6em}
+.same{margin:16px 0 0;padding:10px 14px;border:2px solid var(--teal);border-radius:6px}
+.same b{color:var(--teal)}
+@media (prefers-reduced-motion:no-preference){.area,.list li{transition:background-color .25s,border-color .25s,box-shadow .25s}}
+@media (max-width:720px){.lanes{grid-template-columns:1fr}}
+@media (max-width:480px){h1{font-size:1.7rem}main{padding:28px 16px 48px}}
+details{border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin:24px 0 0;max-width:44rem}
+summary{cursor:pointer;padding:10px 0;font-weight:700;color:var(--blue)}
+details ol{padding-left:22px}
+footer{margin-top:40px;color:var(--muted);border-top:1px solid var(--line);padding-top:16px;max-width:44rem}
+@media print{.ctl,.rm,.skip{display:none!important}}
+</style>
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<main id="content">
+<div class="prose">
+<p class="kicker">NOPerf · <a href="index.html">What we learned</a></p>
+<h1>How finding nearby units works</h1>
+<p class="lead">The server often needs a list of nearby units. Spatial builds the same list with less bookkeeping.</p>
+<p>The map is split into areas. To find nearby units, the server checks the areas around a spot and lists the units inside them.</p>
+<p class="tag">Made-up example map. These steps count actions in the example, not a measured speedup.</p>
+</div>
+
+<div class="ctl" id="ctl" hidden>
+ <button type="button" id="play">Play</button>
+ <button type="button" id="next">Next</button>
+ <button type="button" id="reset">Reset</button>
+ <span class="count" id="count"></span>
+</div>
+<p class="rm" id="rm" hidden>Play is off because your device asks for reduced motion. Use Next to go one step at a time.</p>
+<p class="status" id="status" role="status" aria-live="polite">Finished. Before needed 8 steps; After needed 4. Both lists are the same: Plane 1, Truck, Plane 2, Ship.</p>
+
+<div class="lanes">
+ <div class="lane b" id="lane-b">
+  <h2>Before</h2>
+  <p class="how">First list the areas; then collect their units.</p>
+  <div class="map" role="img" aria-label="Example map with four areas: Area 1 has Plane 1, Area 2 has Truck, Area 3 has Plane 2, Area 4 has Ship.">
+   <div class="area" data-k="C"><small>Area 2</small><span class="u">Truck</span></div>
+   <div class="area" data-k="D"><small>Area 4</small><span class="u">Ship</span></div>
+   <div class="area" data-k="A"><small>Area 1</small><span class="u">Plane 1</span></div>
+   <div class="area" data-k="B"><small>Area 3</small><span class="u">Plane 2</span></div>
+  </div>
+  <p class="lab">Areas to check</p>
+  <ul class="list" id="b-areas"><li>Area 1</li><li>Area 2</li><li>Area 3</li><li>Area 4</li></ul>
+  <p class="lab">Nearby units</p>
+  <ol class="list res" id="b-res"><li>Plane 1</li><li>Truck</li><li>Plane 2</li><li>Ship</li></ol>
+  <p class="done" id="b-done">Done after 8 steps.</p>
+ </div>
+ <div class="lane a" id="lane-a">
+  <h2>After (Spatial)</h2>
+  <p class="how">Collect the units while visiting each area.</p>
+  <div class="map" role="img" aria-label="The same example map with four areas.">
+   <div class="area" data-k="C"><small>Area 2</small><span class="u">Truck</span></div>
+   <div class="area" data-k="D"><small>Area 4</small><span class="u">Ship</span></div>
+   <div class="area" data-k="A"><small>Area 1</small><span class="u">Plane 1</span></div>
+   <div class="area" data-k="B"><small>Area 3</small><span class="u">Plane 2</span></div>
+  </div>
+  <p class="lab">Areas to check</p>
+  <ul class="list"><li class="none">Not needed</li></ul>
+  <p class="lab">Nearby units</p>
+  <ol class="list res" id="a-res"><li>Plane 1</li><li>Truck</li><li>Plane 2</li><li>Ship</li></ol>
+  <p class="done" id="a-done">Done after 4 steps.</p>
+ </div>
+</div>
+<p class="same" id="same"><b>Same result:</b> Plane 1, Truck, Plane 2, Ship, in the same order.</p>
+
+<div class="prose">
+<p>Spatial skips the extra list, not any units. That makes this one task cheaper; it has not been shown to make the whole server faster. <a href="index.html">See the results</a>.</p>
+</div>
+
+<details>
+ <summary>All 8 steps as text</summary>
+ <ol>
+  <li>Before writes down Area 1. After visits Area 1 and adds Plane 1.</li>
+  <li>Before writes down Area 2. After visits Area 2 and adds Truck.</li>
+  <li>Before writes down Area 3. After visits Area 3 and adds Plane 2.</li>
+  <li>Before writes down Area 4. After visits Area 4 and adds Ship. After is finished.</li>
+  <li>Before goes back to Area 1 and adds Plane 1.</li>
+  <li>Before goes back to Area 2 and adds Truck.</li>
+  <li>Before goes back to Area 3 and adds Plane 2.</li>
+  <li>Before goes back to Area 4 and adds Ship. Both lists now match.</li>
+ </ol>
+</details>
+<details>
+ <summary>Technical details</summary>
+ <p>In the real game, areas are grid cells, visited column by column, and each cell’s units are read from last to first. Duplicates and empty (null) entries are kept. The <a href="query-details.html">query details page</a> walks through a fuller example with those cases. The other plugins are described in the <a href="https://github.com/clankagent/noperf/blob/main/docs/developer-guide.md">developer guide</a>.</p>
+</details>
+<footer>NOPerf is unofficial and MIT-licensed. Nuclear Option belongs to its developers. <a href="https://github.com/clankagent/noperf">Source on GitHub</a>.</footer>
+</main>
+<script>
+(()=>{
+'use strict';
+// Illustrative only. Real visit order is x outer, z inner: A, C, B, D.
+const CELLS={A:['Plane 1'],C:['Truck'],B:['Plane 2'],D:['Ship']};
+const ORDER=['A','C','B','D'];
+const NAME={A:'Area 1',C:'Area 2',B:'Area 3',D:'Area 4'};
+const OUT=ORDER.flatMap(k=>CELLS[k].slice().reverse());
+const N=ORDER.length,LAST=2*N;
+
+const $=id=>document.getElementById(id);
+const play=$('play'),next=$('next'),reset=$('reset'),count=$('count'),status=$('status'),rm=$('rm');
+const areasB=[...$('lane-b').querySelectorAll('.area')],areasA=[...$('lane-a').querySelectorAll('.area')];
+const bAreas=$('b-areas'),bRes=$('b-res'),aRes=$('a-res'),bDone=$('b-done'),aDone=$('a-done'),same=$('same');
+const reduce=matchMedia('(prefers-reduced-motion: reduce)');
+let step=0,timer=null;
+
+function fill(list,items,hi){
+ list.replaceChildren(...(items.length?items:[null]).map((t,i)=>{
+  const li=document.createElement('li');
+  if(t===null){li.className='empty';li.textContent='Empty'}else{li.textContent=t;if(i===hi)li.className='on'}
+  return li}));
+}
+function msg(s){
+ if(s===0)return 'Ready. Both lists are empty. Press Next or Play.';
+ if(s<=N){const k=ORDER[s-1];return `Step ${s} of ${LAST}. Before writes down ${NAME[k]}. After visits ${NAME[k]} and adds ${CELLS[k].join(', ')}.`+(s===N?' After is finished.':'')}
+ const k=ORDER[s-N-1];return `Step ${s} of ${LAST}. Before goes back to ${NAME[k]} and adds ${CELLS[k].join(', ')}. After has nothing left to do.`+(s===LAST?' Both lists now match.':'');
+}
+function render(){
+ const bK=step===0?null:ORDER[(step-1)%N],aK=step>=1&&step<=N?ORDER[step-1]:null;
+ areasB.forEach(e=>e.classList.toggle('on',e.dataset.k===bK));
+ areasA.forEach(e=>e.classList.toggle('on',e.dataset.k===aK));
+ const nb=Math.min(step,N);
+ fill(bAreas,ORDER.slice(0,nb).map(k=>NAME[k]),step<=N?nb-1:step-N-1);
+ const rb=Math.max(0,step-N),ra=Math.min(step,N);
+ fill(bRes,OUT.slice(0,rb),step>N?rb-1:-1);
+ fill(aRes,OUT.slice(0,ra),step<=N?ra-1:-1);
+ bDone.textContent=step>=LAST?`Done after ${LAST} steps.`:'';
+ aDone.textContent=step>=N?`Done after ${N} steps.`:'';
+ same.hidden=step<LAST;
+ count.textContent=`Step ${step} of ${LAST}`;
+ status.textContent=msg(step);
+}
+function stop(){if(timer){clearInterval(timer);timer=null}play.textContent='Play'}
+function advance(){if(step<LAST){step++;render()}if(step>=LAST)stop()}
+play.addEventListener('click',()=>{
+ if(timer){stop();status.textContent=`Paused at step ${step} of ${LAST}.`;return}
+ if(reduce.matches)return;
+ if(step>=LAST){step=0;render()}
+ play.textContent='Pause';
+ advance();
+ if(step<LAST)timer=setInterval(advance,1600);
+});
+next.addEventListener('click',()=>{stop();if(step>=LAST){status.textContent='This is the last step. Press Reset to start again.';return}advance()});
+reset.addEventListener('click',()=>{stop();step=0;render()});
+document.addEventListener('visibilitychange',()=>{if(document.hidden&&timer){stop();status.textContent=`Paused at step ${step} of ${LAST}.`}});
+const motion=()=>{if(reduce.matches)stop();play.disabled=reduce.matches;rm.hidden=!reduce.matches};
+reduce.addEventListener?reduce.addEventListener('change',motion):reduce.addListener(motion);
+$('ctl').hidden=false;
+motion();
+render();
+})();
+</script>
+</body>
+</html>

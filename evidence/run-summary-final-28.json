@@ -1,0 +1,944 @@
+{
+  "discarded_initial_windows": 4,
+  "runs": [
+    {
+      "run": "baseline-01-bepinex",
+      "verified_mission": {
+        "requested": "Escalation",
+        "actual": "Escalation"
+      },
+      "instrumented_methods_or_phases": false,
+      "windows": 15,
+      "frames": 25384.0,
+      "weighted_loop_mean_ms": 14.044139576110938,
+      "median_window_loop_mean_ms": 13.689,
+      "weighted_fixed_mean_ms": 9.673942995587772,
+      "max_loop_ms": 83.138,
+      "units_min": 1042.0,
+      "units_max": 1071.0,
+      "heap_final_bytes": 92528640.0,
+      "gc0": 2.0,
+      "workers": null,
+      "worker_max": null,
+      "fixed_delta_seconds": null,
+      "startup_workers": null,
+      "startup_worker_max": null,
+      "steady_segments": [
+        {
+          "first_window": 5,
+          "last_window": 19,
+          "weighted_loop_mean_ms": 14.044139576110938,
+          "weighted_fixed_mean_ms": 9.673942995587772,
+          "units_min": 1042.0,
+          "units_max": 1071.0,
+          "heap_first_bytes": 82644992.0,
+          "heap_last_bytes": 92528640.0,
+          "gc0": 2.0
+        }
+      ]
+    },
+    {
+      "run": "baseline-02-bepinex",
+      "verified_mission": {
+        "requested": "Escalation",
+        "actual": "Escalation"
+      },
+      "instrumented_methods_or_phases": false,
+      "windows": 15,
+      "frames": 25230.0,
+      "weighted_loop_mean_ms": 14.42955941339675,
+      "median_window_loop_mean_ms": 14.296,
+      "weighted_fixed_mean_ms": 9.81408763376932,
+      "max_loop_ms": 66.728,
+      "units_min": 1032.0,
+      "units_max": 1081.0,
+      "heap_final_bytes": 93511680.0,
+      "gc0": 2.0,
+      "workers": null,
+      "worker_max": null,
+      "fixed_delta_seconds": null,
+      "startup_workers": null,
+      "startup_worker_max": null,
+      "steady_segments": [
+        {
+          "first_window": 5,
+          "last_window": 19,
+          "weighted_loop_mean_ms": 14.42955941339675,
+          "weighted_fixed_mean_ms": 9.81408763376932,
+          "units_min": 1032.0,
+          "units_max": 1081.0,
+          "heap_first_bytes": 81170432.0,
+          "heap_last_bytes": 93511680.0,
+          "gc0": 2.0
+        }
+      ]
+    },
+    {
+      "run": "carrier-profile-11-bepinex",
+      "verified_mission": {
+        "requested": "Carrier Duel",
+        "actual": "Carrier Duel"
+      },
+      "instrumented_methods_or_phases": true,
+      "windows": 15,
+      "frames": 26638.0,
+      "weighted_loop_mean_ms": 10.95636113822359,
+      "median_window_loop_mean_ms": 10.962,
+      "weighted_fixed_mean_ms": 8.483708424055862,
+      "max_loop_ms": 50.743,
+      "units_min": 133.0,
+      "units_max": 187.0,
+      "heap_final_bytes": 79998976.0,
+      "gc0": 1.0,
+      "workers": 2,
+      "worker_max": 3,
+      "fixed_delta_seconds": 0.01666667,
+      "startup_workers": 3,
+      "startup_worker_max": 3,
+      "steady_segments": [
+        {
+          "first_window": 5,
+          "last_window": 19,
+          "weighted_loop_mean_ms": 10.95636113822359,
+          "weighted_fixed_mean_ms": 8.483708424055862,
+          "units_min": 133.0,
+          "units_max": 187.0,
+          "heap_first_bytes": 70053888.0,
+          "heap_last_bytes": 79998976.0,
+          "gc0": 1.0
+        }
+      ]
+    },
+    {
+      "run": "escalation-agingprofile-14-bepinex",
+      "verified_mission": {
+        "actual": "Escalation",
+        "requested": "Escalation"
+      },
+      "instrumented_methods_or_phases": true,
+      "windows": 115,
+      "frames": 141754.0,
+      "weighted_loop_mean_ms": 20.53976148115749,
+      "median_window_loop_mean_ms": 18.502,
+      "weighted_fixed_mean_ms": 14.986706569126797,
+      "max_loop_ms": 736.829,
+      "units_min": 759.0,
+      "units_max": 1164.0,
+      "heap_final_bytes": 189255680.0,
+      "gc0": 15.0,
+      "workers": 2,
+      "worker_max": 3,
+      "fixed_delta_seconds": 0.01666667,
+      "startup_workers": 3,
+      "startup_worker_max": 3,
+      "steady_segments": [
+        {
+          "first_window": 5,
+          "last_window": 24,
+          "weighted_loop_mean_ms": 13.84721526481568,
+          "weighted_fixed_mean_ms": 9.324138969902004,
+          "units_min": 1022.0,
+          "units_max": 1066.0,
+          "heap_first_bytes": 86118400.0,
+          "heap_last_bytes": 105046016.0,
+          "gc0": 3.0
+        },
+        {
+          "first_window": 25,
+          "last_window": 44,
+          "weighted_loop_mean_ms": 14.805229624229169,
+          "weighted_fixed_mean_ms": 9.941130866672742,
+          "units_min": 1015.0,
+          "units_max": 1090.0,
+          "heap_first_bytes": 107847680.0,
+          "heap_last_bytes": 118501376.0,
+          "gc0": 3.0
+        },
+        {
+          "first_window": 45,
+          "last_window": 64,
+          "weighted_loop_mean_ms": 18.523750806130213,
+          "weighted_fixed_mean_ms": 13.073009564870839,
+          "units_min": 1030.0,
+          "units_max": 1075.0,
+          "heap_first_bytes": 122757120.0,
+          "heap_last_bytes": 141332480.0,
+          "gc0": 2.0
+        },
+        {
+          "first_window": 65,
+          "last_window": 84,
+          "weighted_loop_mean_ms": 20.98351614589617,
+          "weighted_fixed_mean_ms": 15.56277846141473,
+          "units_min": 1026.0,
+          "units_max": 1142.0,
+          "heap_first_bytes": 130686976.0,
+          "heap_last_bytes": 152518656.0,
+          "gc0": 3.0
+        },
+        {
+          "first_window": 85,
+          "last_window": 104,
+          "weighted_loop_mean_ms": 37.86318098655971,
+          "weighted_fixed_mean_ms": 30.938604390964745,
+          "units_min": 1089.0,
+          "units_max": 1164.0,
+          "heap_first_bytes": 157925376.0,
+          "heap_last_bytes": 183218176.0,
+          "gc0": 2.0
+        },
+        {
+          "first_window": 105,
+          "last_window": 119,
+          "weighted_loop_mean_ms": 48.078529613624816,
+          "weighted_fixed_mean_ms": 36.854497076766656,
+          "units_min": 759.0,
+          "units_max": 1093.0,
+          "heap_first_bytes": 186916864.0,
+          "heap_last_bytes": 189255680.0,
+          "gc0": 2.0
+        }
+      ]
+    },
+    {
+      "run": "escalation-all-long-06-bepinex",
+      "verified_mission": {
+        "requested": "Escalation",
+        "actual": "Escalation"
+      },
+      "instrumented_methods_or_phases": false,
+      "windows": 115,
+      "frames": 136141.0,
+      "weighted_loop_mean_ms": 21.67584062112074,
+      "median_window_loop_mean_ms": 21.476,
+      "weighted_fixed_mean_ms": 16.151474875313102,
+      "max_loop_ms": 434.443,
+      "units_min": 1006.0,
+      "units_max": 1187.0,
+      "heap_final_bytes": 206524416.0,
+      "gc0": 14.0,
+      "workers": 2,
+      "worker_max": 3,
+      "fixed_delta_seconds": 0.01666667,
+      "startup_workers": 3,
+      "startup_worker_max": 3,
+      "steady_segments": [
+        {
+          "first_window": 5,
+          "last_window": 24,
+          "weighted_loop_mean_ms": 14.76816479571659,
+          "weighted_fixed_mean_ms": 10.059973806698915,
+          "units_min": 1017.0,
+          "units_max": 1071.0,
+          "heap_first_bytes": 81772544.0,
+          "heap_last_bytes": 101941248.0,
+          "gc0": 2.0
+        },
+        {
+          "first_window": 25,
+          "last_window": 44,
+          "weighted_loop_mean_ms": 15.691321452567593,
+          "weighted_fixed_mean_ms": 10.822566853303472,
+          "units_min": 1013.0,
+          "units_max": 1082.0,
+          "heap_first_bytes": 104693760.0,
+          "heap_last_bytes": 110821376.0,
+          "gc0": 3.0
+        },
+        {
+          "first_window": 45,
+          "last_window": 64,
+          "weighted_loop_mean_ms": 21.792747811151607,
+          "weighted_fixed_mean_ms": 15.93086959071677,
+          "units_min": 1006.0,
+          "units_max": 1106.0,
+          "heap_first_bytes": 113438720.0,
+          "heap_last_bytes": 133689344.0,
+          "gc0": 3.0
+        },
+        {
+          "first_window": 65,
+          "last_window": 84,
+          "weighted_loop_mean_ms": 23.58828932724064,
+          "weighted_fixed_mean_ms": 17.78630249287427,
+          "units_min": 1043.0,
+          "units_max": 1140.0,
+          "heap_first_bytes": 137084928.0,
+          "heap_last_bytes": 145989632.0,
+          "gc0": 3.0
+        },
+        {
+          "first_window": 85,
+          "last_window": 104,
+          "weighted_loop_mean_ms": 34.929563568481036,
+          "weighted_fixed_mean_ms": 28.108058819676426,
+          "units_min": 1113.0,
+          "units_max": 1187.0,
+          "heap_first_bytes": 148615168.0,
+          "heap_last_bytes": 178503680.0,
+          "gc0": 2.0
+        },
+        {
+          "first_window": 105,
+          "last_window": 119,
+          "weighted_loop_mean_ms": 37.14848078708001,
+          "weighted_fixed_mean_ms": 30.387511509188787,
+          "units_min": 1090.0,
+          "units_max": 1178.0,
+          "heap_first_bytes": 183365632.0,
+          "heap_last_bytes": 206524416.0,
+          "gc0": 1.0
+        }
+      ]
+    },
+    {
+      "run": "escalation-baseline-long-13-bepinex",
+      "verified_mission": {
+        "actual": "Escalation",
+        "requested": "Escalation"
+      },
+      "instrumented_methods_or_phases": false,
+      "windows": 115,
+      "frames": 145250.0,
+      "weighted_loop_mean_ms": 20.049375456110162,
+      "median_window_loop_mean_ms": 18.031,
+      "weighted_fixed_mean_ms": 14.347995435456111,
+      "max_loop_ms": 671.466,
+      "units_min": 891.0,
+      "units_max": 1164.0,
+      "heap_final_bytes": 189087744.0,
+      "gc0": 15.0,
+      "workers": 2,
+      "worker_max": 3,
+      "fixed_delta_seconds": 0.01666667,
+      "startup_workers": 3,
+      "startup_worker_max": 3,
+      "steady_segments": [
+        {
+          "first_window": 5,
+          "last_window": 24,
+          "weighted_loop_mean_ms": 14.277277254692958,
+          "weighted_fixed_mean_ms": 9.681487001835732,
+          "units_min": 1006.0,
+          "units_max": 1074.0,
+          "heap_first_bytes": 81174528.0,
+          "heap_last_bytes": 103460864.0,
+          "gc0": 2.0
+        },
+        {
+          "first_window": 25,
+          "last_window": 44,
+          "weighted_loop_mean_ms": 16.99726299879081,
+          "weighted_fixed_mean_ms": 11.564329638586592,
+          "units_min": 1006.0,
+          "units_max": 1098.0,
+          "heap_first_bytes": 97992704.0,
+          "heap_last_bytes": 116699136.0,
+          "gc0": 4.0
+        },
+        {
+          "first_window": 45,
+          "last_window": 64,
+          "weighted_loop_mean_ms": 17.85984630007745,
+          "weighted_fixed_mean_ms": 12.115108251777789,
+          "units_min": 1029.0,
+          "units_max": 1060.0,
+          "heap_first_bytes": 118820864.0,
+          "heap_last_bytes": 146563072.0,
+          "gc0": 2.0
+        },
+        {
+          "first_window": 65,
+          "last_window": 84,
+          "weighted_loop_mean_ms": 18.680442019351503,
+          "weighted_fixed_mean_ms": 12.878213531280005,
+          "units_min": 1017.0,
+          "units_max": 1087.0,
+          "heap_first_bytes": 132775936.0,
+          "heap_last_bytes": 167034880.0,
+          "gc0": 3.0
+        },
+        {
+          "first_window": 85,
+          "last_window": 104,
+          "weighted_loop_mean_ms": 32.24975836202657,
+          "weighted_fixed_mean_ms": 25.06145216428923,
+          "units_min": 932.0,
+          "units_max": 1164.0,
+          "heap_first_bytes": 172052480.0,
+          "heap_last_bytes": 197046272.0,
+          "gc0": 2.0
+        },
+        {
+          "first_window": 105,
+          "last_window": 119,
+          "weighted_loop_mean_ms": 38.79697026918441,
+          "weighted_fixed_mean_ms": 31.36933346725593,
+          "units_min": 891.0,
+          "units_max": 1052.0,
+          "heap_first_bytes": 175841280.0,
+          "heap_last_bytes": 189087744.0,
+          "gc0": 2.0
+        }
+      ]
+    },
+    {
+      "run": "mission-objectives-05-bepinex",
+      "verified_mission": {
+        "requested": "Escalation",
+        "actual": "Escalation"
+      },
+      "instrumented_methods_or_phases": true,
+      "windows": 15,
+      "frames": 25544.0,
+      "weighted_loop_mean_ms": 14.159494715001568,
+      "median_window_loop_mean_ms": 14.01,
+      "weighted_fixed_mean_ms": 9.531376252740369,
+      "max_loop_ms": 72.489,
+      "units_min": 1036.0,
+      "units_max": 1070.0,
+      "heap_final_bytes": 92291072.0,
+      "gc0": 2.0,
+      "workers": 2,
+      "worker_max": 3,
+      "fixed_delta_seconds": 0.01666667,
+      "startup_workers": 3,
+      "startup_worker_max": 3,
+      "steady_segments": [
+        {
+          "first_window": 5,
+          "last_window": 19,
+          "weighted_loop_mean_ms": 14.159494715001568,
+          "weighted_fixed_mean_ms": 9.531376252740369,
+          "units_min": 1036.0,
+          "units_max": 1070.0,
+          "heap_first_bytes": 81924096.0,
+          "heap_last_bytes": 92291072.0,
+          "gc0": 2.0
+        }
+      ]
+    },
+    {
+      "run": "spatial-01-bepinex",
+      "verified_mission": {
+        "requested": "Escalation",
+        "actual": "Escalation"
+      },
+      "instrumented_methods_or_phases": false,
+      "windows": 15,
+      "frames": 25505.0,
+      "weighted_loop_mean_ms": 14.026479121740836,
+      "median_window_loop_mean_ms": 13.648,
+      "weighted_fixed_mean_ms": 9.66992178004313,
+      "max_loop_ms": 102.433,
+      "units_min": 1040.0,
+      "units_max": 1075.0,
+      "heap_final_bytes": 106545152.0,
+      "gc0": 2.0,
+      "workers": null,
+      "worker_max": null,
+      "fixed_delta_seconds": null,
+      "startup_workers": null,
+      "startup_worker_max": null,
+      "steady_segments": [
+        {
+          "first_window": 5,
+          "last_window": 19,
+          "weighted_loop_mean_ms": 14.026479121740836,
+          "weighted_fixed_mean_ms": 9.66992178004313,
+          "units_min": 1040.0,
+          "units_max": 1075.0,
+          "heap_first_bytes": 99352576.0,
+          "heap_last_bytes": 106545152.0,
+          "gc0": 2.0
+        }
+      ]
+    },
+    {
+      "run": "spatial-02-bepinex",
+      "verified_mission": {
+        "requested": "Escalation",
+        "actual": "Escalation"
+      },
+      "instrumented_methods_or_phases": false,
+      "windows": 15,
+      "frames": 25493.0,
+      "weighted_loop_mean_ms": 13.998930647628761,
+      "median_window_loop_mean_ms": 13.88,
+      "weighted_fixed_mean_ms": 9.569899031106578,
+      "max_loop_ms": 63.903,
+      "units_min": 1030.0,
+      "units_max": 1069.0,
+      "heap_final_bytes": 91029504.0,
+      "gc0": 2.0,
+      "workers": null,
+      "worker_max": null,
+      "fixed_delta_seconds": null,
+      "startup_workers": null,
+      "startup_worker_max": null,
+      "steady_segments": [
+        {
+          "first_window": 5,
+          "last_window": 19,
+          "weighted_loop_mean_ms": 13.998930647628761,
+          "weighted_fixed_mean_ms": 9.569899031106578,
+          "units_min": 1030.0,
+          "units_max": 1069.0,
+          "heap_first_bytes": 82796544.0,
+          "heap_last_bytes": 91029504.0,
+          "gc0": 2.0
+        }
+      ]
+    },
+    {
+      "run": "terminal-all-06-bepinex",
+      "verified_mission": {
+        "requested": "Terminal Control",
+        "actual": "Free Flight"
+      },
+      "instrumented_methods_or_phases": false,
+      "windows": 35,
+      "frames": 62582.0,
+      "weighted_loop_mean_ms": 3.3022570068070696,
+      "median_window_loop_mean_ms": 3.301,
+      "weighted_fixed_mean_ms": 1.7500569652615774,
+      "max_loop_ms": 9.513,
+      "units_min": 134.0,
+      "units_max": 134.0,
+      "heap_final_bytes": 74420224.0,
+      "gc0": 1.0,
+      "workers": 2,
+      "worker_max": 3,
+      "fixed_delta_seconds": 0.01666667,
+      "startup_workers": 3,
+      "startup_worker_max": 3,
+      "steady_segments": [
+        {
+          "first_window": 5,
+          "last_window": 24,
+          "weighted_loop_mean_ms": 3.284350763380124,
+          "weighted_fixed_mean_ms": 1.7486497679100723,
+          "units_min": 134.0,
+          "units_max": 134.0,
+          "heap_first_bytes": 73842688.0,
+          "heap_last_bytes": 79228928.0,
+          "gc0": 0.0
+        },
+        {
+          "first_window": 25,
+          "last_window": 39,
+          "weighted_loop_mean_ms": 3.326133333333333,
+          "weighted_fixed_mean_ms": 1.7519333333333333,
+          "units_min": 134.0,
+          "units_max": 134.0,
+          "heap_first_bytes": 79511552.0,
+          "heap_last_bytes": 74420224.0,
+          "gc0": 1.0
+        }
+      ]
+    },
+    {
+      "run": "terminal-spatial-06-bepinex",
+      "verified_mission": {
+        "requested": "Terminal Control",
+        "actual": "Free Flight"
+      },
+      "instrumented_methods_or_phases": false,
+      "windows": 35,
+      "frames": 62576.0,
+      "weighted_loop_mean_ms": 3.266400568908208,
+      "median_window_loop_mean_ms": 3.265,
+      "weighted_fixed_mean_ms": 1.7295426521350035,
+      "max_loop_ms": 10.695,
+      "units_min": 134.0,
+      "units_max": 134.0,
+      "heap_final_bytes": 65654784.0,
+      "gc0": 1.0,
+      "workers": 2,
+      "worker_max": 3,
+      "fixed_delta_seconds": 0.01666667,
+      "startup_workers": 3,
+      "startup_worker_max": 3,
+      "steady_segments": [
+        {
+          "first_window": 5,
+          "last_window": 24,
+          "weighted_loop_mean_ms": 3.2515511368403396,
+          "weighted_fixed_mean_ms": 1.7311003999216934,
+          "units_min": 134.0,
+          "units_max": 134.0,
+          "heap_first_bytes": 61915136.0,
+          "heap_last_bytes": 61554688.0,
+          "gc0": 1.0
+        },
+        {
+          "first_window": 25,
+          "last_window": 39,
+          "weighted_loop_mean_ms": 3.286198888847459,
+          "weighted_fixed_mean_ms": 1.7274657518923153,
+          "units_min": 134.0,
+          "units_max": 134.0,
+          "heap_first_bytes": 61820928.0,
+          "heap_last_bytes": 65654784.0,
+          "gc0": 0.0
+        }
+      ]
+    },
+    {
+      "run": "weapons-profile-12-bepinex",
+      "verified_mission": {
+        "actual": "Escalation",
+        "requested": "Escalation"
+      },
+      "instrumented_methods_or_phases": true,
+      "windows": 25,
+      "frames": 42213.0,
+      "weighted_loop_mean_ms": 14.326499609125149,
+      "median_window_loop_mean_ms": 14.347,
+      "weighted_fixed_mean_ms": 9.72564975244593,
+      "max_loop_ms": 284.922,
+      "units_min": 981.0,
+      "units_max": 1072.0,
+      "heap_final_bytes": 110882816.0,
+      "gc0": 4.0,
+      "workers": 2,
+      "worker_max": 3,
+      "fixed_delta_seconds": 0.01666667,
+      "startup_workers": 3,
+      "startup_worker_max": 3,
+      "steady_segments": [
+        {
+          "first_window": 5,
+          "last_window": 24,
+          "weighted_loop_mean_ms": 14.115718955206377,
+          "weighted_fixed_mean_ms": 9.602529754924953,
+          "units_min": 998.0,
+          "units_max": 1072.0,
+          "heap_first_bytes": 94724096.0,
+          "heap_last_bytes": 111054848.0,
+          "gc0": 3.0
+        },
+        {
+          "first_window": 25,
+          "last_window": 29,
+          "weighted_loop_mean_ms": 15.214062831749166,
+          "weighted_fixed_mean_ms": 10.244088137267003,
+          "units_min": 981.0,
+          "units_max": 1016.0,
+          "heap_first_bytes": 113717248.0,
+          "heap_last_bytes": 110882816.0,
+          "gc0": 1.0
+        }
+      ]
+    },
+    {
+      "run": "worker-1-01-bepinex",
+      "verified_mission": null,
+      "instrumented_methods_or_phases": false,
+      "windows": 15,
+      "frames": 24257.0,
+      "weighted_loop_mean_ms": 15.062136537906584,
+      "median_window_loop_mean_ms": 15.005,
+      "weighted_fixed_mean_ms": 10.881308653172281,
+      "max_loop_ms": 98.038,
+      "units_min": 1034.0,
+      "units_max": 1074.0,
+      "heap_final_bytes": 94507008.0,
+      "gc0": 2.0,
+      "workers": null,
+      "worker_max": null,
+      "fixed_delta_seconds": null,
+      "startup_workers": 1,
+      "startup_worker_max": 1,
+      "steady_segments": [
+        {
+          "first_window": 5,
+          "last_window": 19,
+          "weighted_loop_mean_ms": 15.062136537906584,
+          "weighted_fixed_mean_ms": 10.881308653172281,
+          "units_min": 1034.0,
+          "units_max": 1074.0,
+          "heap_first_bytes": 81420288.0,
+          "heap_last_bytes": 94507008.0,
+          "gc0": 2.0
+        }
+      ]
+    },
+    {
+      "run": "worker-2-01-bepinex",
+      "verified_mission": null,
+      "instrumented_methods_or_phases": false,
+      "windows": 15,
+      "frames": 25992.0,
+      "weighted_loop_mean_ms": 13.449373114804555,
+      "median_window_loop_mean_ms": 13.442,
+      "weighted_fixed_mean_ms": 9.1284459833795,
+      "max_loop_ms": 60.385,
+      "units_min": 1039.0,
+      "units_max": 1069.0,
+      "heap_final_bytes": 106074112.0,
+      "gc0": 2.0,
+      "workers": null,
+      "worker_max": null,
+      "fixed_delta_seconds": null,
+      "startup_workers": 2,
+      "startup_worker_max": 2,
+      "steady_segments": [
+        {
+          "first_window": 5,
+          "last_window": 19,
+          "weighted_loop_mean_ms": 13.449373114804555,
+          "weighted_fixed_mean_ms": 9.1284459833795,
+          "units_min": 1039.0,
+          "units_max": 1069.0,
+          "heap_first_bytes": 99528704.0,
+          "heap_last_bytes": 106074112.0,
+          "gc0": 2.0
+        }
+      ]
+    },
+    {
+      "run": "worker-3-01-bepinex",
+      "verified_mission": null,
+      "instrumented_methods_or_phases": false,
+      "windows": 15,
+      "frames": 24745.0,
+      "weighted_loop_mean_ms": 14.831603717922812,
+      "median_window_loop_mean_ms": 14.046,
+      "weighted_fixed_mean_ms": 10.079841907456052,
+      "max_loop_ms": 120.073,
+      "units_min": 1023.0,
+      "units_max": 1075.0,
+      "heap_final_bytes": 116211712.0,
+      "gc0": 2.0,
+      "workers": null,
+      "worker_max": null,
+      "fixed_delta_seconds": null,
+      "startup_workers": 3,
+      "startup_worker_max": 3,
+      "steady_segments": [
+        {
+          "first_window": 5,
+          "last_window": 19,
+          "weighted_loop_mean_ms": 14.831603717922812,
+          "weighted_fixed_mean_ms": 10.079841907456052,
+          "units_min": 1023.0,
+          "units_max": 1075.0,
+          "heap_first_bytes": 100012032.0,
+          "heap_last_bytes": 116211712.0,
+          "gc0": 2.0
+        }
+      ]
+    },
+    {
+      "run": "worker-default-01-bepinex",
+      "verified_mission": null,
+      "instrumented_methods_or_phases": false,
+      "windows": 15,
+      "frames": 25415.0,
+      "weighted_loop_mean_ms": 14.203976706669291,
+      "median_window_loop_mean_ms": 14.031,
+      "weighted_fixed_mean_ms": 9.759482156206964,
+      "max_loop_ms": 70.566,
+      "units_min": 1037.0,
+      "units_max": 1076.0,
+      "heap_final_bytes": 107175936.0,
+      "gc0": 2.0,
+      "workers": null,
+      "worker_max": null,
+      "fixed_delta_seconds": null,
+      "startup_workers": 3,
+      "startup_worker_max": 3,
+      "steady_segments": [
+        {
+          "first_window": 5,
+          "last_window": 19,
+          "weighted_loop_mean_ms": 14.203976706669291,
+          "weighted_fixed_mean_ms": 9.759482156206964,
+          "units_min": 1037.0,
+          "units_max": 1076.0,
+          "heap_first_bytes": 89415680.0,
+          "heap_last_bytes": 107175936.0,
+          "gc0": 2.0
+        }
+      ]
+    },
+    {
+      "run": "worker-default-02-bepinex",
+      "verified_mission": null,
+      "instrumented_methods_or_phases": false,
+      "windows": 15,
+      "frames": 25264.0,
+      "weighted_loop_mean_ms": 14.264026322039268,
+      "median_window_loop_mean_ms": 13.947,
+      "weighted_fixed_mean_ms": 9.844656071880939,
+      "max_loop_ms": 77.421,
+      "units_min": 1033.0,
+      "units_max": 1071.0,
+      "heap_final_bytes": 95760384.0,
+      "gc0": 2.0,
+      "workers": null,
+      "worker_max": null,
+      "fixed_delta_seconds": null,
+      "startup_workers": 3,
+      "startup_worker_max": 3,
+      "steady_segments": [
+        {
+          "first_window": 5,
+          "last_window": 19,
+          "weighted_loop_mean_ms": 14.264026322039268,
+          "weighted_fixed_mean_ms": 9.844656071880939,
+          "units_min": 1033.0,
+          "units_max": 1071.0,
+          "heap_first_bytes": 80785408.0,
+          "heap_last_bytes": 95760384.0,
+          "gc0": 2.0
+        }
+      ]
+    },
+    {
+      "run": "worker-r2a-07-bepinex",
+      "verified_mission": {
+        "requested": "Escalation",
+        "actual": "Escalation"
+      },
+      "instrumented_methods_or_phases": false,
+      "windows": 15,
+      "frames": 25437.0,
+      "weighted_loop_mean_ms": 14.01767500098282,
+      "median_window_loop_mean_ms": 13.916,
+      "weighted_fixed_mean_ms": 9.55084070448559,
+      "max_loop_ms": 73.766,
+      "units_min": 1046.0,
+      "units_max": 1068.0,
+      "heap_final_bytes": 93396992.0,
+      "gc0": 2.0,
+      "workers": 2,
+      "worker_max": 2,
+      "fixed_delta_seconds": 0.01666667,
+      "startup_workers": 2,
+      "startup_worker_max": 2,
+      "steady_segments": [
+        {
+          "first_window": 5,
+          "last_window": 19,
+          "weighted_loop_mean_ms": 14.01767500098282,
+          "weighted_fixed_mean_ms": 9.55084070448559,
+          "units_min": 1046.0,
+          "units_max": 1068.0,
+          "heap_first_bytes": 80941056.0,
+          "heap_last_bytes": 93396992.0,
+          "gc0": 2.0
+        }
+      ]
+    },
+    {
+      "run": "worker-r2b-07-bepinex",
+      "verified_mission": {
+        "requested": "Escalation",
+        "actual": "Escalation"
+      },
+      "instrumented_methods_or_phases": false,
+      "windows": 15,
+      "frames": 25493.0,
+      "weighted_loop_mean_ms": 14.027966422155098,
+      "median_window_loop_mean_ms": 14.129,
+      "weighted_fixed_mean_ms": 9.573220727258464,
+      "max_loop_ms": 61.369,
+      "units_min": 1036.0,
+      "units_max": 1076.0,
+      "heap_final_bytes": 90980352.0,
+      "gc0": 2.0,
+      "workers": 2,
+      "worker_max": 2,
+      "fixed_delta_seconds": 0.01666667,
+      "startup_workers": 2,
+      "startup_worker_max": 2,
+      "steady_segments": [
+        {
+          "first_window": 5,
+          "last_window": 19,
+          "weighted_loop_mean_ms": 14.027966422155098,
+          "weighted_fixed_mean_ms": 9.573220727258464,
+          "units_min": 1036.0,
+          "units_max": 1076.0,
+          "heap_first_bytes": 81514496.0,
+          "heap_last_bytes": 90980352.0,
+          "gc0": 2.0
+        }
+      ]
+    },
+    {
+      "run": "worker-r3a-07-bepinex",
+      "verified_mission": {
+        "requested": "Escalation",
+        "actual": "Escalation"
+      },
+      "instrumented_methods_or_phases": false,
+      "windows": 15,
+      "frames": 25450.0,
+      "weighted_loop_mean_ms": 14.200538467583495,
+      "median_window_loop_mean_ms": 14.172,
+      "weighted_fixed_mean_ms": 9.597464125736739,
+      "max_loop_ms": 86.039,
+      "units_min": 1028.0,
+      "units_max": 1071.0,
+      "heap_final_bytes": 95350784.0,
+      "gc0": 2.0,
+      "workers": 2,
+      "worker_max": 3,
+      "fixed_delta_seconds": 0.01666667,
+      "startup_workers": 3,
+      "startup_worker_max": 3,
+      "steady_segments": [
+        {
+          "first_window": 5,
+          "last_window": 19,
+          "weighted_loop_mean_ms": 14.200538467583495,
+          "weighted_fixed_mean_ms": 9.597464125736739,
+          "units_min": 1028.0,
+          "units_max": 1071.0,
+          "heap_first_bytes": 82014208.0,
+          "heap_last_bytes": 95350784.0,
+          "gc0": 2.0
+        }
+      ]
+    },
+    {
+      "run": "worker-r3b-07-bepinex",
+      "verified_mission": {
+        "requested": "Escalation",
+        "actual": "Escalation"
+      },
+      "instrumented_methods_or_phases": false,
+      "windows": 15,
+      "frames": 25083.0,
+      "weighted_loop_mean_ms": 14.357015707849941,
+      "median_window_loop_mean_ms": 13.998,
+      "weighted_fixed_mean_ms": 9.913196387991867,
+      "max_loop_ms": 56.265,
+      "units_min": 1033.0,
+      "units_max": 1071.0,
+      "heap_final_bytes": 105168896.0,
+      "gc0": 2.0,
+      "workers": 2,
+      "worker_max": 3,
+      "fixed_delta_seconds": 0.01666667,
+      "startup_workers": 3,
+      "startup_worker_max": 3,
+      "steady_segments": [
+        {
+          "first_window": 5,
+          "last_window": 19,
+          "weighted_loop_mean_ms": 14.357015707849941,
+          "weighted_fixed_mean_ms": 9.913196387991867,
+          "units_min": 1033.0,
+          "units_max": 1071.0,
+          "heap_first_bytes": 98893824.0,
+          "heap_last_bytes": 105168896.0,
+          "gc0": 2.0
+        }
+      ]
+    }
+  ]
+}

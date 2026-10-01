@@ -1,0 +1,27 @@
+{
+  "GameSteamBuild": "24724541",
+  "StartupValidationSHA256": "733c70c4ea9883e4b8f67aa5a6095df387e2de5755c0cd9f4b833573232e5048",
+  "GameAssemblySHA256": "df5bed594dd84912efb3e57faa75b37d7e327bf4c8f5418f50411ad0ff46e24a",
+  "RuntimeValidationSHA256": "760e22ebec68e828f447833ce03ca7994bd470c069f784b384d656d3f7aa8a62",
+  "Plugins": [
+    {
+      "Name": "NOPerf.Spatial.dll",
+      "SHA256": "cc79e30de0622d9b4958ab5c93159cae03992ad152443f5a1fc06aaa4483341e"
+    },
+    {
+      "Name": "NOPerf.Wrecks.dll",
+      "SHA256": "f6ac61e31094b6cba8d10d488fe5df758e0de24905fe232fb397a0fa8aff47ea"
+    },
+    {
+      "Name": "NOPerf.Navigation.dll",
+      "SHA256": "5a0b2a75cfc0a8d33034ae841f90217cdc4eb807767d722cbb5f36b05b5f1b28"
+    },
+    {
+      "Name": "NOPerf.Diagnostics.dll",
+      "SHA256": "fcc48efc5ac7cbe1f22b2fe7af7682795b7515ee503d881bc0cdaf5ca0ab6e32"
+    }
+  ],
+  "SourceCommit": "c0640bac2a9fa3fbb903303f6748df36c4640efb",
+  "ChartSHA256": "f8e87a7032eb85fb4b1cfc8bdab447737c897ba85ca53aa7e34343bb49fdcc16",
+  "ReloadValidationSHA256": "a4c6226032205164430dad0f0c01f74b2454ec725385e125004b2cf5411d4553"
+}

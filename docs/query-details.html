@@ -1,0 +1,375 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NOPerf: how the server optimizations work</title>
+<meta name="description" content="Step-through explanation of the NOPerf Spatial query traversal, with notes on the Wrecks and Navigation plugins for the Nuclear Option dedicated server.">
+<style>
+:root{--ink:#1b2733;--muted:#566476;--faint:#8794a3;--line:#d9e0e8;--rail:#f1f4f7;--soft:#f6f8fa;--blue:#2b5a8a;--teal:#0b766c;--focus:#1d64c8;--bluebg:#e8eff6;--tealbg:#e3f2ef}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+@media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
+body{margin:0;font:16px/1.7 Arial,"Helvetica Neue",system-ui,sans-serif;color:var(--ink);background:#fff}
+a{color:var(--blue);text-underline-offset:2px}
+:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+.skip{position:absolute;left:-999px;top:8px;background:#fff;padding:6px 10px;z-index:5}
+.skip:focus{left:8px}
+.layout{display:grid;grid-template-columns:228px minmax(0,1fr)}
+.rail{position:sticky;top:0;height:100vh;overflow:auto;background:var(--rail);border-right:1px solid var(--line);padding:28px 16px}
+.rail .id{margin:0 0 22px 10px;font-size:13px;line-height:1.45;color:var(--muted)}
+.rail .id b{display:block;font-size:15px;color:var(--ink)}
+.rail ol{list-style:none;margin:0;padding:0;counter-reset:ch}
+.rail li{counter-increment:ch}
+.rail a{display:block;padding:7px 10px;border-left:2px solid transparent;color:var(--muted);text-decoration:none;font-size:14px;line-height:1.4}
+.rail ol a::before{content:counter(ch) ". ";color:var(--faint)}
+.rail a:hover{color:var(--ink)}
+.rail a[aria-current]{color:var(--ink);border-left-color:var(--teal);background:#fff;font-weight:700}
+.rail .out{list-style:none;margin:18px 0 0;padding:14px 0 0;border-top:1px solid var(--line)}
+main{padding:44px clamp(18px,5vw,72px) 72px;min-width:0}
+[hidden]{display:none!important}
+main>:not(section),section>*{max-width:68ch}
+section>.wide,section>figure{max-width:60rem}
+section{padding-top:12px;margin-top:44px;border-top:1px solid var(--line)}
+.eyebrow{font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:0}
+h1{font-size:36px;line-height:1.2;margin:8px 0 10px;max-width:26ch}
+h2{font-size:32px;line-height:1.25;margin:18px 0 12px}
+h3{font-size:24px;line-height:1.3;margin:30px 0 8px}
+.meta{font-size:14px;color:var(--muted);margin:0 0 26px}
+.lead{font-size:19px;line-height:1.6}
+.note{border-left:3px solid var(--blue);background:var(--soft);padding:12px 16px;margin:20px 0}
+.note p{margin:0 0 6px}.note p:last-child{margin:0}
+code,pre{font-family:Consolas,"SFMono-Regular",Menlo,monospace;font-size:14px}
+code{background:var(--soft);padding:1px 4px;border-radius:3px}
+pre{background:var(--soft);border:1px solid var(--line);padding:12px 14px;overflow:auto;margin:0;line-height:1.55}
+pre code{background:none;padding:0}
+ul.tight li,ol.tight li{margin-bottom:6px}
+figure{margin:26px 0;padding:0}
+figcaption{font-size:14px;color:var(--muted);margin-top:10px;max-width:68ch}
+figcaption b{color:var(--ink)}
+.tag{display:inline-block;font-size:13px;color:var(--muted);border:1px dashed var(--faint);padding:2px 8px;margin:0 0 12px}
+.ctl{display:flex;flex-wrap:wrap;gap:8px 10px;align-items:center;margin:0 0 6px}
+.ctl button{font:inherit;font-size:15px;min-height:36px;padding:6px 14px;border:1px solid var(--blue);background:#fff;color:var(--blue);border-radius:4px;cursor:pointer}
+.ctl button:hover{background:var(--soft)}
+.ctl button.primary{background:var(--blue);color:#fff;min-width:6.5em}
+.ctl button.primary:hover{background:#234a72}
+.ctl .count{font-size:14px;color:var(--muted);font-variant-numeric:tabular-nums}
+.status{font-size:15px;margin:4px 0 14px;min-height:3.4em;padding:8px 12px;background:var(--soft);border-left:3px solid var(--teal)}
+.stage{display:grid;grid-template-columns:minmax(0,15rem) minmax(0,1fr);gap:18px 32px;align-items:start}
+.lab{font-size:13px;color:var(--muted);margin:0 0 6px;letter-spacing:.02em}
+.gridbox{display:grid;grid-template-columns:auto 1fr 1fr;grid-template-rows:1fr 1fr auto;gap:6px;font-size:14px}
+.ax{color:var(--muted);font-size:12px;align-self:center;text-align:center}
+.cell{border:1px solid var(--line);border-radius:4px;padding:6px 8px;background:#fff;min-width:0}
+.cell .hd{display:flex;justify-content:space-between;gap:6px;align-items:baseline}
+.cell b{font-size:16px}
+.cell .ord{font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
+.cell ol{list-style:none;margin:4px 0 0;padding:0;font-family:Consolas,"SFMono-Regular",Menlo,monospace;font-size:13px}
+.cell li{padding:1px 4px;border-radius:3px;border:1px solid transparent}
+.cell li .i{color:var(--faint)}
+.cell.on{border-color:var(--teal);box-shadow:inset 0 0 0 1px var(--teal);background:var(--tealbg)}
+.cell li.on{background:#fff;border-color:var(--teal);font-weight:700}
+.cell li.done{color:var(--faint)}
+.nul{font-style:italic}
+.loop{margin-top:14px}
+.loop .ln{display:block;padding:0 4px;margin:0 -4px;border-radius:2px}
+.loop .ln.on{background:var(--tealbg);box-shadow:inset 3px 0 0 var(--teal)}
+.lane{border:1px solid var(--line);border-radius:6px;padding:10px 14px 12px;margin:0 0 12px}
+.lane h3{font-size:17px;margin:0 0 2px}
+.lane.o h3{color:var(--blue)}.lane.f h3{color:var(--teal)}
+.lane p{margin:0;font-size:14px;color:var(--muted)}
+.staged{display:flex;flex-wrap:wrap;gap:6px;list-style:none;margin:6px 0 2px;padding:0;min-height:32px;align-items:center}
+.staged li{min-width:32px;text-align:center;border:1px solid var(--blue);border-radius:4px;padding:1px 6px;font-weight:700;background:#fff}
+.staged li.wait{border-style:dashed;border-color:var(--line);color:transparent}
+.staged li.on{background:var(--bluebg)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.tw{overflow-x:auto}
+table.cmp{border-collapse:collapse;font-size:14px;line-height:1.4;width:100%;table-layout:fixed}
+table.cmp caption{text-align:left;font-size:13px;color:var(--muted);padding:0 0 4px}
+table.cmp th,table.cmp td{border:1px solid var(--line);padding:5px 2px;text-align:center;font-variant-numeric:tabular-nums}
+table.cmp thead th{font-size:12px;color:var(--muted);font-weight:400;background:var(--soft)}
+table.cmp th[scope=row]{text-align:left;padding-left:6px;font-size:13px;width:5.6em}
+table.cmp td{font-family:Consolas,"SFMono-Regular",Menlo,monospace;height:2.3em}
+table.cmp tr.ro td:not(:empty){background:var(--bluebg)}
+table.cmp tr.rf td:not(:empty){background:var(--tealbg)}
+table.cmp tr.eq td{font-family:Arial,system-ui,sans-serif;color:var(--teal);font-weight:700}
+table.cmp td.new{outline:2px solid var(--ink);outline-offset:-2px}
+@media (prefers-reduced-motion:no-preference){
+ .cell,.cell li,.staged li,.loop .ln{transition:background-color .25s,border-color .25s,box-shadow .25s}
+ table.cmp td.new{animation:pop .35s ease-out}
+ @keyframes pop{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
+}
+details{border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin:14px 0;padding:0 2px}
+summary{cursor:pointer;padding:9px 0;font-size:15px;font-weight:700;color:var(--blue)}
+details ol{padding-left:22px;font-size:15px}
+.cmp2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0}
+.cmp2>div{border:1px solid var(--line);border-radius:6px;padding:10px 14px}
+.cmp2 h4{margin:0 0 4px;font-size:15px}
+.cmp2 p{margin:0;font-size:15px}
+footer{margin-top:40px;font-size:13px;color:var(--muted)}
+@media (max-width:860px){
+ .layout{display:block}
+ .rail{position:static;height:auto;border-right:0;border-bottom:1px solid var(--line);padding:12px 14px}
+ .rail .id{margin:0 0 6px 4px}.rail .id b{display:inline;font-size:14px}
+ .rail ol,.rail .out{display:flex;flex-wrap:wrap;gap:2px 2px}
+ .rail .out{margin:6px 0 0;padding:6px 0 0}
+ .rail a{border-left:0;border-bottom:2px solid transparent;padding:4px 7px;font-size:14px}
+ .rail a[aria-current]{background:none;border-bottom-color:var(--teal)}
+ main{padding-top:24px}
+ h1{font-size:28px}h2{font-size:26px}h3{font-size:21px}.lead{font-size:17px}
+ .stage{grid-template-columns:minmax(0,1fr)}
+ .gridbox{max-width:20rem}
+}
+@media (max-width:520px){
+ .cmp2{grid-template-columns:1fr}
+ table.cmp{font-size:12px}
+ table.cmp th[scope=row]{width:4.4em;font-size:12px;padding-left:3px}
+ table.cmp th,table.cmp td{padding:4px 1px}
+}
+@media print{
+ .rail,.ctl,.skip{display:none!important}
+ .layout{display:block}main{padding:0}
+ body{font-size:11pt;line-height:1.5}
+ figure,table,.note{break-inside:avoid}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#content">Skip to explanation</a>
+<div class="layout">
+<nav class="rail" aria-label="Chapters">
+ <p class="id"><b>NOPerf</b> how it works</p>
+ <ol>
+  <li><a href="#spatial">Spatial query</a></li>
+  <li><a href="#walk">Step through</a></li>
+  <li><a href="#preserved">What stays the same</a></li>
+  <li><a href="#others">Wrecks and Navigation</a></li>
+  <li><a href="#limits">Limits</a></li>
+ </ol>
+ <ul class="out">
+  <li><a href="detailed-report.html">Detailed test report</a></li>
+  <li><a href="https://github.com/clankagent/noperf">Source on GitHub</a></li>
+ </ul>
+</nav>
+<main id="content">
+<p class="eyebrow">NOPerf 0.1.0 · mechanism notes</p>
+<h1>How the NOPerf server optimizations work</h1>
+<p class="meta">Linux dedicated server · Nuclear Option 0.34.1, Steam build 24724541, game build <code>cb745d6c44f1</code> · Measured results are in the <a href="detailed-report.html">detailed test report</a>.</p>
+
+<section id="spatial" aria-labelledby="h-spatial">
+<h2 id="h-spatial">The Spatial query</h2>
+<p class="lead">Sensors and weapons ask the battlefield grid which units are near a position. <code>NOPerf.Spatial</code> returns exactly the same list, in the same order. It just builds that list in one fewer pass.</p>
+<p>The game divides the map into square cells. For a position and range, <code>BattlefieldGrid.GetUnitsInRangeNonAlloc</code> picks a rectangle of cells around the position. The shipped method first assembles the selected cells, then walks each cell's unit list from its last entry to its first, adding every entry to the caller's output list.</p>
+<p>The optimized version uses the same rectangle and the same loops, but appends each unit as soon as it reaches it. No intermediate list of cells is built. Nothing is filtered by distance here: whatever the selected cells contain is returned, as before.</p>
+<pre aria-label="Fused loop in NOPerf.Spatial"><code>for (int x = x0; x &lt; x1; x++)          // x is the outer loop
+for (int z = z0; z &lt; z1; z++)          // z is the inner loop
+{
+    var source = gridLookup[z * divisions + x].units;
+    for (int i = source.Count - 1; i &gt;= 0; i--)   // last unit first
+        units.Add(source[i]);
+}</code></pre>
+<p>In game-Mono method benchmarks this cut the method's time by about 28–33%. That is a method result. In an unoptimized hour of Escalation the query cost roughly 0.031 ms per game frame, and <strong>no whole-server speedup has been established</strong>.</p>
+</section>
+
+<section id="walk" aria-labelledby="h-walk">
+<h2 id="h-walk">Step through a query</h2>
+<p>A tiny made-up grid shows the order. Four cells, A to D, fall inside the selected rectangle. Cell C lists unit A1 a second time and also holds a <span class="nul">null</span> entry. The real grid can contain both, and both must survive.</p>
+<figure class="wide" aria-labelledby="walk-cap">
+ <p class="tag">Synthetic illustration · not game data · not a timing</p>
+ <div class="ctl" id="ctl" hidden>
+  <button type="button" class="primary" id="play">Play</button>
+  <button type="button" id="next">Next step</button>
+  <button type="button" id="reset">Reset</button>
+  <span class="count" id="count" aria-hidden="true"></span>
+ </div>
+ <p class="status" id="status" role="status" aria-live="polite">Final state shown. Both outputs hold A2, A1, A1, null, B1, D2, D1. The full step list is below the figure.</p>
+ <div class="stage">
+  <div>
+   <p class="lab">Selected rectangle, 2 × 2 cells</p>
+   <div class="gridbox">
+    <span class="ax" aria-hidden="true">z1</span>
+    <div class="cell" data-cell="C"><div class="hd"><b>C</b><span class="ord">x0 z1 · visit 2</span></div>
+     <ol><li data-u="C0"><span class="i">[0]</span> <span class="nul">null</span></li><li data-u="C1"><span class="i">[1]</span> A1</li></ol></div>
+    <div class="cell" data-cell="D"><div class="hd"><b>D</b><span class="ord">x1 z1 · visit 4</span></div>
+     <ol><li data-u="D0"><span class="i">[0]</span> D1</li><li data-u="D1"><span class="i">[1]</span> D2</li></ol></div>
+    <span class="ax" aria-hidden="true">z0</span>
+    <div class="cell" data-cell="A"><div class="hd"><b>A</b><span class="ord">x0 z0 · visit 1</span></div>
+     <ol><li data-u="A0"><span class="i">[0]</span> A1</li><li data-u="A1"><span class="i">[1]</span> A2</li></ol></div>
+    <div class="cell" data-cell="B"><div class="hd"><b>B</b><span class="ord">x1 z0 · visit 3</span></div>
+     <ol><li data-u="B0"><span class="i">[0]</span> B1</li></ol></div>
+    <span></span><span class="ax" aria-hidden="true">x0</span><span class="ax" aria-hidden="true">x1</span>
+   </div>
+   <pre class="loop" aria-hidden="true"><code><span class="ln" data-ln="x">for x in x0..x1</span><span class="ln" data-ln="z">  for z in z0..z1</span><span class="ln" data-ln="i">    for i = last..0</span><span class="ln" data-ln="add">      add units[i]</span></code></pre>
+  </div>
+  <div>
+   <div class="lane o">
+    <h3>Original (shipped)</h3>
+    <p>Pass 1: stage the selected cells.</p>
+    <ol class="staged" id="staged" aria-label="Staged cells">
+     <li data-s="A">A</li><li data-s="C">C</li><li data-s="B">B</li><li data-s="D">D</li>
+    </ol>
+    <p>Pass 2: walk each staged cell, last unit first.</p>
+   </div>
+   <div class="lane f">
+    <h3>NOPerf.Spatial (fused)</h3>
+    <p>Visit the same cells and append directly. No staging list.</p>
+   </div>
+   <div class="tw">
+   <table class="cmp" id="cmp">
+    <caption>Output lists, index 0 to 6</caption>
+    <thead><tr><th scope="col"><span class="sr">Row</span></th><th scope="col">0</th><th scope="col">1</th><th scope="col">2</th><th scope="col">3</th><th scope="col">4</th><th scope="col">5</th><th scope="col">6</th></tr></thead>
+    <tbody>
+     <tr class="ro"><th scope="row">Original</th><td>A2</td><td>A1</td><td>A1</td><td class="nul">null</td><td>B1</td><td>D2</td><td>D1</td></tr>
+     <tr class="rf"><th scope="row">Fused</th><td>A2</td><td>A1</td><td>A1</td><td class="nul">null</td><td>B1</td><td>D2</td><td>D1</td></tr>
+     <tr class="eq"><th scope="row">Same?</th><td>=</td><td>=</td><td>=</td><td>=</td><td>=</td><td>=</td><td>=</td></tr>
+    </tbody>
+   </table>
+   </div>
+  </div>
+ </div>
+ <figcaption id="walk-cap"><b>Same cells, same order, same entries.</b> The visit order follows the real loops: <code>x</code> outer, <code>z</code> inner, so A (x0 z0), C (x0 z1), B (x1 z0), D (x1 z1). Inside each cell the index runs from last to first. The only difference is the original's staging pass. The illustration shows that the pass is avoided, not how long it takes.</figcaption>
+</figure>
+<details>
+ <summary>All steps as text</summary>
+ <ol id="steplist">
+  <li>Original stages the selected cells A, C, B, D. Fused builds no staging list.</li>
+  <li>Cell A (x0 z0), index 1: both outputs add A2 at position 0.</li>
+  <li>Cell A, index 0: both add A1 at position 1.</li>
+  <li>Cell C (x0 z1), index 1: both add A1 again at position 2. The duplicate is kept.</li>
+  <li>Cell C, index 0: both add null at position 3. The null entry is kept.</li>
+  <li>Cell B (x1 z0), index 0: both add B1 at position 4.</li>
+  <li>Cell D (x1 z1), index 1: both add D2 at position 5.</li>
+  <li>Cell D, index 0: both add D1 at position 6. The two outputs are identical: 7 entries in the same order.</li>
+ </ol>
+</details>
+</section>
+
+<section id="preserved" aria-labelledby="h-preserved">
+<h2 id="h-preserved">What stays the same</h2>
+<ul class="tight">
+ <li><strong>Cell rectangle.</strong> The same clamped centre cell, the same radius rounding and the same exclusive upper bounds. Changing coverage would change sensor and weapon decisions.</li>
+ <li><strong>Order.</strong> <code>x</code> outer, <code>z</code> inner, units from last to first.</li>
+ <li><strong>Contents.</strong> Duplicates and <span class="nul">null</span> entries pass through untouched. The output list is cleared first, as before.</li>
+ <li><strong>Fallbacks.</strong> Calls off the main thread, or before the grid exists, run the original method.</li>
+ <li><strong>Guard.</strong> The patch is applied only on the exact tested game assembly, only on a dedicated (batch-mode) server, and only if no other mod has already patched the method.</li>
+</ul>
+<p>A runtime harness compared the patch against a Harmony reverse patch of the shipped method. It covered thousands of random, edge, fractional and non-finite queries, plus null-cell and null-output exceptions and Unity RNG state. See the <a href="index.html#validation">validation chapter</a> of the report.</p>
+</section>
+
+<section id="others" aria-labelledby="h-others">
+<h2 id="h-others">Wrecks and Navigation</h2>
+<p>Both are <strong>experimental and disabled by default</strong>. Neither changes which wreck or route the game picks.</p>
+<h3>Wrecks: reusing a search snapshot</h3>
+<p>When a wreck collector looks for a wreck, the game copies its candidates into a new temporary list. During the outermost search on the main thread, <code>NOPerf.Wrecks</code> fills a list kept for that collector instead. The original selection code then runs over it unchanged. The list is cleared when the search ends, even if it throws, and is trimmed if it grows large. Nested searches, searches by another collector and off-thread calls still make a fresh copy.</p>
+<div class="cmp2">
+ <div><h4>Original</h4><p>New list per search.</p></div>
+ <div><h4>Wrecks plugin</h4><p>One reused list per collector, emptied after each search.</p></div>
+</div>
+<p>The method benchmark improved by 0.9–3.5% at 128 candidates, with fewer GC collections. Empty searches added 0.006–0.65 µs. Whether it helps depends on the workload.</p>
+<h3>Navigation: road-node membership</h3>
+<p>Road pathfinding repeatedly asks whether a node is still in a list. A list answers that by scanning. On the first such check in a pathfinding call, <code>NOPerf.Navigation</code> builds a lookup indexed by node ID, with a count per node so duplicates behave as before. Removals still use the original list operation, so list order and sorting are untouched.</p>
+<p>The plugin falls back to the original scan in these cases:</p>
+<ul class="tight">
+ <li>IDs are negative, too large or too sparse, or two nodes share an ID.</li>
+ <li>The list changes outside the patched calls.</li>
+ <li>The call is nested or off the main thread.</li>
+</ul>
+<p>Synthetic road graphs ran 6–13% faster. Pathfinding was sparse in the measured Escalation missions, so the effect on a whole server is unproven.</p>
+</section>
+
+<section id="limits" aria-labelledby="h-limits">
+<h2 id="h-limits">Limits</h2>
+<div class="note" role="note">
+ <p><strong>Method results are not server results.</strong> The percentages above come from method benchmarks. Mission comparisons stayed within run-to-run variation, and no FPS or capacity gain is claimed.</p>
+ <p><strong>Vanilla clients are not live-tested.</strong> Clients install nothing, and static inspection found no new network messages, but unmodded join and rejoin were not tested.</p>
+ <p><strong>One build only.</strong> On any other game assembly the plugins stay inactive. Each update needs a rebuild and fresh validation.</p>
+</div>
+<p>Install steps, configuration and build instructions are in the <a href="https://github.com/clankagent/noperf#install">README</a>. Measured results and charts are in the <a href="detailed-report.html">detailed test report</a>.</p>
+<footer>NOPerf is MIT-licensed. Nuclear Option and other dependencies belong to their owners. Design assistance: Claude Opus 5.5.</footer>
+</section>
+</main>
+</div>
+<script>
+(()=>{
+'use strict';
+// Synthetic example: visit order A, C, B, D (x outer, z inner); units walked last to first.
+const CELLS={A:['A1','A2'],C:[null,'A1'],B:['B1'],D:['D1','D2']};
+const XZ={A:'x0 z0',C:'x0 z1',B:'x1 z0',D:'x1 z1'};
+const ORDER=['A','C','B','D'];
+const EMIT=[];
+ORDER.forEach(c=>{for(let i=CELLS[c].length-1;i>=0;i--)EMIT.push({c,i,v:CELLS[c][i]})});
+const LAST=EMIT.length+1; // step 1 = staging, steps 2..LAST = one append each
+const show=v=>v===null?'null':v;
+
+const $=id=>document.getElementById(id);
+const ctl=$('ctl'),play=$('play'),next=$('next'),reset=$('reset'),count=$('count'),status=$('status');
+const cells={};document.querySelectorAll('[data-cell]').forEach(e=>cells[e.dataset.cell]=e);
+const units={};document.querySelectorAll('[data-u]').forEach(e=>units[e.dataset.u]=e);
+const staged=[...$('staged').children],lines={};document.querySelectorAll('[data-ln]').forEach(e=>{e.dataset.base=e.textContent;lines[e.dataset.ln]=e});
+const rows=[...$('cmp').tBodies[0].rows].map(r=>[...r.cells].slice(1));
+
+let step=0,timer=null;
+const reduce=matchMedia('(prefers-reduced-motion: reduce)');
+
+function msg(s){
+ if(s===0)return 'Ready. Both outputs are empty. Press Next step or Play.';
+ if(s===1)return 'Step 1 of '+LAST+': the original stages the selected cells A, C, B, D. The fused version builds no staging list.';
+ const k=s-2,e=EMIT[k],v=show(e.v);
+ let t='Step '+s+' of '+LAST+': cell '+e.c+' ('+XZ[e.c]+'), index '+e.i+'. Both outputs add '+v+' at position '+k+'.';
+ if(e.c==='C'&&e.v==='A1')t+=' A1 appears again; the duplicate is kept.';
+ if(e.v===null)t+=' The null entry is kept.';
+ if(s===LAST)t+=' Done: both outputs hold the same 7 entries in the same order.';
+ return t;
+}
+function render(){
+ const k=step-2,cur=step>=2?EMIT[k]:null;
+ Object.entries(cells).forEach(([c,e])=>e.classList.toggle('on',!!cur&&cur.c===c));
+ Object.entries(units).forEach(([id,e])=>{
+  const c=id[0],i=+id.slice(1),at=EMIT.findIndex(x=>x.c===c&&x.i===i);
+  e.classList.toggle('on',at===k);e.classList.toggle('done',at<k&&at>=0&&step>=2);
+ });
+ staged.forEach(li=>{li.classList.toggle('wait',step<1);li.classList.toggle('on',!!cur&&li.dataset.s===cur.c)});
+ const now=cur?{x:'x = '+XZ[cur.c][1],z:'z = '+XZ[cur.c][4],i:'i = '+cur.i,add:'→ '+show(cur.v)}:{};
+ Object.entries(lines).forEach(([n,e])=>{e.textContent=e.dataset.base+(now[n]?'   '+now[n]:'');e.classList.toggle('on',!!cur)});
+ rows.forEach((r,ri)=>r.forEach((td,j)=>{
+  const filled=j<=k&&step>=2;
+  td.textContent=filled?(ri===2?'=':show(EMIT[j].v)):'';
+  td.classList.toggle('nul',filled&&ri<2&&EMIT[j].v===null);
+  td.classList.toggle('new',filled&&j===k);
+ }));
+ count.textContent='Step '+step+' of '+LAST;
+ status.textContent=msg(step);
+}
+function stop(){if(timer){clearInterval(timer);timer=null}play.textContent='Play'}
+function advance(){
+ if(step>=LAST){stop();status.textContent='Already at the last step. Press Reset to start again.';return false}
+ step++;render();
+ if(step>=LAST)stop();
+ return true;
+}
+play.addEventListener('click',()=>{
+ if(timer){stop();status.textContent='Paused at step '+step+' of '+LAST+'.';return}
+ if(step>=LAST){step=0;render()}
+ play.textContent='Pause';
+ advance();
+ if(step<LAST)timer=setInterval(advance,reduce.matches?2200:1500);
+});
+next.addEventListener('click',()=>{stop();advance()});
+reset.addEventListener('click',()=>{stop();step=0;render()});
+document.addEventListener('visibilitychange',()=>{if(document.hidden&&timer){stop();status.textContent='Paused at step '+step+' of '+LAST+'.'}});
+ctl.hidden=false;
+render();
+
+// Active chapter in the rail
+const links=[...document.querySelectorAll('.rail ol a')],secs=links.map(a=>document.querySelector(a.getAttribute('href')));
+const mark=id=>links.forEach(a=>a.getAttribute('href')==='#'+id?a.setAttribute('aria-current','location'):a.removeAttribute('aria-current'));
+if('IntersectionObserver'in window){
+ const vis=new Set();
+ const io=new IntersectionObserver(es=>{es.forEach(e=>e.isIntersecting?vis.add(e.target):vis.delete(e.target));
+  const first=secs.find(s=>vis.has(s));if(first)mark(first.id)},{rootMargin:'-15% 0px -70% 0px'});
+ secs.forEach(s=>io.observe(s));
+}
+mark('spatial');
+})();
+</script>
+</body>
+</html>
