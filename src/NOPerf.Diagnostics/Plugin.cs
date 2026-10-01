@@ -21,6 +21,7 @@ public sealed class DiagnosticsPlugin : BaseUnityPlugin
     private MethodProfiler? profiler;
     private bool requestProfiler;
     private bool requestMissionProfiler;
+    private bool requestJobProfiler;
     private bool requestNative;
     private NativeMarkers? native;
     private bool requestPhases;
@@ -38,6 +39,7 @@ public sealed class DiagnosticsPlugin : BaseUnityPlugin
         gc0=GC.CollectionCount(0);gc1=GC.CollectionCount(1);gc2=GC.CollectionCount(2);
         requestProfiler = Config.Bind("Profiling", "Methods", false, "Instrument selected managed methods, sampling 1/64 calls. Adds overhead; restart to apply.").Value;
         requestMissionProfiler = Config.Bind("Profiling", "MissionMethods", false, "Instrument selected mission objective methods, sampling 1/64 calls. Adds overhead; restart to apply.").Value;
+        requestJobProfiler = Config.Bind("Profiling", "JobMethods", false, "Instrument job scheduling, input collection and result application separately. Inclusive main-thread timings include waits; sampling adds overhead. Restart to apply.").Value;
         requestNative = Config.Bind("Profiling", "NativeMarkers", false, "Record available Unity main-thread physics/job markers. Adds overhead; restart to apply.").Value;
         requestPhases = Config.Bind("Profiling", "PlayerLoopPhases", false, "Observe native physics and script phase timings through adjacent player-loop probes; restart to apply.").Value;
         Logger.LogInfo("Diagnostics observing existing game frame timings; frame/AI/physics rates unchanged.");
@@ -61,11 +63,11 @@ public sealed class DiagnosticsPlugin : BaseUnityPlugin
             Logger.LogInfo($"Runtime settled workers={Unity.Jobs.LowLevel.Unsafe.JobsUtility.JobWorkerCount} worker_max={Unity.Jobs.LowLevel.Unsafe.JobsUtility.JobWorkerMaximumCount} logical_cpus={SystemInfo.processorCount} fixed_delta_seconds={Time.fixedDeltaTime}");
             Logger.LogInfo($"Physics settled reuse_collision_callbacks={Physics.reuseCollisionCallbacks} auto_sync_transforms={Physics.autoSyncTransforms}");
         }
-        if ((requestProfiler || requestMissionProfiler) && Time.realtimeSinceStartupAsDouble > 5)
+        if ((requestProfiler || requestMissionProfiler || requestJobProfiler) && Time.realtimeSinceStartupAsDouble > 5)
         {
-            bool generalMethods = requestProfiler, missionMethods = requestMissionProfiler;
-            requestProfiler = requestMissionProfiler = false;
-            try { profiler = new MethodProfiler(Logger, generalMethods, missionMethods); }
+            bool generalMethods = requestProfiler, missionMethods = requestMissionProfiler, jobMethods = requestJobProfiler;
+            requestProfiler = requestMissionProfiler = requestJobProfiler = false;
+            try { profiler = new MethodProfiler(Logger, generalMethods, missionMethods, jobMethods); }
             catch (Exception ex) { new HarmonyLib.Harmony("agent.noperf.diagnostics.methods").UnpatchSelf(); Logger.LogError("Method profiler disabled: " + ex); }
         }
         if (requestNative && Time.realtimeSinceStartupAsDouble > 20)

@@ -23,7 +23,7 @@ internal sealed class MethodProfiler : IDisposable
     private static int mainThread;
     private readonly Harmony harmony = new("agent.noperf.diagnostics.methods");
     private readonly ManualLogSource log;
-    internal MethodProfiler(ManualLogSource log, bool generalMethods, bool missionMethods)
+    internal MethodProfiler(ManualLogSource log, bool generalMethods, bool missionMethods, bool jobMethods = false)
     {
         this.log = log;
         mainThread = Thread.CurrentThread.ManagedThreadId;
@@ -52,6 +52,31 @@ internal sealed class MethodProfiler : IDisposable
             (typeof(NuclearOption.SavedMission.Objectives.SuccessfulSortieObjective), "UpdateAndCheck"),
             (typeof(NuclearOption.SavedMission.Objectives.CrashAircraftObjective), "UpdateAndCheck"),
             (typeof(NuclearOption.SavedMission.Objectives.NoObjective), "UpdateAndCheck") });
+        if (jobMethods)
+        {
+            foreach (var target in new[] {
+                ("NuclearOption.Jobs.JobManager", "ScheduleJobs"),
+                ("NuclearOption.Jobs.JobManager", "PilotAeroInputs"),
+                ("NuclearOption.Jobs.AeroJobSettings", "SetArgs_Update"),
+                ("NuclearOption.Jobs.AeroJobSettings", "FinishJob"),
+                ("NuclearOption.Jobs.ControlJobSettings", "Schedule"),
+                ("NuclearOption.Jobs.ControlJobSettings", "FinishJob"),
+                ("NuclearOption.Jobs.GroundVehicleJobSettings", "SetArgs_Update"),
+                ("NuclearOption.Jobs.GroundVehicleJobSettings", "Schedule_1_inner"),
+                ("NuclearOption.Jobs.GroundVehicleJobSettings", "Schedule_2"),
+                ("NuclearOption.Jobs.GroundVehicleJobSettings", "FinishJob"),
+                ("NuclearOption.Jobs.DetectorManager", "Schedule"),
+                ("NuclearOption.Jobs.DetectorManager", "FinishJob"),
+                ("GroundVehicle", "ObstacleCopy"),
+                ("GroundVehicle", "UpdateJobFields_Pathfinder"),
+                ("GroundVehicle", "ApplyJobFields"),
+                ("Pilot", "Pilot_OnAeroInputsApplied") })
+            {
+                var type = AccessTools.TypeByName(target.Item1);
+                if (type == null) { log.LogWarning("Job profile type unavailable: " + target.Item1); continue; }
+                targets.Add((type, target.Item2));
+            }
+        }
         foreach (var target in targets)
         {
             var method = AccessTools.Method(target.Item1, target.Item2);

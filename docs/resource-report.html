@@ -1,0 +1,851 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nuclear Option server resource report · NOTestPilot</title>
+<meta name="description" content="Report of automated multiplayer testing of a Nuclear Option dedicated server: what four scripted pilots did, measured server CPU and memory, and what remains unproven.">
+<style>
+:root{
+  --bg:#ffffff; --surface:#f4f6f9; --surface-2:#eef2f7;
+  --text:#18212d; --muted:#4f5b6b; --border:#d3dae3; --border-strong:#8794a6;
+  --action:#1d5bbf; --action-hover:#16478f; --on-action:#ffffff; --focus:#1d5bbf;
+  --success:#17663f; --success-bg:#e9f5ee; --danger:#a8201a; --danger-bg:#fbeceb;
+  --note:#f2f6fc; --note-border:#bcd0ee; --warn:#7a4f00; --warn-bg:#fdf5e4; --warn-border:#e8cf96;
+  --server:#1d5bbf; --server-main:#173f80; --server-jobs:#4a82d6; --server-other:#9bb8e6;
+  --client:#0d7480; --client-2:#13848f; --unused:#e8ecf2;
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --mono:ui-monospace,"Cascadia Mono",Consolas,"SFMono-Regular",Menlo,monospace;
+  --header:56px;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--text);font:16px/1.7 var(--sans)}
+a{color:var(--action);text-underline-offset:2px}
+a:hover{color:var(--action-hover)}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px;border-radius:2px}
+.skip{position:absolute;left:-999px;top:8px;background:var(--action);color:var(--on-action);padding:8px 12px;z-index:20}
+.skip:focus{left:8px}
+
+/* Header */
+.top{position:sticky;top:0;z-index:10;height:var(--header);display:flex;align-items:center;gap:16px;padding:0 20px;background:var(--bg);border-bottom:1px solid var(--border)}
+.brand{font-weight:650;font-size:15px;color:var(--text);text-decoration:none;white-space:nowrap}
+.brand span{color:var(--muted);font-weight:400}
+.draft-tag{font-size:12px;font-weight:600;letter-spacing:.02em;color:var(--warn);background:var(--warn-bg);border:1px solid var(--warn-border);padding:1px 8px;border-radius:4px}
+.top .src{margin-left:auto;font-size:14px;white-space:nowrap}
+
+/* Layout */
+.layout{display:grid;grid-template-columns:232px minmax(0,1fr);max-width:1440px;margin:0 auto}
+.rail{position:sticky;top:var(--header);align-self:start;height:calc(100vh - var(--header));overflow:auto;background:var(--surface);border-right:1px solid var(--border);padding:24px 0 32px}
+.rail h2{font-size:12px;line-height:1.4;margin:0 20px 8px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.06em}
+.rail ol{list-style:none;margin:0;padding:0;counter-reset:ch}
+.rail li{counter-increment:ch}
+.rail a{display:flex;gap:10px;font-size:13px;line-height:1.45;padding:7px 20px;color:var(--text);text-decoration:none;border-left:3px solid transparent}
+.rail a::before{content:counter(ch);color:var(--muted);font-variant-numeric:tabular-nums;min-width:1ch}
+.rail a:hover{background:var(--surface-2)}
+.rail a[aria-current="true"]{color:var(--action);border-left-color:var(--action);background:#e7eef9;font-weight:600}
+.rail .meta{margin:24px 20px 0;font-size:12px;line-height:1.55;color:var(--muted)}
+.content{display:grid;grid-template-columns:minmax(0,74ch) 200px;gap:48px;padding:40px 40px 96px;justify-content:start}
+.toc{position:sticky;top:calc(var(--header) + 40px);align-self:start;font-size:13px;line-height:1.45}
+.toc h2{font-size:12px;margin:0 0 8px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.06em}
+.toc ul{list-style:none;margin:0;padding:0;border-left:1px solid var(--border)}
+.toc a{display:block;padding:5px 0 5px 12px;color:var(--muted);text-decoration:none}
+.toc a:hover{color:var(--action)}
+article{min-width:0}
+
+/* Type */
+h1{font-size:34px;line-height:1.2;margin:0 0 12px;font-weight:700;letter-spacing:-.01em}
+h2.ch{font-size:24px;line-height:1.3;margin:0 0 8px;font-weight:700}
+h3{font-size:18px;line-height:1.4;margin:32px 0 8px;font-weight:650}
+section{padding-top:48px;margin-top:48px;border-top:1px solid var(--border)}
+section:first-of-type{border-top:0;margin-top:24px;padding-top:0}
+section,h3{scroll-margin-top:calc(var(--header) + 16px)}
+.lead{font-size:18px;line-height:1.6;color:var(--text);margin:0 0 16px}
+.kicker{font-size:13px;color:var(--muted);margin:0 0 4px}
+p{margin:0 0 16px}
+ul,ol{padding-left:22px;margin:0 0 16px}
+li{margin:4px 0}
+.muted{color:var(--muted)}
+.num,td.num,th.num{font-variant-numeric:tabular-nums}
+code{font-family:var(--mono);font-size:.88em;background:var(--surface);padding:1px 4px;border-radius:3px}
+strong{font-weight:650}
+
+/* Notes */
+.note{background:var(--note);border-left:3px solid var(--note-border);padding:14px 18px;margin:20px 0;border-radius:0 4px 4px 0}
+.note.warn{background:var(--warn-bg);border-left-color:var(--warn-border)}
+.note p:last-child,.note ul:last-child{margin-bottom:0}
+.note-title{font-weight:650;display:block;margin-bottom:4px}
+
+/* Two-column shown / not shown */
+.split{display:grid;grid-template-columns:1fr 1fr;gap:32px;margin:24px 0}
+.split h3{margin-top:0;display:flex;align-items:center;gap:8px}
+.mark{display:inline-grid;place-items:center;width:20px;height:20px;border-radius:50%;font-size:13px;font-weight:700;flex:none}
+.mark.ok{background:var(--success-bg);color:var(--success);border:1px solid #9fcfb4}
+.mark.no{background:var(--danger-bg);color:var(--danger);border:1px solid #e7a9a5}
+.split ul{padding-left:18px}
+
+/* Key figures row (data, not decoration) */
+.figures{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;margin:24px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.figures div{padding:14px 16px 14px 0}
+.figures div+div{padding-left:16px;border-left:1px solid var(--border)}
+.figures b{display:block;font-size:24px;line-height:1.2;font-variant-numeric:tabular-nums;font-weight:650}
+.figures span{display:block;font-size:13px;line-height:1.45;color:var(--muted);margin-top:4px}
+
+/* Tables */
+.table-wrap{overflow-x:auto;margin:16px 0 20px;-webkit-overflow-scrolling:touch}
+table{border-collapse:collapse;width:100%;font-size:14px;line-height:1.5}
+caption{text-align:left;font-size:13px;color:var(--muted);padding-bottom:8px}
+th,td{padding:8px 12px 8px 0;border-bottom:1px solid var(--border);text-align:left;vertical-align:top}
+th{font-weight:600;font-size:13px;color:var(--muted);border-bottom-color:var(--border-strong)}
+td.num,th.num{text-align:right;padding-right:16px}
+.pass{color:var(--success);font-weight:600}
+.fail{color:var(--danger);font-weight:600}
+
+/* Disclosures */
+details{border:1px solid var(--border);border-radius:6px;margin:16px 0;background:var(--bg)}
+summary{cursor:pointer;padding:10px 14px;font-size:14px;font-weight:600;color:var(--text);list-style:none;display:flex;gap:8px;align-items:center}
+summary::-webkit-details-marker{display:none}
+summary::before{content:"";width:0;height:0;border-left:6px solid var(--muted);border-top:5px solid transparent;border-bottom:5px solid transparent;transition:transform .15s}
+details[open] summary::before{transform:rotate(90deg)}
+details>.inner{padding:0 14px 12px}
+details>.inner .table-wrap{margin-top:0}
+
+/* Timeline */
+.timeline{margin:20px 0 8px}
+.tl-bar{display:flex;height:34px;border-radius:4px;overflow:hidden;border:1px solid var(--border-strong)}
+.tl-bar div{display:flex;align-items:center;padding:0 10px;font-size:13px;font-weight:600;color:#fff;white-space:nowrap;overflow:hidden}
+.tl-a{background:#4a6fa5;flex:180}
+.tl-b{background:var(--server-main);flex:600}
+.tl-scale{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums;margin-top:4px}
+.steps{counter-reset:s;list-style:none;padding:0}
+.steps li{counter-increment:s;position:relative;padding-left:40px;margin:14px 0}
+.steps li::before{content:counter(s);position:absolute;left:0;top:1px;width:26px;height:26px;border-radius:50%;border:1px solid var(--border-strong);display:grid;place-items:center;font-size:13px;font-weight:600;color:var(--muted);background:var(--bg)}
+
+/* Figures / charts */
+figure{margin:28px 0;padding:0}
+figcaption.fig-title{font-weight:650;font-size:16px;margin-bottom:2px}
+.fig-sub{font-size:14px;color:var(--muted);margin:0 0 14px}
+.controls{display:flex;flex-wrap:wrap;gap:16px 24px;align-items:center;margin:0 0 16px}
+.seg{display:inline-flex;border:1px solid var(--border-strong);border-radius:6px;overflow:hidden}
+.seg legend{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+fieldset.seg{padding:0;margin:0;min-width:0}
+.seg label{position:relative;display:block;cursor:pointer}
+.seg input{position:absolute;opacity:0;inset:0;margin:0;cursor:pointer}
+.seg span{display:block;padding:6px 12px;font-size:14px;line-height:1.4;color:var(--text);background:var(--bg)}
+.seg label+label span{border-left:1px solid var(--border-strong)}
+.seg input:checked+span{background:var(--action);color:var(--on-action)}
+.seg input:focus-visible+span{outline:3px solid var(--focus);outline-offset:-3px}
+.ctl-label{font-size:13px;color:var(--muted);margin-right:8px}
+.btn{font:inherit;font-size:14px;padding:6px 12px;border:1px solid var(--border-strong);background:var(--bg);color:var(--text);border-radius:6px;cursor:pointer}
+.btn:hover:not(:disabled){border-color:var(--action);color:var(--action)}
+.btn:disabled{color:#7b8594;cursor:not-allowed;background:var(--surface)}
+.btn.primary{background:var(--action);border-color:var(--action);color:var(--on-action)}
+.btn.primary:hover:not(:disabled){background:var(--action-hover);color:var(--on-action)}
+
+.alloc{border:1px solid var(--border);border-radius:8px;padding:20px}
+.track-label{display:flex;justify-content:space-between;font-size:13px;color:var(--muted);margin-bottom:6px}
+.track{position:relative;display:flex;height:56px;border:1px solid var(--border-strong);border-radius:4px;overflow:hidden;background:var(--unused)}
+.track::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(90deg,transparent calc(25% - 1px),rgba(24,33,45,.55) calc(25% - 1px),rgba(24,33,45,.55) 25%,transparent 25%,transparent calc(50% - 1px),rgba(24,33,45,.55) calc(50% - 1px),rgba(24,33,45,.55) 50%,transparent 50%,transparent calc(75% - 1px),rgba(24,33,45,.55) calc(75% - 1px),rgba(24,33,45,.55) 75%,transparent 75%)}
+.seg-bar{height:100%;transition:width .45s ease,opacity .3s ease,filter .3s ease;display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;font-weight:600;overflow:hidden;white-space:nowrap;border-right:1px solid rgba(255,255,255,.7)}
+.seg-bar.server{background:var(--server)}
+.seg-bar.client{background:var(--client)}
+.seg-bar.client.alt{background:var(--client-2)}
+.seg-bar.unused{background:repeating-linear-gradient(135deg,var(--unused) 0 6px,#d6dce5 6px 8px);color:var(--muted);border-right:0;flex:1}
+.track.focus-server .seg-bar:not(.server),
+.track.focus-clients .seg-bar:not(.client),
+.track.focus-unused .seg-bar:not(.unused),
+.track.focus-none .seg-bar{opacity:1;filter:none;background:#dce3ec;color:#26364b}
+.scale{display:grid;grid-template-columns:repeat(4,1fr);font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums;margin-top:4px}
+.scale span{text-align:right}
+.scale span:first-child::before{content:"0";float:left}
+.legend{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:13px;margin:14px 0 0;padding:0;list-style:none}
+.legend li{display:flex;align-items:center;gap:6px;margin:0}
+.sw{width:12px;height:12px;border-radius:2px;flex:none;border:1px solid rgba(0,0,0,.15)}
+.stepper{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-top:18px;padding-top:16px;border-top:1px solid var(--border)}
+.step-count{font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
+.caption{margin:12px 0 0;min-height:5.1em}
+.caption strong{display:block}
+
+.hbars{display:grid;grid-template-columns:minmax(96px,max-content) 1fr;gap:8px 12px;align-items:center;font-size:14px}
+.hbars .lbl{color:var(--text);line-height:1.3}
+.hbars .lbl small{display:block;color:var(--muted);font-size:12px}
+.bar-row{display:flex;align-items:center;gap:8px;min-width:0}
+.bar{height:20px;border-radius:2px;transition:width .45s ease;min-width:2px}
+.bar-val{font-size:13px;font-variant-numeric:tabular-nums;white-space:nowrap;color:var(--text)}
+.bar.zero{min-width:0;width:0!important}
+.range-track{position:relative;height:20px;flex:1;background:linear-gradient(90deg,var(--border) 1px,transparent 1px) 0 0/25% 100%,var(--surface);border-radius:2px}
+.range{position:absolute;top:4px;height:12px;background:var(--server);border-radius:6px;min-width:12px}
+.axis{display:grid;grid-template-columns:minmax(96px,max-content) 1fr;gap:12px;font-size:12px;color:var(--muted);margin-top:4px}
+.axis div:last-child{display:flex;justify-content:space-between;font-variant-numeric:tabular-nums}
+
+.mini{display:flex;height:24px;border:1px solid var(--border-strong);border-radius:3px;overflow:hidden;background:var(--unused);max-width:100%}
+.mini div{transition:width .45s ease;height:100%;border-right:1px solid rgba(255,255,255,.7)}
+.mini-scale{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums;margin-top:2px}
+
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+.phone-nav{display:none}
+footer.about{margin-top:64px;padding-top:24px;border-top:1px solid var(--border);font-size:14px;color:var(--muted)}
+
+@media (max-width:1199px){
+  .content{grid-template-columns:minmax(0,74ch);padding:36px 32px 80px}
+  .toc{display:none}
+}
+@media (max-width:899px){
+  :root{--header:52px}
+  .layout{display:block}
+  .rail{display:none}
+  .content{padding:24px 18px 64px}
+  .phone-nav{display:block;background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:12px 14px;margin:0 0 28px}
+  .phone-nav h2{font-size:12px;margin:0 0 6px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+  .phone-nav ol{margin:0;padding-left:20px;font-size:15px}
+  .phone-nav li{margin:2px 0}
+  .phone-nav a{display:inline-block;padding:4px 0}
+  h1{font-size:28px}
+  .split{grid-template-columns:1fr;gap:16px}
+  .figures{grid-template-columns:1fr 1fr}
+  .figures div:nth-child(3){padding-left:0;border-left:0}
+  .figures div:nth-child(n+3){border-top:1px solid var(--border)}
+  .alloc{padding:14px}
+  .top .src{display:none}
+}
+@media (max-width:420px){
+  .top{gap:10px;padding:0 14px}
+  .brand span{display:none}
+  .figures b{font-size:20px}
+  .hbars,.axis{grid-template-columns:88px 1fr}
+  .seg span{padding:6px 9px;font-size:13px}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{transition:none!important;animation:none!important;scroll-behavior:auto!important}
+}
+@media print{
+  .top,.rail,.toc,.phone-nav,.stepper,.controls{display:none}
+  .layout,.content{display:block;padding:0}
+  details{border:0} details>.inner{display:block}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to report</a>
+
+<header class="top">
+  <a class="brand" href="#summary">NOTestPilot <span>· Server resource report</span></a>
+  <span class="draft-tag">Measured</span>
+  <a class="src" href="https://github.com/clankagent/notestpilot">Public source</a>
+</header>
+
+<div class="layout">
+  <nav class="rail" aria-label="Chapters">
+    <h2>Chapters</h2>
+    <ol>
+      <li><a href="#summary">What is known so far</a></li>
+      <li><a href="#players">What the players did</a></li>
+      <li><a href="#resources">Server CPU and memory</a></li>
+      <li><a href="#capacity">Why this is not a capacity figure</a></li>
+      <li><a href="#comparison">Mod comparison and failures</a></li>
+      <li><a href="#next">Next tests</a></li>
+    </ol>
+    <p class="meta">Measured snapshot<br>1 October 2026<br>Nuclear Option 0.34.1</p>
+  </nav>
+
+  <div class="content">
+    <article id="main">
+      <nav class="phone-nav" aria-label="Chapters">
+        <h2>Chapters</h2>
+        <ol>
+          <li><a href="#summary">What is known so far</a></li>
+          <li><a href="#players">What the players did</a></li>
+          <li><a href="#resources">Server CPU and memory</a></li>
+          <li><a href="#capacity">Why this is not a capacity figure</a></li>
+          <li><a href="#comparison">Mod comparison and failures</a></li>
+          <li><a href="#next">Next tests</a></li>
+        </ol>
+      </nav>
+
+      <!-- 1 -->
+      <section id="summary" aria-labelledby="h-summary">
+        <p class="kicker">Nuclear Option dedicated server · automated multiplayer testing</p>
+        <h1 id="h-summary">What a server used with four active pilots</h1>
+        <p class="lead">Four scripted test pilots joined a Linux dedicated server over the game’s normal network connection, took off in the stock Escalation mission and flew and fired guns for ten minutes. This page shows what the server used while that happened, and what the test still can’t tell you.</p>
+
+        <div class="note warn" role="note">
+          <span class="note-title">Useful measurements; capacity is still unproven</span>
+          <p>The newer Ryzen machine completed three four-pilot baseline runs. In their ten-minute flight windows the server averaged 0.76–0.77 CPU cores and peaked at 1.04–1.14 GiB. This describes those runs, not the minimum hardware for an hour-long battle or a larger player count. The test clients competed with the server for the same four vCPUs.</p>
+        </div>
+
+        <div class="figures" role="list" aria-label="Measured figures from the passed four-pilot run, ten-minute flight window">
+          <div role="listitem"><b>0.76</b><span>CPU cores used by the server process on average</span></div>
+          <div role="listitem"><b>1.14 GiB</b><span>Peak server memory</span></div>
+          <div role="listitem"><b>60.0 / s</b><span>Physics steps per second</span></div>
+          <div role="listitem"><b>50 of 50</b><span>Checks passed in this baseline</span></div>
+        </div>
+
+        <div class="split">
+          <div>
+            <h3 id="shown"><span class="mark ok" aria-hidden="true">✓</span>Shown with real game processes</h3>
+            <ul>
+              <li>A Nuclear Option 0.34.1 Linux dedicated server hosted four connected pilots in stock Escalation. Every pilot taxied, took off and climbed for 3 minutes, then flew and fired short gun bursts for 10 minutes. Three independent baseline runs and one matched Spatial run passed all 50 checks each.</li>
+              <li>During those 10 minutes the server process averaged <strong>0.76 of one CPU core</strong> and peaked at <strong>1.14 GiB</strong> of memory.</li>
+              <li>The physics simulation averaged 60 steps per second. The server’s update loop averaged 55.4 per second.</li>
+              <li>Two-pilot runs also covered rockets, ejecting in the air, taking a replacement aircraft and flying again.</li>
+            </ul>
+          </div>
+          <div>
+            <h3 id="not-shown"><span class="mark no" aria-hidden="true">✕</span>Not shown yet</h3>
+            <ul>
+              <li>How many players a production server can hold. The server and all test clients shared one small virtual machine.</li>
+              <li>Whether the optional NOPerf Spatial plugin helps the whole server. One matched pair finished, with almost identical CPU use. Earlier attempts failed; more repeats are needed.</li>
+              <li>Behaviour with human players or retail Steam clients.</li>
+              <li>Sessions of an hour or more, reconnecting mid-flight, or switching missions with players in the air. Those either failed or haven’t been tested.</li>
+              <li>A completely unmodded server. Every measured baseline also loads the BepInEx mod loader and the test bridge.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- 2 -->
+      <section id="players" aria-labelledby="h-players">
+        <h2 class="ch" id="h-players">What the players actually did</h2>
+        <p>The pilots weren’t people. Each one was a <strong>headless test client</strong>: a copy of the game’s dedicated-server build running without graphics, joining like an ordinary networked player over UDP. A small scripted controller flew each aircraft by sending control inputs through the game’s own control path. They are not retail Steam clients and not combat AI.</p>
+
+        <h3 id="four-pilot">The four-pilot session</h3>
+        <div class="timeline" role="img" aria-label="Timeline: 3 minutes of taxi, takeoff and climb, followed by 10 minutes of flight with gun bursts. 13 minutes measured in total.">
+          <div class="tl-bar"><div class="tl-a">Take off · 3 min</div><div class="tl-b">Fly and fire · 10 min</div></div>
+          <div class="tl-scale"><span>0:00</span><span>3:00</span><span>13:00</span></div>
+        </div>
+        <ol class="steps">
+          <li><strong>Join.</strong> The server waits with no mission loaded. The first player to join triggers the normal stock Escalation load; all four clients then join the same game.</li>
+          <li><strong>Taxi, take off and climb (3 minutes).</strong> Each pilot gets a normal aircraft from the reserve, steers along the taxiway, takes off and climbs.</li>
+          <li><strong>Fly and fire (10 minutes).</strong> All four stay airborne. Each fires a half-second gun burst every 20 seconds.</li>
+          <li><strong>Server checks.</strong> The server confirmed that each player kept the original aircraft and player identity, and that gun ammunition went down through normal firing without running out (rounds left: 328, 316, 320 and 322).</li>
+        </ol>
+
+        <div class="note" role="note">
+          <span class="note-title">About the “1,000 units” in this mission</span>
+          <p>During the flight the game’s unit list held between 1,008 and 1,077 entries. That count covers all kinds of mission objects. Only 10 to 12 of them were aircraft at any moment. It does <em>not</em> mean a thousand AI aircraft were flying.</p>
+        </div>
+
+        <h3 id="two-pilot">Shorter two-pilot runs</h3>
+        <p>Before the four-pilot session, two-pilot runs on the same lab covered more kinds of activity. All of them used the same game build and no performance plugin.</p>
+        <div class="table-wrap">
+          <table>
+            <caption>Two-pilot activities on the current lab</caption>
+            <thead><tr><th scope="col">What both pilots did</th><th scope="col">Result</th></tr></thead>
+            <tbody>
+              <tr><td>Server start, 3-minute taxi, takeoff and flight, then 30 seconds of rocket fire</td><td><span class="pass">Passed</span> in several runs. One repeat <span class="fail">failed</span> at 2 min 52 s when an aircraft took impact damage and broke up.</td></tr>
+              <tr><td>Fly, fire rockets, eject in the air, take a replacement aircraft and fly a second sortie</td><td><span class="pass">Passed</span> (51 checks in each of two consecutive runs); original player identities kept</td></tr>
+              <tr><td>Three one-second gun bursts each, with the trigger releasing between bursts</td><td><span class="pass">Passed</span> (54 checks)</td></tr>
+              <tr><td>Three sorties, including 6 minutes of gun firing, then disconnect and reconnect</td><td><span class="fail">Failed</span> twice: once at a disconnect after the flying passed, once 2 min 23 s into the gun flight after missile fragments damaged a pilot</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 3 -->
+      <section id="resources" aria-labelledby="h-resources">
+        <h2 class="ch" id="h-resources">Server CPU and memory</h2>
+        <p>The figures below come from the first passing four-pilot baseline. Choose takeoff or flight to compare its CPU use, memory and update timing. The activity chart later also includes two-pilot workloads.</p>
+
+        <figure id="fig-alloc" aria-labelledby="alloc-title">
+          <figcaption class="fig-title" id="alloc-title">Where the lab’s four CPU cores went</figcaption>
+          <p class="fig-sub">Average CPU use per process across the whole phase. Each tick on the bar marks one core.</p>
+          <div class="alloc">
+            <div class="controls">
+              <fieldset class="seg" id="phase-ctl">
+                <legend>Phase</legend>
+                <label><input type="radio" name="phase" value="takeoff"><span>Takeoff · 3 min</span></label>
+                <label><input type="radio" name="phase" value="flight" checked><span>Flight · 10 min</span></label>
+              </fieldset>
+            </div>
+            <div class="track-label"><span>4 vCPUs shared by everything</span><span id="alloc-total" class="num"></span></div>
+            <div class="track" id="alloc-track" role="img" aria-describedby="alloc-caption">
+              <div class="seg-bar server" data-k="server"></div>
+              <div class="seg-bar client" data-k="c0"></div>
+              <div class="seg-bar client alt" data-k="c1"></div>
+              <div class="seg-bar client" data-k="c2"></div>
+              <div class="seg-bar client alt" data-k="c3"></div>
+              <div class="seg-bar unused" data-k="unused"></div>
+            </div>
+            <div class="scale" aria-hidden="true"><span>1</span><span>2</span><span>3</span><span>4 cores</span></div>
+            <ul class="legend">
+              <li><span class="sw" style="background:var(--server)"></span>Game server</li>
+              <li><span class="sw" style="background:var(--client)"></span>Test clients 1–4</li>
+              <li><span class="sw" style="background:repeating-linear-gradient(135deg,var(--unused) 0 3px,#c3cad5 3px 4px)"></span>Not used by these five processes</li>
+            </ul>
+
+            <div class="stepper">
+              <button class="btn" id="step-prev" type="button">Back</button>
+              <button class="btn primary" id="step-next" type="button">Next</button>
+              <span class="step-count" id="step-count" aria-hidden="true"></span>
+            </div>
+            <p class="caption" id="alloc-caption" aria-live="polite"></p>
+          </div>
+          <details>
+            <summary>Data table: CPU cores by process</summary>
+            <div class="inner"><div class="table-wrap"><table id="alloc-table"></table></div>
+              <p class="muted" style="font-size:14px">One core fully busy for the whole phase = 1.00. The lab-wide busy figure is measured separately at the machine level, so it doesn’t exactly equal the sum of the five processes.</p></div>
+          </details>
+        </figure>
+
+        <h3 id="inside">Inside the server process</h3>
+        <p>Most of the server’s CPU time is on its main thread, the single thread that runs the game loop. Two helper threads (“job workers”) take a smaller share. These thread figures come from a separate, approximate sampler outside the game.</p>
+        <figure aria-labelledby="thr-title" style="margin-top:12px">
+          <figcaption class="fig-title" id="thr-title" style="font-size:15px">Server CPU by thread, out of one core</figcaption>
+          <div class="mini" id="thr-bar" role="img"></div>
+          <div class="mini-scale" aria-hidden="true"><span>0</span><span>0.5</span><span>1 core</span></div>
+          <ul class="legend" id="thr-legend"></ul>
+        </figure>
+
+        <h3 id="memory">Memory</h3>
+        <figure aria-labelledby="mem-title" style="margin-top:12px">
+          <figcaption class="fig-title" id="mem-title">Peak memory per process</figcaption>
+          <p class="fig-sub">Highest resident memory each process reached during the phase.</p>
+          <div class="hbars" id="mem-bars"></div>
+          <div class="axis" aria-hidden="true"><div></div><div><span>0</span><span>0.5</span><span>1.0</span><span>1.5 GiB</span></div></div>
+          <p id="mem-note" style="margin-top:14px"></p>
+          <details>
+            <summary>Data table: peak memory</summary>
+            <div class="inner"><div class="table-wrap"><table id="mem-table"></table></div></div>
+          </details>
+        </figure>
+
+        <h3 id="smoothness">How smooth the server loop was</h3>
+        <p>These intervals measure time between server updates. Most fell below 25 milliseconds. The chart counts slower updates too; retail-client network latency remains untested.</p>
+        <figure aria-labelledby="frm-title" style="margin-top:12px">
+          <figcaption class="fig-title" id="frm-title">Server frame times</figcaption>
+          <p class="fig-sub" id="frm-sub"></p>
+          <div class="hbars" id="frm-bars"></div>
+          <details>
+            <summary>Data table: frame time bands</summary>
+            <div class="inner"><div class="table-wrap"><table id="frm-table"></table></div>
+            <p class="muted" style="font-size:14px">These are Unity update intervals measured inside each process. They are not network latency as a player would feel it.</p></div>
+          </details>
+        </figure>
+
+        <h3 id="by-activity">Server CPU by activity</h3>
+        <p>Selected passed observation windows on this lab without performance plugins. The two short startup repeats and three completed four-pilot baselines are shown, plus the six-minute gun phase of a run that later failed at disconnect. Bars span the lowest and highest averages for each activity.</p>
+        <figure aria-labelledby="act-title" style="margin-top:12px">
+          <figcaption class="fig-title" id="act-title">Server process CPU, in cores</figcaption>
+          <div class="hbars" id="act-bars"></div>
+          <div class="axis" aria-hidden="true"><div></div><div><span>0</span><span>0.25</span><span>0.5</span><span>0.75</span><span>1</span></div></div>
+          <details>
+            <summary>Data table: server CPU by activity</summary>
+            <div class="inner"><div class="table-wrap">
+              <table>
+                <thead><tr><th scope="col">Activity</th><th scope="col" class="num">Runs</th><th scope="col" class="num">Server cores</th><th scope="col" class="num">Whole lab busy</th></tr></thead>
+                <tbody id="act-table"></tbody>
+              </table></div>
+              <p class="muted" style="font-size:14px">With four clients the lab is much busier, so the two-pilot and four-pilot rows were measured under different contention. They aren’t a clean “cost per extra player”.</p>
+            </div>
+          </details>
+        </figure>
+      </section>
+
+      <!-- 4 -->
+      <section id="capacity" aria-labelledby="h-capacity">
+        <h2 class="ch" id="h-capacity">Why the lab can’t establish production capacity</h2>
+        <p>The numbers above describe one test machine, not a recommendation for your server. On this lab the server process alone averaged under one core with four active pilots in this mission. Going further than that would not be honest yet.</p>
+
+        <h3 id="shared">The server and the players shared one machine</h3>
+        <p>The lab is a single virtual machine with <strong>4 vCPUs and 8 GiB</strong> on an AMD Ryzen 5 PRO 3600 host. The server and all four test clients ran inside it. The clients together used about 2.7 cores, roughly three and a half times what the server used. On a real server, players’ games run on their own computers.</p>
+
+        <h3 id="contention">The machine was crowded</h3>
+        <p>During the 10-minute flight the machine was 86% busy. Some task was waiting for a free CPU <strong>57%</strong> of the time. In two-pilot runs that wait was about 10% or less, and the server’s update loop held close to 60 per second. With four pilots it fell to 55.4. We can’t yet tell how much of that drop is extra game work and how much is the server queueing behind its own test clients.</p>
+
+        <h3 id="other-limits">Other limits</h3>
+        <ul>
+          <li><strong>Limited repeats.</strong> Three independent four-pilot baselines and one matched Spatial run have passed. The detailed figures here come from the first one. Only one complete baseline/mod pair is available; more are needed.</li>
+          <li><strong>Averages hide spikes.</strong> A 0.76-core average can still include short moments where the main thread was the bottleneck.</li>
+          <li><strong>Not stock.</strong> The “baseline” loads BepInEx and the NOTestPilot bridge. A loader-free stock server is a separate test.</li>
+          <li><strong>Scripted pilots.</strong> A simple circuit controller isn’t human flying or combat. Deliberate hits on targets weren’t verified.</li>
+          <li><strong>Different hardware gives different numbers.</strong> These results apply to this guest only.</li>
+        </ul>
+
+        <details>
+          <summary>Test setup details</summary>
+          <div class="inner">
+            <div class="table-wrap"><table>
+              <tbody>
+                <tr><th scope="row">Game</th><td>Nuclear Option 0.34.1, Linux x64 dedicated server</td></tr>
+                <tr><th scope="row">Mod loader</th><td>BepInEx 5.4.23.3 (present in every measured baseline)</td></tr>
+                <tr><th scope="row">Test bridge</th><td>NOTestPilot bridge 0.1.0, opt-in testing adapter, never deployed to production</td></tr>
+                <tr><th scope="row">Lab</th><td>One disposable Linux guest: AMD Ryzen 5 PRO 3600 host, 4 vCPUs, 8 GiB. CPU steal under 1%.</td></tr>
+                <tr><th scope="row">Clients</th><td>Headless dedicated-build UDP clients, flown by an experimental input driver that bypasses keyboard and menu input</td></tr>
+                <tr><th scope="row">Mission</th><td>Stock Escalation, unchanged simulation settings</td></tr>
+                <tr><th scope="row">Measurements</th><td>Per-process CPU, memory and frame times from inside each game process; per-thread CPU and machine-wide pressure from an approximate external sampler</td></tr>
+                <tr><th scope="row">Tooling tests</th><td>43 runner unit tests pass on Linux and CI; 42 pass on Windows with one POSIX-only test skipped. These test the tooling, not the game.</td></tr>
+              </tbody>
+            </table></div>
+          </div>
+        </details>
+      </section>
+
+      <!-- 5 -->
+      <section id="comparison" aria-labelledby="h-comparison">
+        <h2 class="ch" id="h-comparison">Mod comparison and failures</h2>
+        <p class="lead">No whole-server benefit from the optional performance plugin has been shown.</p>
+
+        <h3 id="pair">The completed pair, and earlier failures</h3>
+        <p>The completed Spatial pair ran the same four-pilot script one run after the other, changing only whether NOPerf Spatial was loaded on the server. Both passed all 50 checks. Server CPU was almost identical: 0.757 cores without Spatial and 0.761 with it. Passing baselines ranged from 0.757 to 0.771 cores, so this does not show a gain.</p>
+        <div class="table-wrap">
+          <table>
+            <caption>Completed four-pilot Spatial pair · same mission, script, game build and test bridge</caption>
+            <thead><tr><th scope="col">Ten-minute flight</th><th scope="col" class="num">Baseline</th><th scope="col" class="num">Spatial</th></tr></thead>
+            <tbody>
+              <tr><td>Checks passed</td><td class="num">50 / 50</td><td class="num">50 / 50</td></tr>
+              <tr><td>Average server CPU, cores</td><td class="num">0.757</td><td class="num">0.761</td></tr>
+              <tr><td>Server updates per second</td><td class="num">56.1</td><td class="num">56.4</td></tr>
+              <tr><td>Physics steps per second</td><td class="num">60.0</td><td class="num">60.0</td></tr>
+              <tr><td>Server frames over 50 ms</td><td class="num">3</td><td class="num">4</td></tr>
+              <tr><td>Server frames over 100 ms</td><td class="num">0</td><td class="num">0</td></tr>
+              <tr><td>Peak server memory</td><td class="num">1.13 GiB</td><td class="num">1.13 GiB</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>The plugin’s actual server patch was confirmed active. One successful pair does not establish long-session stability or remove the failed attempts from the record.</p>
+        <div class="table-wrap">
+          <table>
+            <caption>First four-pilot pair: same mission, script, game build and test bridge</caption>
+            <thead><tr><th scope="col">Server setup</th><th scope="col">Outcome</th></tr></thead>
+            <tbody>
+              <tr><td>Baseline: BepInEx + test bridge</td><td><span class="pass">Passed</span> all 50 checks; full 10-minute flight</td></tr>
+              <tr><td>Same + NOPerf Spatial 0.1.0</td><td><span class="fail">Failed</span> after 9 min 18 s of the 10-minute flight. One client’s aircraft took impact damage at about 792 m, collided with its own parts and descended. The cause is unknown. The plugin was confirmed loaded and active.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>The earlier incomplete pair can’t show a gain or a loss. A separate short run with Spatial loaded passed 37 checks covering startup, a 3-minute flight and rockets. That shows the plugin loads and the game runs with it. It isn’t a performance comparison.</p>
+        <details>
+          <summary>Partial numbers from the pair (not a comparison)</summary>
+          <div class="inner">
+            <p style="font-size:14px">Shown for transparency only. The Spatial window is shorter and ended in a failure, there’s one run each, and both ran on a heavily contended lab. Don’t read these differences as an effect of the plugin.</p>
+            <div class="table-wrap"><table>
+              <thead><tr><th scope="col">Flight window</th><th scope="col" class="num">Baseline</th><th scope="col" class="num">Spatial (failed)</th></tr></thead>
+              <tbody>
+                <tr><td>Length measured</td><td class="num">599 s</td><td class="num">558 s</td></tr>
+                <tr><td>Server CPU, cores</td><td class="num">0.765</td><td class="num">0.765</td></tr>
+                <tr><td>Server updates per second</td><td class="num">55.4</td><td class="num">55.8</td></tr>
+                <tr><td>Physics steps per second</td><td class="num">60.0</td><td class="num">60.0</td></tr>
+                <tr><td>Server frames over 50 ms</td><td class="num">6</td><td class="num">17</td></tr>
+                <tr><td>Server frames over 100 ms</td><td class="num">0</td><td class="num">4</td></tr>
+                <tr><td>Server peak memory</td><td class="num">1.14 GiB</td><td class="num">1.07 GiB</td></tr>
+                <tr><td>Whole lab busy</td><td class="num">86%</td><td class="num">85%</td></tr>
+              </tbody>
+            </table></div>
+          </div>
+        </details>
+
+
+        <h3>Where the profiler points next</h3>
+        <p>In the two-client mission profile, the native physics phase averaged about <strong>2.0 ms per simulation step</strong>. Script phases averaged about 1.1 ms for simulation, 1.2 ms for updates and 0.5 ms for late updates. Job scheduling was a larger measured method than the spatial lookup helper. Three further, shorter profiling runs completed. They separated ground-vehicle input collection from aero input and job waits, giving the next optimization attempts a measured starting point.</p>
+        <p class="muted">These are measurements with extra instrumentation, after discarding the first four diagnostic windows. The window includes takeoff and flight, and the run later failed. Method timings can overlap and include waiting; they are not pieces of a CPU pie, a capacity estimate or a measured mod gain.</p>
+        <h3>Two new performance ideas checked</h3>
+        <p><strong>Reusing an aircraft velocity read: rejected.</strong> It was faster in a synthetic case where adjacent parts shared a body. The real mission recorded 1.50 million reads and no adjacent reuse. Keeping that cache would add work without helping this workload.</p>
+        <p id="ground-result"><strong>Visiting only due ground vehicles: experimental source available.</strong> The game already spreads some ground input work over twelve ticks. Visiting just the due indices kept the original order in 6,360 native checks. The isolated scan became about ten times cheaper, saving roughly two microseconds per loop; actual vehicle callbacks and physics still do their original work.</p>
+        <p>Two shorter, two-pilot baseline/mod pairs passed all 30 checks per run through three minutes of takeoff and three minutes of flight with guns. The mod’s patch was confirmed active. Flight CPU was lower in both mod runs, but the difference varied and mission workloads diverged. This is too little evidence to call a useful whole-server gain or memory reduction.</p>
+        <div class="table-wrap"><table><caption>Ground-input experiment · server CPU cores during three-minute flight</caption><thead><tr><th scope="col">Pair</th><th scope="col" class="num">Baseline</th><th scope="col" class="num">GroundInputs</th></tr></thead><tbody><tr><td>1</td><td class="num">0.780</td><td class="num">0.738</td></tr><tr><td>2</td><td class="num">0.769</td><td class="num">0.762</td></tr></tbody></table></div><p class="muted">GroundInputs is disabled by default and source-only, outside the v0.1.0 download. The second binary adds a startup compatibility guard; its traversal is unchanged and its separate native checks passed. Two baseline-first pairs are not an order-balanced long-session comparison. <a href="https://github.com/clankagent/noperf/blob/main/evidence/GroundInputValidation.json">Detailed experiment evidence</a>.</p>
+        <p class="muted">These attempts preserve the scheduled callbacks, simulation rates and gameplay decisions. The larger measured costs include native physics and actual vehicle work; faster index bookkeeping alone cannot remove those costs.</p>
+        <h3 id="failures">Failures we’re keeping on record</h3>
+        <p>Failed runs stay in the record. They are part of the evidence.</p>
+        <ul>
+          <li><strong>A later mod run failed during mission loading.</strong> A candidate run and a later baseline without the performance plugin both failed while the fourth client loaded Escalation, before flight began. Another baseline failed during a later attempt to join. The loading problem occurs in both variants; its cause remains unresolved. A read-only trace caught a destroyed aircraft left in the client’s mission lookup just before the original error. We have identified the stale entry, but not the full sequence that leaves it there. A delayed second-client join passed a focused test; that does not resolve the intermittent fault.</li>
+          <li><strong>Earlier four-pilot version ran out of ammunition.</strong> One-second bursts every 20 seconds emptied every gun, so the final check failed. The script now uses half-second bursts. That’s the version that passed.</li>
+          <li><strong>Reconnecting while flying fails.</strong> When a client leaves mid-flight, the game hits an error while it cleans up the mission on that client. This happened in both attempts, including with the normal Quit path. Short idle join, leave and rejoin passed.</li>
+          <li><strong>Changing missions with players in the air fails.</strong> Rotating from Escalation to Terminal Control failed during server cleanup. The return rotation was never reached. An older, separate cleanup failure is also on record.</li>
+          <li><strong>Short flights can still end in a breakup.</strong> One two-pilot repeat lost an aircraft to impact damage at 2 min 52 s. A later profiling run also lost height just before the end of its ten-minute flight window. Its trace captured joint breaks at about 935 metres, followed by collisions between parts of the same aircraft. The initiating cause remains unresolved; the profiling run is a failure.</li>
+          <li><strong>A stop-on-request test behaved as intended.</strong> A run stopped deliberately at about 10 seconds kept its partial data, archived its logs and stopped its own game processes. It’s recorded as cancelled, not as a pass.</li>
+          <li><strong>An older long run has an unknown result.</strong> A three-sortie run on the previous lab was interrupted before its result could be collected. It isn’t counted.</li>
+        </ul>
+        <details>
+          <summary>Technical detail for these failures</summary>
+          <div class="inner">
+            <ul style="font-size:14px">
+              <li>Occupied disconnect: client-side exceptions in <code>RadarWarning.Update</code> and, in another run, <code>ThreatItem.AnimateItem</code> / <code>ThreatList.Update</code> during mission unloading. Retail reproduction unverified.</li>
+              <li>Occupied rotation: server <code>Turret.ChooseTarget</code> / <code>Turret_OnTargetDisabled</code> during unit destruction; clients also logged <code>StatusDisplay</code> cleanup exceptions. The older failure was in ship particle cleanup on Terminal Control. Game logic was not modified to hide either.</li>
+              <li>Three-sortie gun flight: missile blast or fragment damage reached a pilot, then own-part collisions and descent. The attacker is unknown.</li>
+              <li>The initiating cause in the Spatial run and the two-pilot breakup is unresolved. Read-only joint and body diagnostics were emitted.</li>
+            </ul>
+          </div>
+        </details>
+      </section>
+
+      <!-- 6 -->
+      <section id="next" aria-labelledby="h-next">
+        <h2 class="ch" id="h-next">Next tests</h2>
+        <p>The repeatable flight and replacement foundation is working. These are the remaining gaps before recommending a production setup.</p>
+        <ol>
+          <li><strong>Repeat the pairs</strong> so differences can be compared with ordinary run-to-run variation.</li>
+          <li><strong>Longer sessions</strong>, tracking slow frames and whether the mission slows down as it ages.</li>
+          <li><strong>Larger missions with more active units</strong>, with simulation settings left unchanged.</li>
+          <li><strong>A fully stock server</strong> without BepInEx, kept separate from the instrumented baseline.</li>
+          <li><strong>Separating client load from the server</strong>. This is needed before any capacity statement is possible.</li>
+          <li><strong>Reconnect and mission-rotation failures</strong>, plus the unexplained aircraft breakups.</li>
+        </ol>
+        <p class="muted">Human players, retail Steam clients and Steam authentication remain untested.</p>
+
+        <footer class="about">
+          <p><strong>About this report.</strong> Resource charts use the first passing baseline; outcome notes include the subsequent profiling and rejected-candidate review. Raw lab logs, machine addresses and game files aren’t published. Test tooling source: <a href="https://github.com/clankagent/notestpilot">github.com/clankagent/notestpilot</a>.</p>
+          <p>This report adds measurements from the newer Ryzen machine. Historical NOPerf results remain separate; timings from different hardware are not a before/after comparison. <a href="https://github.com/clankagent/noperf/blob/main/evidence/ryzen-resources-20261001.json">Reviewed chart data</a> and <a href="https://github.com/clankagent/notestpilot/blob/main/docs/testing.md">testing scope</a> are available with the source.</p>
+        </footer>
+      </section>
+    </article>
+
+    <aside class="toc" aria-label="On this page">
+      <h2>On this chapter</h2>
+      <ul id="toc-list"></ul>
+    </aside>
+  </div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  var GIB = 1073741824;
+  /* Aggregates from evidence.json, passed four-pilot baseline (BepInEx + bridge, no performance plugin). */
+  var PHASES = {
+    takeoff: {
+      label: "3-minute takeoff", seconds: 180,
+      server: 0.7144, clients: [0.6030, 0.6077, 0.6106, 0.6073],
+      labBusy: 78.1, waitPct: 44.7,
+      threads: { main: 0.4913, jobs: 0.1901, other: 0.0282 },
+      mem: { server: 1143463936, clients: [1158586368, 1140781056, 1143992320, 1138180096], minAvail: 2317504512 },
+      ups: 57.7, frames: [4707, 5356, 283, 29, 1, 0]
+    },
+    flight: {
+      label: "10-minute flight", seconds: 600,
+      server: 0.7647, clients: [0.6796, 0.6758, 0.6839, 0.6724],
+      labBusy: 86.3, waitPct: 56.8,
+      threads: { main: 0.5124, jobs: 0.2182, other: 0.0311 },
+      mem: { server: 1221181440, clients: [1265647616, 1243717632, 1252368384, 1242898432], minAvail: 1711562752 },
+      ups: 55.4, frames: [13212, 17955, 1727, 283, 6, 0]
+    }
+  };
+  var BANDS = ["Up to 16.7 ms", "16.7–25 ms", "25–33.4 ms", "33.4–50 ms", "50–100 ms", "Over 100 ms"];
+  var ACTIVITY = [
+  {
+    "name": "2 pilots: taxi, take off, fly",
+    "sub": "3 min",
+    "lo": 0.632,
+    "hi": 0.665,
+    "runs": 2,
+    "busy": "43\u201345%"
+  },
+  {
+    "name": "2 pilots: rocket fire",
+    "sub": "30 s",
+    "lo": 0.721,
+    "hi": 0.768,
+    "runs": 2,
+    "busy": "51\u201353%"
+  },
+  {
+    "name": "2 pilots: flight with guns",
+    "sub": "6 min",
+    "lo": 0.818,
+    "hi": 0.818,
+    "runs": 1,
+    "busy": "56\u201356%"
+  },
+  {
+    "name": "4 pilots: taxi, take off, climb",
+    "sub": "3 min",
+    "lo": 0.688,
+    "hi": 0.714,
+    "runs": 3,
+    "busy": "74\u201378%"
+  },
+  {
+    "name": "4 pilots: flight with gun bursts",
+    "sub": "10 min",
+    "lo": 0.757,
+    "hi": 0.771,
+    "runs": 3,
+    "busy": "85\u201386%"
+  }
+];
+
+  function f2(n){ return n.toFixed(2); }
+  function gib(b){ return (b / GIB).toFixed(2); }
+  function sum(a){ return a.reduce(function(s, x){ return s + x; }, 0); }
+  function el(tag, cls, text){ var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
+
+  var phase = "flight", step = 0;
+  var STEPS = [
+    { focus: "none", title: "The whole lab is one machine",
+      text: function(p){ return "Four vCPUs are shared by the server and all four test clients. Each tick marks one core’s worth of time. Press Next to fill in the " + p.label + "."; } },
+    { focus: "server", title: "The game server",
+      text: function(p){ return "The server process averaged " + f2(p.server) + " of one core, about " + Math.round(p.server / 4 * 100) + "% of the machine."; } },
+    { focus: "clients", title: "The four test clients",
+      text: function(p){ var c = sum(p.clients); return "The clients used " + f2(c) + " cores together, about " + (c / p.server).toFixed(1) + "× the server. On a real server these would be players’ own computers."; } },
+    { focus: "unused", title: "What was left",
+      text: function(p){ return "About " + f2(Math.max(0, 4 - p.server - sum(p.clients))) + " cores were left after these five processes. The machine as a whole was " + Math.round(p.labBusy) + "% busy, and something was waiting for a CPU " + Math.round(p.waitPct) + "% of the time."; } },
+    { focus: "all", title: "All together",
+      text: function(p){ return "Server " + f2(p.server) + " + clients " + f2(sum(p.clients)) + " = " + f2(p.server + sum(p.clients)) + " of 4 cores, averaged over the " + p.label + ". These are averages, so short spikes don’t show."; } }
+  ];
+
+  var track = document.getElementById("alloc-track");
+  var segs = {};
+  Array.prototype.forEach.call(track.children, function(s){ segs[s.getAttribute("data-k")] = s; });
+
+  function renderAlloc(){
+    var p = PHASES[phase];
+    var used = p.server + sum(p.clients);
+    segs.server.style.width = (p.server / 4 * 100) + "%";
+    segs.server.textContent = f2(p.server);
+    p.clients.forEach(function(c, i){
+      var s = segs["c" + i];
+      s.style.width = (c / 4 * 100) + "%";
+      s.textContent = "C" + (i + 1);
+      s.title = "Client " + (i + 1) + ": " + f2(c) + " cores";
+    });
+    segs.server.title = "Server: " + f2(p.server) + " cores";
+    segs.unused.textContent = f2(4 - used);
+    segs.unused.title = "Not used by these processes: " + f2(4 - used) + " cores";
+    document.getElementById("alloc-total").textContent = f2(used) + " of 4 cores used";
+    track.setAttribute("aria-label", "Average CPU, " + p.label + ": server " + f2(p.server) + " cores, four clients " + f2(sum(p.clients)) + " cores, " + f2(4 - used) + " cores left, out of 4.");
+    var st = STEPS[step];
+    track.className = "track focus-" + st.focus;
+    var cap = document.getElementById("alloc-caption");
+    cap.innerHTML = "";
+    cap.appendChild(el("strong", null, st.title));
+    cap.appendChild(document.createTextNode(st.text(p)));
+    document.getElementById("step-count").textContent = "Step " + (step + 1) + " of " + STEPS.length;
+    document.getElementById("step-prev").disabled = step === 0;
+    var nx = document.getElementById("step-next");
+    nx.textContent = step === STEPS.length - 1 ? "Start again" : "Next";
+    nx.setAttribute("aria-label", step === STEPS.length - 1 ? "Start explanation again" : "Next explanation step, " + (step + 2) + " of " + STEPS.length);
+
+    var t = document.getElementById("alloc-table");
+    t.innerHTML = "<thead><tr><th scope='col'>Process</th><th scope='col' class='num'>Takeoff · 3 min</th><th scope='col' class='num'>Flight · 10 min</th></tr></thead>";
+    var tb = el("tbody");
+    var rows = [["Game server", PHASES.takeoff.server, PHASES.flight.server]];
+    for (var i = 0; i < 4; i++) rows.push(["Test client " + (i + 1), PHASES.takeoff.clients[i], PHASES.flight.clients[i]]);
+    rows.push(["All five processes", PHASES.takeoff.server + sum(PHASES.takeoff.clients), PHASES.flight.server + sum(PHASES.flight.clients)]);
+    rows.forEach(function(r){ tb.insertAdjacentHTML("beforeend", "<tr><th scope='row'>" + r[0] + "</th><td class='num'>" + f2(r[1]) + "</td><td class='num'>" + f2(r[2]) + "</td></tr>"); });
+    tb.insertAdjacentHTML("beforeend", "<tr><th scope='row'>Whole lab busy (of 4 vCPUs)</th><td class='num'>" + PHASES.takeoff.labBusy + "%</td><td class='num'>" + PHASES.flight.labBusy + "%</td></tr>");
+    tb.insertAdjacentHTML("beforeend", "<tr><th scope='row'>Time something waited for a CPU</th><td class='num'>" + PHASES.takeoff.waitPct + "%</td><td class='num'>" + PHASES.flight.waitPct + "%</td></tr>");
+    t.appendChild(tb);
+  }
+
+  function renderThreads(){
+    var p = PHASES[phase], th = p.threads;
+    var parts = [["Main thread", th.main, "var(--server-main)"], ["Job workers", th.jobs, "var(--server-jobs)"], ["Other threads", th.other, "var(--server-other)"]];
+    var bar = document.getElementById("thr-bar"), lg = document.getElementById("thr-legend");
+    if (!bar.children.length) parts.forEach(function(x){ var d = el("div"); d.style.background = x[2]; bar.appendChild(d); });
+    lg.innerHTML = "";
+    parts.forEach(function(x, i){
+      bar.children[i].style.width = (x[1] * 100) + "%";
+      var li = el("li"); var sw = el("span", "sw"); sw.style.background = x[2];
+      li.appendChild(sw); li.appendChild(document.createTextNode(x[0] + " " + f2(x[1])));
+      lg.appendChild(li);
+    });
+    bar.setAttribute("aria-label", "Server CPU by thread, " + p.label + ": main thread " + f2(th.main) + ", job workers " + f2(th.jobs) + ", other " + f2(th.other) + " of one core. Approximate.");
+  }
+
+  function renderMem(){
+    var p = PHASES[phase], m = p.mem, box = document.getElementById("mem-bars");
+    box.innerHTML = "";
+    var rows = [["Game server", m.server, "var(--server)"]];
+    m.clients.forEach(function(b, i){ rows.push(["Client " + (i + 1), b, "var(--client)"]); });
+    rows.forEach(function(r){
+      box.appendChild(el("div", "lbl", r[0]));
+      var row = el("div", "bar-row");
+      var b = el("div", "bar"); b.style.width = "calc(" + (r[1] / GIB / 1.5 * 100) + "% - 4.5em)"; b.style.background = r[2];
+      row.appendChild(b); row.appendChild(el("span", "bar-val", gib(r[1]) + " GiB"));
+      box.appendChild(row);
+    });
+    box.setAttribute("role", "img");
+    box.setAttribute("aria-label", "Highest observed memory, " + p.label + ": server " + gib(m.server) + " GiB; clients " + m.clients.map(gib).join(", ") + " GiB.");
+    document.getElementById("mem-note").textContent = "The machine has 8 GiB. At its lowest point in the " + p.label + ", " + gib(m.minAvail) + " GiB was still available. Swap use stayed negligible. Most of the memory went to the test clients, which wouldn’t share a real server’s machine.";
+    var t = document.getElementById("mem-table");
+    var html = "<thead><tr><th scope='col'>Process</th><th scope='col' class='num'>Takeoff · 3 min</th><th scope='col' class='num'>Flight · 10 min</th></tr></thead><tbody>";
+    html += "<tr><th scope='row'>Game server</th><td class='num'>" + gib(PHASES.takeoff.mem.server) + " GiB</td><td class='num'>" + gib(PHASES.flight.mem.server) + " GiB</td></tr>";
+    for (var i = 0; i < 4; i++) html += "<tr><th scope='row'>Client " + (i + 1) + "</th><td class='num'>" + gib(PHASES.takeoff.mem.clients[i]) + " GiB</td><td class='num'>" + gib(PHASES.flight.mem.clients[i]) + " GiB</td></tr>";
+    html += "<tr><th scope='row'>Lowest memory available on the machine</th><td class='num'>" + gib(PHASES.takeoff.mem.minAvail) + " GiB</td><td class='num'>" + gib(PHASES.flight.mem.minAvail) + " GiB</td></tr></tbody>";
+    t.innerHTML = html;
+  }
+
+  function renderFrames(){
+    var p = PHASES[phase], total = sum(p.frames), box = document.getElementById("frm-bars");
+    document.getElementById("frm-sub").textContent = total.toLocaleString("en-GB") + " server frames in the " + p.label + ". Update loop averaged " + p.ups + " per second; physics averaged 60.0 steps per second.";
+    box.innerHTML = "";
+    var max = Math.max.apply(null, p.frames);
+    p.frames.forEach(function(n, i){
+      box.appendChild(el("div", "lbl", BANDS[i]));
+      var row = el("div", "bar-row");
+      var b = el("div", "bar" + (n === 0 ? " zero" : ""));
+      b.style.width = "calc(" + (n / max * 100) + "% - 7em)";
+      b.style.background = i >= 4 ? "var(--danger)" : (i >= 2 ? "#6f87ad" : "var(--server)");
+      var pct = n / total * 100;
+      row.appendChild(b);
+      row.appendChild(el("span", "bar-val", n.toLocaleString("en-GB") + " · " + (pct === 0 ? "0" : pct < 0.1 ? pct.toFixed(2) : pct.toFixed(1)) + "%"));
+      box.appendChild(row);
+    });
+    box.setAttribute("role", "img");
+    box.setAttribute("aria-label", "Server frame times, " + p.label + ": " + p.frames.map(function(n, i){ return BANDS[i] + " " + n; }).join("; ") + ".");
+    var html = "<thead><tr><th scope='col'>Frame time</th><th scope='col' class='num'>Takeoff · 3 min</th><th scope='col' class='num'>Flight · 10 min</th></tr></thead><tbody>";
+    BANDS.forEach(function(b, i){ html += "<tr><th scope='row'>" + b + "</th><td class='num'>" + PHASES.takeoff.frames[i].toLocaleString("en-GB") + "</td><td class='num'>" + PHASES.flight.frames[i].toLocaleString("en-GB") + "</td></tr>"; });
+    html += "<tr><th scope='row'>Updates per second</th><td class='num'>" + PHASES.takeoff.ups + "</td><td class='num'>" + PHASES.flight.ups + "</td></tr></tbody>";
+    document.getElementById("frm-table").innerHTML = html;
+  }
+
+  function renderActivity(){
+    var box = document.getElementById("act-bars"), tb = document.getElementById("act-table");
+    ACTIVITY.forEach(function(a){
+      var lbl = el("div", "lbl", a.name); lbl.appendChild(el("small", null, a.sub + " · " + a.runs + (a.runs === 1 ? " run" : " runs")));
+      box.appendChild(lbl);
+      var row = el("div", "bar-row");
+      var tr = el("div", "range-track"); var r = el("div", "range");
+      r.style.left = "calc(" + (a.lo * 100) + "% - 6px)"; r.style.width = "calc(" + ((a.hi - a.lo) * 100) + "% + 12px)";
+      if (a.name.indexOf("4 pilots") === 0) r.style.background = "var(--server-main)";
+      tr.appendChild(r); row.appendChild(tr);
+      row.appendChild(el("span", "bar-val", f2(a.lo) === f2(a.hi) ? f2(a.lo) : f2(a.lo) + "–" + f2(a.hi)));
+      box.appendChild(row);
+      tb.insertAdjacentHTML("beforeend", "<tr><th scope='row'>" + a.name + " (" + a.sub + ")</th><td class='num'>" + a.runs + "</td><td class='num'>" + (f2(a.lo) === f2(a.hi) ? f2(a.lo) : f2(a.lo) + "–" + f2(a.hi)) + "</td><td class='num'>" + a.busy + "</td></tr>");
+    });
+    box.setAttribute("role", "img");
+    box.setAttribute("aria-label", "Server CPU in cores by activity: " + ACTIVITY.map(function(a){ return a.name + " " + (f2(a.lo) === f2(a.hi) ? f2(a.lo) : f2(a.lo) + " to " + f2(a.hi)); }).join("; ") + ".");
+  }
+
+  function renderPhase(){ renderAlloc(); renderThreads(); renderMem(); renderFrames(); }
+
+  document.getElementById("phase-ctl").addEventListener("change", function(e){
+    if (e.target.name === "phase") { phase = e.target.value; renderPhase(); }
+  });
+  document.getElementById("step-prev").addEventListener("click", function(){ if (step > 0) { step--; renderAlloc(); } });
+  document.getElementById("step-next").addEventListener("click", function(){ step = (step + 1) % STEPS.length; renderAlloc(); });
+
+  renderPhase();
+  renderActivity();
+
+  /* Chapter tracking and local contents */
+  var sections = Array.prototype.slice.call(document.querySelectorAll("article > section"));
+  var railLinks = Array.prototype.slice.call(document.querySelectorAll(".rail a"));
+  var toc = document.getElementById("toc-list");
+  var current = null;
+  function setActive(id){
+    if (id === current) return;
+    current = id;
+    railLinks.forEach(function(a){ a.setAttribute("aria-current", a.getAttribute("href") === "#" + id ? "true" : "false"); });
+    toc.innerHTML = "";
+    var sec = document.getElementById(id);
+    sec.querySelectorAll("h3[id]").forEach(function(h){
+      var li = el("li"), a = el("a", null, h.textContent.replace(/^[✓✕]/, "").trim()); a.href = "#" + h.id;
+      li.appendChild(a); toc.appendChild(li);
+    });
+    toc.parentNode.hidden = !toc.children.length;
+  }
+  function onScroll(){
+    var line = window.innerHeight * 0.3, active = sections[0].id;
+    sections.forEach(function(s){ if (s.getBoundingClientRect().top <= line) active = s.id; });
+    if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 4) active = sections[sections.length - 1].id;
+    setActive(active);
+  }
+  var ticking = false;
+  window.addEventListener("scroll", function(){ if (!ticking) { ticking = true; requestAnimationFrame(function(){ ticking = false; onScroll(); }); } }, { passive: true });
+  window.addEventListener("resize", onScroll);
+  onScroll();
+})();
+</script>
+</body>
+</html>

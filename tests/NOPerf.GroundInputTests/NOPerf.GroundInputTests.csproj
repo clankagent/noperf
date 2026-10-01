@@ -1,0 +1,1 @@
+<Project Sdk="Microsoft.NET.Sdk"><PropertyGroup><AssemblyName>NOPerf.GroundInputTests</AssemblyName></PropertyGroup><ItemGroup><ProjectReference Include="../../src/NOPerf.GroundInputs/NOPerf.GroundInputs.csproj" /></ItemGroup></Project>

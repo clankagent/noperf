@@ -6,6 +6,7 @@ server cheaper. The goal is to leave gameplay unchanged. Our automatic tests
 found the same units and routes in the cases they checked.
 
 **[See what we learned, in pictures](https://clankagent.github.io/noperf/)** ·
+**[Newer Ryzen server: CPU, memory and multiplayer tests](https://clankagent.github.io/noperf/resource-report.html)** ·
 **[Watch how it works (step-by-step animation)](https://clankagent.github.io/noperf/how-it-works.html)** ·
 **[Download v0.1.0](https://github.com/clankagent/noperf/releases/tag/v0.1.0)**
 
@@ -14,7 +15,9 @@ found the same units and routes in the cases they checked.
 Some tiny jobs got cheaper in our tests. **We have not shown that the server as
 a whole runs faster.** Those jobs were a very small part of the server's work,
 and our long side-by-side test was inconclusive because the two battles played
-out differently.
+out differently. A later four-client flight comparison also showed no clear
+whole-server gain: 0.757 baseline versus 0.761 Spatial CPU cores, inside ordinary
+baseline variation.
 
 **Real players joining a server with NOPerf has not been tested yet.** Players
 do not need to install anything, but treat player connections as untested.
@@ -26,9 +29,15 @@ do not need to install anything, but treat player connections as untested.
 | Spatial | Finds nearby units with less bookkeeping. Same units, same order. | On |
 | Wrecks | Reuses temporary lists of wrecks instead of making new ones. | Off (experimental) |
 | Navigation | Checks road points faster while planning routes. Same routes. | Off (experimental) |
-| Diagnostics | Optional measurement. Writes timing numbers to the log. Adds a little work. | Off |
+| Diagnostics | Optional measurement. Writes timing numbers to the log. Adds overhead. | Off |
 
 Install only the ones you want. Each works on its own.
+
+Current source also includes a **disabled-by-default GroundInputs experiment**,
+which visits the ground vehicles already due on each simulation tick. It is not
+in the v0.1.0 download. Native index/order checks pass and the isolated scan is
+cheaper; a whole-server benefit is unproven. See the
+[experimental source instructions](docs/developer-guide.md#ground-input-traversal-experiment).
 
 NOPerf only works on the exact game version we tested: Nuclear Option 0.34.1
 (Steam build 24724541) with BepInEx 5. On any other version the plugins switch

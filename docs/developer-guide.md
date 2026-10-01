@@ -156,8 +156,9 @@ part of the plugin release (see [Tests](#tests-and-validation)).
 - **Clients.** Players install nothing. Static inspection found no new network
   messages and no plugin-list requirement. However, **a live connection from an
   unmodded client has not been tested**. Tests ran in isolated offline hosting
-  without human players, so joining, rejoining, authentication and
-  player-flown aircraft are outside the measured coverage.
+  and later with dedicated-build headless UDP clients. Human players, retail
+  Steam clients and Steam authentication remain outside that coverage. See the
+  [newer resource report](resource-report.html) for the separate multiplayer tests.
 - **`ModdedServer` setting.** NOPerf neither forces nor hides this setting. Set
   it according to your own policy and the official
   [dedicated server guide](https://github.com/Shockfront-Studios/Nuclear-Option-Server-Tools/blob/main/DedicatedServerGuide.md).
@@ -181,6 +182,63 @@ dotnet build NuclearOptionPerformance.sln -c Release \
 
 Each plugin is built to `src/NOPerf.*/bin/Release/net48/`. The build fails
 early with a message if either path is missing the expected assemblies.
+
+### Optional job profiling in current source
+
+The current Diagnostics source adds `[Profiling] JobMethods = true`. This option
+is **not in the v0.1.0 release archive**. Build Diagnostics from the current source
+to separate job scheduling, ground/aero input collection and result application.
+Diagnostics and this option are disabled by default. Its 16 selected methods were
+observed in three completed, instrumented two-client Escalation workloads.
+
+This mode samples every 64th main-thread call and adds instrumentation to every
+selected call. Nested inclusive timings overlap; job completion includes waiting
+for workers. Per-vehicle hooks can add substantial overhead. Use it to locate work
+for investigation, then remove method profiling from baseline/mod comparisons.
+Do not sum method times into a CPU chart or treat an instrumented run as a speedup.
+See the [reviewed Ryzen measurements](../evidence/ryzen-resources-20261001.json).
+
+### Ground input traversal experiment
+
+`src/NOPerf.GroundInputs` is an independent, source-only experiment, disabled by
+default and excluded from v0.1.0 packaging. It changes only the two due-input loop
+counters. The original eligibility predicate, callback bodies, callback order and
+tick offset remain; callbacks still run on their original one-in-twelve schedule.
+No vehicle state is cached. Both collection and eligibility methods must be free
+of other Harmony patches at startup. Later patches are not detected.
+
+Build the plugin and its disposable native harness explicitly:
+
+```sh
+dotnet build tests/NOPerf.GroundInputTests -c Release \
+  -p:GameServerPath=/absolute/path/to/server \
+  -p:BepInExPath=/absolute/path/to/bepinex
+```
+
+Only in an empty, disposable batch-mode lab, install both authored DLLs, enable
+GroundInputs in `BepInEx/config/agent.noperf.groundinputs.cfg`, and use
+`NOPERF_GROUND_INPUT_TEST=1`. Require a fresh PASS in
+`BepInEx/data/noperf/ground-input-tests.txt`, actual transpiler activation and the
+correct DLL hashes. Use `NOPERF_GROUND_INPUT_DISABLED_TEST=1` with Enabled=false
+for the separate disabled startup check. Keep the harness off populated worlds.
+
+The expanded native suite passed 6,360 checks against the shipped eligibility
+method, covering positive/negative ticks, signed addition overflow, near-limit
+indices and refusal of pre-existing collection/eligibility patches. It proves
+the visited index sequence; it does not independently replay every vehicle's
+callback state. The callback bodies are left in the original method. An earlier
+binary passed the separate disabled-mode check; that result is scoped to its
+recorded hash. Runtime workloads and helper timings are reported separately.
+
+At 440 vehicles over 200,000 ticks, the isolated single-loop bookkeeping took
+430–467 ms originally and 43–45 ms with direct traversal, in five alternating
+trials. That is only about two microseconds saved per loop invocation. It is not
+a tenfold improvement to vehicle physics or total server work. This remains an
+experiment until repeated workload evidence supports a useful overall effect.
+Two short baseline/mod workload pairs passed all 30 checks per run; the lower mod
+flight CPU differed across pairs, and live mission workloads diverged. No useful
+whole-server gain or memory reduction is established. See the
+[hash-scoped native and workload evidence](../evidence/GroundInputValidation.json).
 
 To build the runtime test harness as well:
 

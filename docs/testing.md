@@ -12,6 +12,8 @@ game-test CI for every commit or a live vanilla-client compatibility test.
 | Plugin startup checks | Loads each plugin independently; checks all-disabled mode and rejects an unknown assembly hash | StartupValidation.txt | Not a general third-party-mod compatibility test |
 | Live mission transitions | Starts populated Terminal Control, changes to Escalation, back to Terminal Control and then Escalation; checks live query/state parity | Baseline 106,391 assertions, all optimizers 106,423; three transitions/four phases in each | Not a deterministic replay of an identical full mission |
 | Workload profiling | Collects steady frame timing over short and hour-long Escalation runs and additional Carrier Duel/weapons profiles | Reviewed aggregate JSON and report | No players; workloads varied; whole-server improvement remains unproven |
+| Later headless multiplayer workloads | Separate dedicated-build UDP client processes taxi, fly and fire in stock Escalation; server checks ownership, flight and ammunition | Three four-client baseline passes and one completed baseline/Spatial pair, 50 checks per run; actual Spatial activation verified | Baseline includes BepInEx/test bridge; not retail Steam or human play. Loading, flight, reconnect and rotation failures retained |
+| Deeper optional job profiling | Measures input collection, scheduling and results separately | All 16 job targets emitted in three completed two-client 6-minute instrumented workloads | Inclusive timings overlap/include waits; instrumentation adds overhead, so these are not mod comparisons |
 | Release verification | Refuses packaging unless runtime, startup and optional reload reports match all four DLL hashes | scripts/package.ps1 and scripts/check_release.py | Passing reports apply only to their exact binaries/build |
 
 These are more than standalone unit tests: the harness executes in the game's
@@ -77,5 +79,9 @@ uv run scripts/check_release.py /absolute/path/NOPerf-0.1.0-build24724541.zip
 - An isolated private game-test runner triggered on every source change. It would
   need the exact locally held game assemblies and explicitly managed lab state.
 
-The overnight orchestration finished and stopped. No game-testing schedule is
-currently running. The source harness remains available to rerun in a lab.
+The [newer Ryzen resource report](resource-report.html) explains the separate
+multiplayer measurements and their limits. Those runs used
+[NOTestPilot](https://github.com/clankagent/notestpilot), which supplies repeatable
+commands and checks. It still needs reliable occupied reconnects, rotation, longer
+combat and retail-client coverage. Charts use reviewed aggregates and have their
+own data check; this documentation CI does not execute the game.
