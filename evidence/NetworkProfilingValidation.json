@@ -1,0 +1,269 @@
+{
+  "game": "Nuclear Option 0.34.1",
+  "steam_build": 24724541,
+  "game_assembly_sha256": "df5bed594dd84912efb3e57faa75b37d7e327bf4c8f5418f50411ad0ff46e24a",
+  "diagnostics_sha256": "c36dd29c92d9d38197678cb1ce31ad2ba13f2f25c9685d2a83b96bc0e643eede",
+  "installed_network_targets": 21,
+  "workload": "Two headless dedicated-build UDP clients, stock Escalation, 180s taxi/takeoff and 180s sustained flight/gun bursts per run",
+  "runs": [
+    {
+      "id": "ryzen-network-leaf-01",
+      "passed": true,
+      "checks": 30,
+      "profile": {
+        "discarded_windows": 4,
+        "steady_windows": 8,
+        "game_frames": 14395,
+        "phases": {
+          "PhysicsFixedUpdate": {
+            "calls": 14403,
+            "calls_per_game_frame": 1.000555748523793,
+            "weighted_mean_ms": 1.771842220370756,
+            "max_ms": 7.131
+          },
+          "ScriptRunBehaviourFixedUpdate": {
+            "calls": 14403,
+            "calls_per_game_frame": 1.000555748523793,
+            "weighted_mean_ms": 1.0995311324029717,
+            "max_ms": 11.831
+          },
+          "ScriptRunBehaviourLateUpdate": {
+            "calls": 14395,
+            "calls_per_game_frame": 1.0,
+            "weighted_mean_ms": 0.7767469190691212,
+            "max_ms": 3.914
+          },
+          "ScriptRunBehaviourUpdate": {
+            "calls": 14395,
+            "calls_per_game_frame": 1.0,
+            "weighted_mean_ms": 1.0227640291767974,
+            "max_ms": 10.496
+          }
+        },
+        "methods": {
+          "AircraftNetworkTransform.ShouldSend": {
+            "calls": 48894,
+            "rough_inclusive_ms_per_game_frame": 0.0014727335880514068
+          },
+          "AircraftNetworkTransform.Write": {
+            "calls": 48894,
+            "rough_inclusive_ms_per_game_frame": 0.00747481764501563
+          },
+          "GroundVehicleNetworkTransform.ShouldSend": {
+            "calls": 670219,
+            "rough_inclusive_ms_per_game_frame": 0.006127127474817645
+          },
+          "GroundVehicleNetworkTransform.Write": {
+            "calls": 84576,
+            "rough_inclusive_ms_per_game_frame": 0.004876693296283432
+          },
+          "MissileNetworkTransform.ShouldSend": {
+            "calls": 63271,
+            "rough_inclusive_ms_per_game_frame": 0.00015977770059048282
+          },
+          "MissileNetworkTransform.Write": {
+            "calls": 63271,
+            "rough_inclusive_ms_per_game_frame": 0.00314692601597777
+          },
+          "NetworkServer.UpdateSent": {
+            "calls": 14395,
+            "rough_inclusive_ms_per_game_frame": 0.05370614796804446
+          },
+          "NetworkTransformBase.TimeToUpdate": {
+            "calls": 7031693,
+            "rough_inclusive_ms_per_game_frame": 0.019624869746439736
+          },
+          "NetworkWriter.CopyFromPointer": {
+            "calls": 228375,
+            "rough_inclusive_ms_per_game_frame": 0.0013546370267453977
+          },
+          "NetworkWriter.CopyFromWriter": {
+            "calls": 228327,
+            "rough_inclusive_ms_per_game_frame": 0.015296978117401877
+          },
+          "PilotDismountedNetworkTransform.ShouldSend": {
+            "calls": 1914,
+            "rough_inclusive_ms_per_game_frame": 1.3893713094824592e-05
+          },
+          "PilotDismountedNetworkTransform.Write": {
+            "calls": 1623,
+            "rough_inclusive_ms_per_game_frame": 0.00019451198332754428
+          },
+          "SendTransformBatcher.ClientUpdate": {
+            "calls": 14395,
+            "rough_inclusive_ms_per_game_frame": 0.2417436609934005
+          },
+          "SendTransformBatcher.LateUpdate": {
+            "calls": 14395,
+            "rough_inclusive_ms_per_game_frame": 0.7106425842306356
+          },
+          "SendTransformBatcher.Send": {
+            "calls": 16131,
+            "rough_inclusive_ms_per_game_frame": 0.012170892671066342
+          },
+          "SendTransformBatcher.ServerUpdate": {
+            "calls": 14395,
+            "rough_inclusive_ms_per_game_frame": 0.4057658909343522
+          },
+          "SendTransformBatcher.VisualUpdate": {
+            "calls": 14395,
+            "rough_inclusive_ms_per_game_frame": 0.23815908301493574
+          },
+          "ShipNetworkTransform.ShouldSend": {
+            "calls": 29963,
+            "rough_inclusive_ms_per_game_frame": 0.00029176797499131643
+          },
+          "ShipNetworkTransform.Write": {
+            "calls": 29963,
+            "rough_inclusive_ms_per_game_frame": 0.0015838832928100036
+          },
+          "UnitNetworkTransform.ShouldSend": {
+            "calls": 29963,
+            "rough_inclusive_ms_per_game_frame": 0.000375130253560264
+          }
+        },
+        "windowBoundary": "closing frames row",
+        "limits": "Instrumented observations; nested inclusive estimates overlap, fixed-stride sampling can alias workload order."
+      },
+      "copy_coverage_check": {
+        "complete_windows": 8,
+        "minimum_pointer_copies_over_observed_transform_writes": 1.0000673945275644,
+        "scope": "Lower-bound runtime cross-check; extra copies include other Mirage traffic. Not an independent proof that every call is observed."
+      }
+    },
+    {
+      "id": "ryzen-network-leaf-02",
+      "passed": true,
+      "checks": 30,
+      "profile": {
+        "discarded_windows": 4,
+        "steady_windows": 8,
+        "game_frames": 14397,
+        "phases": {
+          "PhysicsFixedUpdate": {
+            "calls": 14404,
+            "calls_per_game_frame": 1.0004862124053622,
+            "weighted_mean_ms": 1.8560027631213554,
+            "max_ms": 8.106
+          },
+          "ScriptRunBehaviourFixedUpdate": {
+            "calls": 14404,
+            "calls_per_game_frame": 1.0004862124053622,
+            "weighted_mean_ms": 1.169653006109414,
+            "max_ms": 12.478
+          },
+          "ScriptRunBehaviourLateUpdate": {
+            "calls": 14397,
+            "calls_per_game_frame": 1.0,
+            "weighted_mean_ms": 0.813321615614364,
+            "max_ms": 3.904
+          },
+          "ScriptRunBehaviourUpdate": {
+            "calls": 14397,
+            "calls_per_game_frame": 1.0,
+            "weighted_mean_ms": 1.0671719941654512,
+            "max_ms": 9.916
+          }
+        },
+        "methods": {
+          "AircraftNetworkTransform.ShouldSend": {
+            "calls": 48554,
+            "rough_inclusive_ms_per_game_frame": 0.0014864207821073834
+          },
+          "AircraftNetworkTransform.Write": {
+            "calls": 48554,
+            "rough_inclusive_ms_per_game_frame": 0.007869695075362922
+          },
+          "GroundVehicleNetworkTransform.ShouldSend": {
+            "calls": 669528,
+            "rough_inclusive_ms_per_game_frame": 0.0066124887129263045
+          },
+          "GroundVehicleNetworkTransform.Write": {
+            "calls": 82746,
+            "rough_inclusive_ms_per_game_frame": 0.004973258317705077
+          },
+          "MissileNetworkTransform.ShouldSend": {
+            "calls": 57462,
+            "rough_inclusive_ms_per_game_frame": 0.0001389178301034938
+          },
+          "MissileNetworkTransform.Write": {
+            "calls": 57462,
+            "rough_inclusive_ms_per_game_frame": 0.0034590539695769956
+          },
+          "NetworkServer.UpdateSent": {
+            "calls": 14397,
+            "rough_inclusive_ms_per_game_frame": 0.056233937625894286
+          },
+          "NetworkTransformBase.TimeToUpdate": {
+            "calls": 7021726,
+            "rough_inclusive_ms_per_game_frame": 0.01710773077724526
+          },
+          "NetworkWriter.CopyFromPointer": {
+            "calls": 221476,
+            "rough_inclusive_ms_per_game_frame": 0.0012641522539417933
+          },
+          "NetworkWriter.CopyFromWriter": {
+            "calls": 221428,
+            "rough_inclusive_ms_per_game_frame": 0.011016183927207056
+          },
+          "PilotDismountedNetworkTransform.ShouldSend": {
+            "calls": 4546,
+            "rough_inclusive_ms_per_game_frame": 6.25130235465722e-05
+          },
+          "PilotDismountedNetworkTransform.Write": {
+            "calls": 2684,
+            "rough_inclusive_ms_per_game_frame": 0.00045148294783635477
+          },
+          "SendTransformBatcher.ClientUpdate": {
+            "calls": 14397,
+            "rough_inclusive_ms_per_game_frame": 0.25379592970757797
+          },
+          "SendTransformBatcher.LateUpdate": {
+            "calls": 14397,
+            "rough_inclusive_ms_per_game_frame": 0.739487393206918
+          },
+          "SendTransformBatcher.Send": {
+            "calls": 16052,
+            "rough_inclusive_ms_per_game_frame": 0.01296103354865597
+          },
+          "SendTransformBatcher.ServerUpdate": {
+            "calls": 14397,
+            "rough_inclusive_ms_per_game_frame": 0.41955268458706674
+          },
+          "SendTransformBatcher.VisualUpdate": {
+            "calls": 14397,
+            "rough_inclusive_ms_per_game_frame": 0.2501423907758561
+          },
+          "ShipNetworkTransform.ShouldSend": {
+            "calls": 29982,
+            "rough_inclusive_ms_per_game_frame": 0.00028478155171216224
+          },
+          "ShipNetworkTransform.Write": {
+            "calls": 29982,
+            "rough_inclusive_ms_per_game_frame": 0.0020143085365006597
+          },
+          "UnitNetworkTransform.ShouldSend": {
+            "calls": 29982,
+            "rough_inclusive_ms_per_game_frame": 0.00029172744321733694
+          }
+        },
+        "windowBoundary": "closing frames row",
+        "limits": "Instrumented observations; nested inclusive estimates overlap, fixed-stride sampling can alias workload order."
+      },
+      "copy_coverage_check": {
+        "complete_windows": 8,
+        "minimum_pointer_copies_over_observed_transform_writes": 1.0000692233144124,
+        "scope": "Lower-bound runtime cross-check; extra copies include other Mirage traffic. Not an independent proof that every call is observed."
+      }
+    }
+  ],
+  "whole_server_speedup_established": false,
+  "limits": [
+    "Instrumentation adds overhead to every selected call; parent inclusive timings overlap and include child-probe overhead.",
+    "Every 64th main-thread call timed; fixed-stride sampling can alias workload order, tiny methods can be inlined.",
+    "Last complete windows after discarding first four include late takeoff and flight; not a flight-only sample.",
+    "Server and clients share four vCPUs and 8 GiB; baseline has BepInEx and the observation bridge.",
+    "No retail Steam/unmodded-client authentication, no loader-free stock server or player-capacity proof.",
+    "An earlier two-run probe installed the small copy wrapper after its caller and missed steady copy calls; its copy timings are excluded."
+  ]
+}

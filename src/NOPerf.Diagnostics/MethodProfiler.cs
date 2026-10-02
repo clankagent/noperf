@@ -23,7 +23,7 @@ internal sealed class MethodProfiler : IDisposable
     private static int mainThread;
     private readonly Harmony harmony = new("agent.noperf.diagnostics.methods");
     private readonly ManualLogSource log;
-    internal MethodProfiler(ManualLogSource log, bool generalMethods, bool missionMethods, bool jobMethods = false)
+    internal MethodProfiler(ManualLogSource log, bool generalMethods, bool missionMethods, bool jobMethods = false, bool networkMethods = false)
     {
         this.log = log;
         mainThread = Thread.CurrentThread.ManagedThreadId;
@@ -77,9 +77,44 @@ internal sealed class MethodProfiler : IDisposable
                 targets.Add((type, target.Item2));
             }
         }
-        foreach (var target in targets)
+        if (networkMethods)
         {
-            var method = AccessTools.Method(target.Item1, target.Item2);
+            foreach (var target in new[] {
+                ("NuclearOption.NetworkTransforms.SendTransformBatcher", "LateUpdate"),
+                ("NuclearOption.NetworkTransforms.SendTransformBatcher", "ServerUpdate"),
+                ("NuclearOption.NetworkTransforms.SendTransformBatcher", "ClientUpdate"),
+                ("NuclearOption.NetworkTransforms.SendTransformBatcher", "VisualUpdate"),
+                ("NuclearOption.NetworkTransforms.SendTransformBatcher", "Send"),
+                ("NuclearOption.NetworkTransforms.NetworkTransformBase", "TimeToUpdate"),
+                ("NuclearOption.NetworkTransforms.AircraftNetworkTransform", "ShouldSend"),
+                ("NuclearOption.NetworkTransforms.AircraftNetworkTransform", "Write"),
+                ("NuclearOption.NetworkTransforms.GroundVehicleNetworkTransform", "ShouldSend"),
+                ("NuclearOption.NetworkTransforms.GroundVehicleNetworkTransform", "Write"),
+                ("NuclearOption.NetworkTransforms.MissileNetworkTransform", "ShouldSend"),
+                ("NuclearOption.NetworkTransforms.MissileNetworkTransform", "Write"),
+                ("NuclearOption.NetworkTransforms.UnitNetworkTransform", "ShouldSend"),
+                ("NuclearOption.NetworkTransforms.UnitNetworkTransform", "Write"),
+                ("NuclearOption.NetworkTransforms.ShipNetworkTransform", "ShouldSend"),
+                ("NuclearOption.NetworkTransforms.ShipNetworkTransform", "Write"),
+                ("NuclearOption.NetworkTransforms.PilotDismountedNetworkTransform", "ShouldSend"),
+                ("NuclearOption.NetworkTransforms.PilotDismountedNetworkTransform", "Write"),
+                ("Mirage.Serialization.NetworkWriter", "CopyFromWriter"),
+                ("Mirage.Serialization.NetworkWriter", "CopyFromPointer"),
+                ("Mirage.NetworkServer", "UpdateSent") })
+            {
+                var type = AccessTools.TypeByName(target.Item1);
+                if (type == null) { log.LogWarning("Network profile type unavailable: " + target.Item1); continue; }
+                targets.Add((type, target.Item2));
+            }
+        }
+        // Install leaf probes before replacing the batch caller. Tiny wrappers
+        // may still be inlined: also probe CopyFromPointer and verify runtime
+        // copy counts against emitted transform writes before trusting its cost.
+        foreach (var target in targets.Distinct().OrderBy(t => t.Item1 == typeof(NuclearOption.NetworkTransforms.SendTransformBatcher) ? 1 : 0))
+        {
+            var method = target.Item2 == "CopyFromWriter"
+                ? AccessTools.Method(target.Item1, target.Item2, new[] { target.Item1 })
+                : AccessTools.Method(target.Item1, target.Item2);
             if (method == null) { log.LogWarning("Profile target unavailable: " + target); continue; }
             stats[method] = new Stat { Label = target.Item1.Name + "." + target.Item2, Stride = target.Item2 == "TryPathfind" ? 1 : 64 };
             log.LogInfo("Installing sampled profile: " + target.Item1.Name + "." + target.Item2);

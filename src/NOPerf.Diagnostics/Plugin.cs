@@ -22,6 +22,10 @@ public sealed class DiagnosticsPlugin : BaseUnityPlugin
     private bool requestProfiler;
     private bool requestMissionProfiler;
     private bool requestJobProfiler;
+    private bool requestNetworkProfiler;
+    private bool requestAssetMemory;
+    private float assetMemoryInterval;
+    private AssetMemoryScanner? assetMemory;
     private bool requestNative;
     private NativeMarkers? native;
     private bool requestPhases;
@@ -40,6 +44,9 @@ public sealed class DiagnosticsPlugin : BaseUnityPlugin
         requestProfiler = Config.Bind("Profiling", "Methods", false, "Instrument selected managed methods, sampling 1/64 calls. Adds overhead; restart to apply.").Value;
         requestMissionProfiler = Config.Bind("Profiling", "MissionMethods", false, "Instrument selected mission objective methods, sampling 1/64 calls. Adds overhead; restart to apply.").Value;
         requestJobProfiler = Config.Bind("Profiling", "JobMethods", false, "Instrument job scheduling, input collection and result application separately. Inclusive main-thread timings include waits; sampling adds overhead. Restart to apply.").Value;
+        requestNetworkProfiler = Config.Bind("Profiling", "NetworkMethods", false, "Instrument transform eligibility, serialization, batching and transport separately. Inclusive main-thread timings overlap and sampling adds overhead. Restart to apply.").Value;
+        requestAssetMemory = Config.Bind("Profiling", "AssetMemory", false, "Read-only typed asset memory and mesh-reference inventory in main-thread slices. Enumeration calls cannot be sliced; reports may overlap or be unavailable. Adds overhead, not total RSS or reclaimable memory. Restart to apply.").Value;
+        assetMemoryInterval = Mathf.Clamp(Config.Bind("Profiling", "AssetMemoryIntervalSeconds", 120f, "Seconds between completed asset inventories, 30-600; first scan starts after 120 seconds. Restart to apply.").Value, 30f, 600f);
         requestNative = Config.Bind("Profiling", "NativeMarkers", false, "Record available Unity main-thread physics/job markers. Adds overhead; restart to apply.").Value;
         requestPhases = Config.Bind("Profiling", "PlayerLoopPhases", false, "Observe native physics and script phase timings through adjacent player-loop probes; restart to apply.").Value;
         Logger.LogInfo("Diagnostics observing existing game frame timings; frame/AI/physics rates unchanged.");
@@ -57,17 +64,23 @@ public sealed class DiagnosticsPlugin : BaseUnityPlugin
     }
     private void Update()
     {
+        if (requestAssetMemory)
+        {
+            requestAssetMemory = false;
+            assetMemory = new AssetMemoryScanner(Logger, assetMemoryInterval);
+        }
+        assetMemory?.Update();
         if (subscribed && !runtimeSettled && Time.realtimeSinceStartupAsDouble > 10)
         {
             runtimeSettled = true;
             Logger.LogInfo($"Runtime settled workers={Unity.Jobs.LowLevel.Unsafe.JobsUtility.JobWorkerCount} worker_max={Unity.Jobs.LowLevel.Unsafe.JobsUtility.JobWorkerMaximumCount} logical_cpus={SystemInfo.processorCount} fixed_delta_seconds={Time.fixedDeltaTime}");
             Logger.LogInfo($"Physics settled reuse_collision_callbacks={Physics.reuseCollisionCallbacks} auto_sync_transforms={Physics.autoSyncTransforms}");
         }
-        if ((requestProfiler || requestMissionProfiler || requestJobProfiler) && Time.realtimeSinceStartupAsDouble > 5)
+        if ((requestProfiler || requestMissionProfiler || requestJobProfiler || requestNetworkProfiler) && Time.realtimeSinceStartupAsDouble > 5)
         {
-            bool generalMethods = requestProfiler, missionMethods = requestMissionProfiler, jobMethods = requestJobProfiler;
-            requestProfiler = requestMissionProfiler = requestJobProfiler = false;
-            try { profiler = new MethodProfiler(Logger, generalMethods, missionMethods, jobMethods); }
+            bool generalMethods = requestProfiler, missionMethods = requestMissionProfiler, jobMethods = requestJobProfiler, networkMethods = requestNetworkProfiler;
+            requestProfiler = requestMissionProfiler = requestJobProfiler = requestNetworkProfiler = false;
+            try { profiler = new MethodProfiler(Logger, generalMethods, missionMethods, jobMethods, networkMethods); }
             catch (Exception ex) { new HarmonyLib.Harmony("agent.noperf.diagnostics.methods").UnpatchSelf(); Logger.LogError("Method profiler disabled: " + ex); }
         }
         if (requestNative && Time.realtimeSinceStartupAsDouble > 20)
@@ -103,5 +116,6 @@ public sealed class DiagnosticsPlugin : BaseUnityPlugin
         profiler?.Dispose();
         native?.Dispose();
         phases?.Dispose();
+        assetMemory?.Dispose();
     }
 }

@@ -1,0 +1,392 @@
+{
+  "game": "Nuclear Option 0.34.1",
+  "steam_build": 24724541,
+  "game_assembly_sha256": "df5bed594dd84912efb3e57faa75b37d7e327bf4c8f5418f50411ad0ff46e24a",
+  "diagnostics_sha256": "954fe9aebcb74337a18e64bca470c83599376eea142d4ccc72fa45e603a932d5",
+  "run": {
+    "id": "ryzen-asset-memory-sorties-02",
+    "passed": true,
+    "checks": 51,
+    "workload": "Two dedicated-build headless UDP clients, stock Escalation; initial takeoff/flight, ordinary rockets, airborne ejection and replacement, second 180sec taxi/takeoff attempt, final both airborne. Not 180sec continuously airborne on replacement aircraft."
+  },
+  "completed_inventories": [
+    {
+      "scan": 1,
+      "queries": [
+        {
+          "type": "MeshCollider",
+          "count": 9021,
+          "enumeration_ms": 3.779
+        },
+        {
+          "type": "SkinnedMeshRenderer",
+          "count": 71,
+          "enumeration_ms": 0.043
+        },
+        {
+          "type": "MeshFilter",
+          "count": 21707,
+          "enumeration_ms": 16.27
+        },
+        {
+          "type": "Mesh",
+          "count": 3536,
+          "enumeration_ms": 0.744
+        },
+        {
+          "type": "Texture",
+          "count": 1354,
+          "enumeration_ms": 0.618
+        },
+        {
+          "type": "AudioClip",
+          "count": 422,
+          "enumeration_ms": 0.16
+        },
+        {
+          "type": "TerrainData",
+          "count": 0,
+          "enumeration_ms": 0.01
+        },
+        {
+          "type": "AnimationClip",
+          "count": 12,
+          "enumeration_ms": 0.092
+        },
+        {
+          "type": "Material",
+          "count": 1414,
+          "enumeration_ms": 0.359
+        },
+        {
+          "type": "Shader",
+          "count": 108,
+          "enumeration_ms": 0.109
+        },
+        {
+          "type": "ComputeShader",
+          "count": 5,
+          "enumeration_ms": 0.015
+        }
+      ],
+      "groups": {
+        "meshes": {
+          "count": 3536,
+          "unity_reported_bytes": 332252594,
+          "zero_reports": 2253
+        },
+        "textures": {
+          "count": 1354,
+          "unity_reported_bytes": 67896116,
+          "zero_reports": 1315
+        },
+        "materials": {
+          "count": 1414,
+          "unity_reported_bytes": 615624,
+          "zero_reports": 0
+        },
+        "audio_clips": {
+          "count": 422,
+          "unity_reported_bytes": 0,
+          "zero_reports": 422
+        },
+        "animation_clips": {
+          "count": 12,
+          "unity_reported_bytes": 0,
+          "zero_reports": 12
+        },
+        "shaders": {
+          "count": 108,
+          "unity_reported_bytes": 0,
+          "zero_reports": 108
+        },
+        "compute_shaders": {
+          "count": 5,
+          "unity_reported_bytes": 0,
+          "zero_reports": 5
+        }
+      },
+      "mesh_references": {
+        "readable_count": 400,
+        "readable_reported_bytes": 9656586,
+        "unreadable_reported_bytes": 322596008,
+        "collider_count": 1187,
+        "collider_reported_bytes": 322173346,
+        "readable_collider_count": 59,
+        "readable_collider_reported_bytes": 118956,
+        "skinned_count": 5,
+        "skinned_reported_bytes": 541618,
+        "filter_count": 3128,
+        "filter_reported_bytes": 330745858,
+        "absent_from_observed_reference_sets_count": 285,
+        "absent_from_observed_reference_sets_reported_bytes": 204
+      },
+      "completion": {
+        "discovered": 37650,
+        "elapsed_seconds": 10.132,
+        "work_ms": 58.474,
+        "max_slice_ms": 16.27,
+        "max_item_ms": 0.767,
+        "destroyed_skipped": 0,
+        "lookup_failures": 0,
+        "heap_bytes": 93376512,
+        "units": 1069
+      }
+    },
+    {
+      "scan": 2,
+      "queries": [
+        {
+          "type": "MeshCollider",
+          "count": 9021,
+          "enumeration_ms": 1.998
+        },
+        {
+          "type": "SkinnedMeshRenderer",
+          "count": 80,
+          "enumeration_ms": 0.046
+        },
+        {
+          "type": "MeshFilter",
+          "count": 21629,
+          "enumeration_ms": 4.759
+        },
+        {
+          "type": "Mesh",
+          "count": 3536,
+          "enumeration_ms": 0.72
+        },
+        {
+          "type": "Texture",
+          "count": 1354,
+          "enumeration_ms": 0.261
+        },
+        {
+          "type": "AudioClip",
+          "count": 422,
+          "enumeration_ms": 0.103
+        },
+        {
+          "type": "TerrainData",
+          "count": 0,
+          "enumeration_ms": 0.013
+        },
+        {
+          "type": "AnimationClip",
+          "count": 12,
+          "enumeration_ms": 0.016
+        },
+        {
+          "type": "Material",
+          "count": 1625,
+          "enumeration_ms": 0.41
+        },
+        {
+          "type": "Shader",
+          "count": 108,
+          "enumeration_ms": 0.037
+        },
+        {
+          "type": "ComputeShader",
+          "count": 5,
+          "enumeration_ms": 0.016
+        }
+      ],
+      "groups": {
+        "meshes": {
+          "count": 3536,
+          "unity_reported_bytes": 332252594,
+          "zero_reports": 2253
+        },
+        "textures": {
+          "count": 1354,
+          "unity_reported_bytes": 67896116,
+          "zero_reports": 1315
+        },
+        "materials": {
+          "count": 1625,
+          "unity_reported_bytes": 708964,
+          "zero_reports": 0
+        },
+        "audio_clips": {
+          "count": 422,
+          "unity_reported_bytes": 0,
+          "zero_reports": 422
+        },
+        "animation_clips": {
+          "count": 12,
+          "unity_reported_bytes": 0,
+          "zero_reports": 12
+        },
+        "shaders": {
+          "count": 108,
+          "unity_reported_bytes": 0,
+          "zero_reports": 108
+        },
+        "compute_shaders": {
+          "count": 5,
+          "unity_reported_bytes": 0,
+          "zero_reports": 5
+        }
+      },
+      "mesh_references": {
+        "readable_count": 400,
+        "readable_reported_bytes": 9656586,
+        "unreadable_reported_bytes": 322596008,
+        "collider_count": 1187,
+        "collider_reported_bytes": 322173346,
+        "readable_collider_count": 59,
+        "readable_collider_reported_bytes": 118956,
+        "skinned_count": 5,
+        "skinned_reported_bytes": 541618,
+        "filter_count": 3128,
+        "filter_reported_bytes": 330745858,
+        "absent_from_observed_reference_sets_count": 285,
+        "absent_from_observed_reference_sets_reported_bytes": 204
+      },
+      "completion": {
+        "discovered": 37792,
+        "elapsed_seconds": 10.138,
+        "work_ms": 41.252,
+        "max_slice_ms": 4.759,
+        "max_item_ms": 0.061,
+        "destroyed_skipped": 0,
+        "lookup_failures": 0,
+        "heap_bytes": 105893888,
+        "units": 1066
+      }
+    },
+    {
+      "scan": 3,
+      "queries": [
+        {
+          "type": "MeshCollider",
+          "count": 9008,
+          "enumeration_ms": 1.846
+        },
+        {
+          "type": "SkinnedMeshRenderer",
+          "count": 85,
+          "enumeration_ms": 0.038
+        },
+        {
+          "type": "MeshFilter",
+          "count": 21570,
+          "enumeration_ms": 6.16
+        },
+        {
+          "type": "Mesh",
+          "count": 3536,
+          "enumeration_ms": 0.724
+        },
+        {
+          "type": "Texture",
+          "count": 1354,
+          "enumeration_ms": 0.29
+        },
+        {
+          "type": "AudioClip",
+          "count": 422,
+          "enumeration_ms": 0.112
+        },
+        {
+          "type": "TerrainData",
+          "count": 0,
+          "enumeration_ms": 0.011
+        },
+        {
+          "type": "AnimationClip",
+          "count": 12,
+          "enumeration_ms": 0.018
+        },
+        {
+          "type": "Material",
+          "count": 1727,
+          "enumeration_ms": 0.581
+        },
+        {
+          "type": "Shader",
+          "count": 108,
+          "enumeration_ms": 0.038
+        },
+        {
+          "type": "ComputeShader",
+          "count": 5,
+          "enumeration_ms": 0.013
+        }
+      ],
+      "groups": {
+        "meshes": {
+          "count": 3536,
+          "unity_reported_bytes": 332252594,
+          "zero_reports": 2253
+        },
+        "textures": {
+          "count": 1354,
+          "unity_reported_bytes": 67896116,
+          "zero_reports": 1315
+        },
+        "materials": {
+          "count": 1727,
+          "unity_reported_bytes": 759716,
+          "zero_reports": 0
+        },
+        "audio_clips": {
+          "count": 422,
+          "unity_reported_bytes": 0,
+          "zero_reports": 422
+        },
+        "animation_clips": {
+          "count": 12,
+          "unity_reported_bytes": 0,
+          "zero_reports": 12
+        },
+        "shaders": {
+          "count": 108,
+          "unity_reported_bytes": 0,
+          "zero_reports": 108
+        },
+        "compute_shaders": {
+          "count": 5,
+          "unity_reported_bytes": 0,
+          "zero_reports": 5
+        }
+      },
+      "mesh_references": {
+        "readable_count": 400,
+        "readable_reported_bytes": 9656586,
+        "unreadable_reported_bytes": 322596008,
+        "collider_count": 1187,
+        "collider_reported_bytes": 322173346,
+        "readable_collider_count": 59,
+        "readable_collider_reported_bytes": 118956,
+        "skinned_count": 5,
+        "skinned_reported_bytes": 541618,
+        "filter_count": 3128,
+        "filter_reported_bytes": 330745858,
+        "absent_from_observed_reference_sets_count": 285,
+        "absent_from_observed_reference_sets_reported_bytes": 204
+      },
+      "completion": {
+        "discovered": 37827,
+        "elapsed_seconds": 10.162,
+        "work_ms": 41.132,
+        "max_slice_ms": 6.16,
+        "max_item_ms": 0.054,
+        "destroyed_skipped": 0,
+        "lookup_failures": 0,
+        "heap_bytes": 107851776,
+        "units": 1071
+      }
+    }
+  ],
+  "unfinished_inventory_count": 0,
+  "whole_server_gain_established": false,
+  "memory_saving_established": false,
+  "limitations": [
+    "Unity per-object reports may overlap or be zero/unavailable; not total RSS or reclaimable bytes.",
+    "Reference categories overlap and are sampled at different moments; absence does not prove unused assets.",
+    "Probe enumeration and transient references affect timing and memory.",
+    "Baseline has BepInEx and observation bridge; retail Steam clients and genuinely stock/no-loader coverage untested."
+  ]
+}

@@ -1,1 +1,8 @@
-<Project Sdk="Microsoft.NET.Sdk"><PropertyGroup><AssemblyName>NOPerf.Diagnostics</AssemblyName><Version>0.1.0</Version></PropertyGroup></Project>
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup><AssemblyName>NOPerf.Diagnostics</AssemblyName><Version>0.1.0</Version></PropertyGroup>
+  <ItemGroup>
+    <Reference Include="UnityEngine.AudioModule"><HintPath>$(ManagedPath)/UnityEngine.AudioModule.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="UnityEngine.TerrainModule"><HintPath>$(ManagedPath)/UnityEngine.TerrainModule.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="UnityEngine.AnimationModule"><HintPath>$(ManagedPath)/UnityEngine.AnimationModule.dll</HintPath><Private>false</Private></Reference>
+  </ItemGroup>
+</Project>

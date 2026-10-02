@@ -133,6 +133,10 @@ Turn the diagnostics profiling options off before comparing whole-server
 timings. Sampled method times are inclusive, so do not add them together across
 nested methods.
 
+Current source also adds `NetworkMethods`, `AssetMemory` and
+`AssetMemoryIntervalSeconds`. They are outside the v0.1.0 download; see
+[how to use the investigation modes and interpret their limits](profiling.md).
+
 **Uninstall:** stop the server, delete the NOPerf DLLs from `BepInEx/plugins/`
 and start it again. The plugins write no mission or player-state data.
 Diagnostics only writes aggregate lines to the BepInEx log.

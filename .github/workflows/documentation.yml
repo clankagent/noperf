@@ -17,3 +17,5 @@ jobs:
         run: uv run --python 3.12 scripts/check_docs.py
       - name: Check multiplayer resource charts against reviewed evidence
         run: uv run --python 3.12 scripts/check_resources.py
+      - name: Check profiling observations and their limits
+        run: uv run --python 3.12 scripts/check_profiling.py
