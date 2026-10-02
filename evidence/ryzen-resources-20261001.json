@@ -2334,144 +2334,145 @@
         "game_frames": 14394,
         "phases": {
           "PhysicsFixedUpdate": {
-            "calls": 12604,
-            "calls_per_game_frame": 0.8756426288731416,
-            "weighted_mean_ms": 1.8369297365915582,
+            "calls": 14403,
+            "calls_per_game_frame": 1.0006252605252188,
+            "weighted_mean_ms": 1.821750121502465,
             "max_ms": 9.015
           },
           "ScriptRunBehaviourFixedUpdate": {
-            "calls": 12604,
-            "calls_per_game_frame": 0.8756426288731416,
-            "weighted_mean_ms": 1.1383394715963187,
+            "calls": 14403,
+            "calls_per_game_frame": 1.0006252605252188,
+            "weighted_mean_ms": 1.118749510518642,
             "max_ms": 10.583
           },
           "ScriptRunBehaviourLateUpdate": {
-            "calls": 12595,
-            "calls_per_game_frame": 0.8750173683479228,
-            "weighted_mean_ms": 0.4521249781659389,
+            "calls": 14394,
+            "calls_per_game_frame": 1.0,
+            "weighted_mean_ms": 0.4528092608031124,
             "max_ms": 4.621
           },
           "ScriptRunBehaviourUpdate": {
-            "calls": 12595,
-            "calls_per_game_frame": 0.8750173683479228,
-            "weighted_mean_ms": 1.098067780865423,
+            "calls": 14394,
+            "calls_per_game_frame": 1.0,
+            "weighted_mean_ms": 1.0973844032235656,
             "max_ms": 13.099
           }
         },
         "methods": {
           "AeroJobSettings.FinishJob": {
-            "calls": 12604,
-            "rough_inclusive_ms_per_game_frame": 0.06841739613727942
+            "calls": 14403,
+            "rough_inclusive_ms_per_game_frame": 0.0775392524663054
           },
           "AeroJobSettings.SetArgs_Update": {
-            "calls": 12604,
-            "rough_inclusive_ms_per_game_frame": 0.03907878282617758
+            "calls": 14403,
+            "rough_inclusive_ms_per_game_frame": 0.04435876059469223
           },
           "BattlefieldGrid.GetUnitsInRangeNonAlloc": {
-            "calls": 28130,
-            "rough_inclusive_ms_per_game_frame": 0.01972349590106989
+            "calls": 32283,
+            "rough_inclusive_ms_per_game_frame": 0.022731693761289425
           },
           "ControlJobSettings.FinishJob": {
-            "calls": 12604,
-            "rough_inclusive_ms_per_game_frame": 0.001118521606224816
+            "calls": 14403,
+            "rough_inclusive_ms_per_game_frame": 0.0012783104071140753
           },
           "ControlJobSettings.Schedule": {
-            "calls": 12604,
-            "rough_inclusive_ms_per_game_frame": 0.01581909128803668
+            "calls": 14403,
+            "rough_inclusive_ms_per_game_frame": 0.017847714325413364
           },
           "DetectorManager.FinishJob": {
-            "calls": 12604,
-            "rough_inclusive_ms_per_game_frame": 0.05627344726969571
+            "calls": 14403,
+            "rough_inclusive_ms_per_game_frame": 0.06391552035570376
           },
           "DetectorManager.Schedule": {
-            "calls": 12604,
-            "rough_inclusive_ms_per_game_frame": 0.042684451854939555
+            "calls": 14403,
+            "rough_inclusive_ms_per_game_frame": 0.04759622064749201
           },
           "FactionHQ.Update": {
-            "calls": 25190,
-            "rough_inclusive_ms_per_game_frame": 0.01527719883284702
+            "calls": 28788,
+            "rough_inclusive_ms_per_game_frame": 0.017014033625121577
           },
           "GroundVehicle.ApplyJobFields": {
-            "calls": 5304093,
-            "rough_inclusive_ms_per_game_frame": 0.18088092260664165
+            "calls": 6086658,
+            "rough_inclusive_ms_per_game_frame": 0.20600250104210086
           },
           "GroundVehicle.ObstacleCopy": {
-            "calls": 441381,
-            "rough_inclusive_ms_per_game_frame": 0.012727525357787966
+            "calls": 506595,
+            "rough_inclusive_ms_per_game_frame": 0.014575517576768098
           },
           "GroundVehicle.UpdateJobFields_Pathfinder": {
-            "calls": 442007,
-            "rough_inclusive_ms_per_game_frame": 0.07689314992357926
+            "calls": 507221,
+            "rough_inclusive_ms_per_game_frame": 0.08845352230095874
           },
           "GroundVehicleJobSettings.FinishJob": {
-            "calls": 12604,
-            "rough_inclusive_ms_per_game_frame": 0.3877448937057107
+            "calls": 14403,
+            "rough_inclusive_ms_per_game_frame": 0.44244824232319024
           },
           "GroundVehicleJobSettings.Schedule_1_inner": {
-            "calls": 12604,
-            "rough_inclusive_ms_per_game_frame": 0.0334444907600389
+            "calls": 14403,
+            "rough_inclusive_ms_per_game_frame": 0.037390579408086703
           },
           "GroundVehicleJobSettings.Schedule_2": {
-            "calls": 12604,
-            "rough_inclusive_ms_per_game_frame": 0.19296234542170349
+            "calls": 14403,
+            "rough_inclusive_ms_per_game_frame": 0.2223912741420036
           },
           "GroundVehicleJobSettings.SetArgs_Update": {
-            "calls": 12604,
-            "rough_inclusive_ms_per_game_frame": 0.3912810893427817
+            "calls": 14403,
+            "rough_inclusive_ms_per_game_frame": 0.44673475059052387
           },
           "JobManager.FinishJobs": {
-            "calls": 12604,
-            "rough_inclusive_ms_per_game_frame": 0.5632694178129776
+            "calls": 14403,
+            "rough_inclusive_ms_per_game_frame": 0.641517298874531
           },
           "JobManager.FixedUpdateEarly": {
-            "calls": 12604,
-            "rough_inclusive_ms_per_game_frame": 0.9386688898152008
+            "calls": 14403,
+            "rough_inclusive_ms_per_game_frame": 1.069237182159233
           },
           "JobManager.PilotAeroInputs": {
-            "calls": 12604,
-            "rough_inclusive_ms_per_game_frame": 0.14144782548284007
+            "calls": 14403,
+            "rough_inclusive_ms_per_game_frame": 0.15965680144504654
           },
           "JobManager.ScheduleJobs": {
-            "calls": 12604,
-            "rough_inclusive_ms_per_game_frame": 0.7916909823537586
+            "calls": 14403,
+            "rough_inclusive_ms_per_game_frame": 0.9032791440878143
           },
           "MissionManager.Update": {
-            "calls": 12595,
-            "rough_inclusive_ms_per_game_frame": 0.15894122551062945
+            "calls": 14394,
+            "rough_inclusive_ms_per_game_frame": 0.18133249965263304
           },
           "PathfindingAgent.GetSteerpoint": {
-            "calls": 448095,
-            "rough_inclusive_ms_per_game_frame": 0.018549395581492288
+            "calls": 515108,
+            "rough_inclusive_ms_per_game_frame": 0.021370015284146174
           },
           "Pilot.Pilot_OnAeroInputsApplied": {
-            "calls": 250334,
-            "rough_inclusive_ms_per_game_frame": 0.16089342781714605
+            "calls": 286314,
+            "rough_inclusive_ms_per_game_frame": 0.18211060163957205
           },
           "Pilot.Update": {
-            "calls": 254959,
-            "rough_inclusive_ms_per_game_frame": 0.002237043212449632
+            "calls": 290939,
+            "rough_inclusive_ms_per_game_frame": 0.002681672919271919
           },
           "Radar.RadarCheck": {
-            "calls": 2306,
-            "rough_inclusive_ms_per_game_frame": 0.004140614144782549
+            "calls": 2634,
+            "rough_inclusive_ms_per_game_frame": 0.004786716687508684
           },
           "RoadPathfinder.TryPathfind": {
             "calls": 14,
             "rough_inclusive_ms_per_game_frame": 0.0004793664026677782
           },
           "SendTransformBatcher.LateUpdate": {
-            "calls": 12595,
-            "rough_inclusive_ms_per_game_frame": 0.32969987494789493
+            "calls": 14394,
+            "rough_inclusive_ms_per_game_frame": 0.37576768097818536
           },
           "TargetDetector.VisualCheck": {
-            "calls": 25162,
-            "rough_inclusive_ms_per_game_frame": 0.06810476587467
+            "calls": 28882,
+            "rough_inclusive_ms_per_game_frame": 0.0782826177573989
           },
           "ThreatTracker.CheckThreats": {
-            "calls": 25190,
-            "rough_inclusive_ms_per_game_frame": 0.013415311935528692
+            "calls": 28788,
+            "rough_inclusive_ms_per_game_frame": 0.014853411143532029
           }
         },
+        "windowBoundary": "closing frames row",
         "limits": "Instrumented observations; nested inclusive estimates overlap, fixed-stride sampling can alias workload order."
       }
     },
@@ -2485,144 +2486,145 @@
         "game_frames": 14394,
         "phases": {
           "PhysicsFixedUpdate": {
-            "calls": 12602,
-            "calls_per_game_frame": 0.8755036820897596,
-            "weighted_mean_ms": 1.8554905729249327,
-            "max_ms": 6.665
+            "calls": 14402,
+            "calls_per_game_frame": 1.0005557871335278,
+            "weighted_mean_ms": 1.845155686710179,
+            "max_ms": 6.723
           },
           "ScriptRunBehaviourFixedUpdate": {
-            "calls": 12602,
-            "calls_per_game_frame": 0.8755036820897596,
-            "weighted_mean_ms": 1.1552458657355975,
-            "max_ms": 9.853
+            "calls": 14402,
+            "calls_per_game_frame": 1.0005557871335278,
+            "weighted_mean_ms": 1.1356928482155257,
+            "max_ms": 13.047
           },
           "ScriptRunBehaviourLateUpdate": {
-            "calls": 12595,
-            "calls_per_game_frame": 0.8750173683479228,
-            "weighted_mean_ms": 0.4590886701071854,
+            "calls": 14394,
+            "calls_per_game_frame": 1.0,
+            "weighted_mean_ms": 0.4599649645685702,
             "max_ms": 2.602
           },
           "ScriptRunBehaviourUpdate": {
-            "calls": 12595,
-            "calls_per_game_frame": 0.8750173683479228,
-            "weighted_mean_ms": 1.1244684874950377,
+            "calls": 14394,
+            "calls_per_game_frame": 1.0,
+            "weighted_mean_ms": 1.1238350145894123,
             "max_ms": 13.893
           }
         },
         "methods": {
           "AeroJobSettings.FinishJob": {
-            "calls": 12602,
-            "rough_inclusive_ms_per_game_frame": 0.07719188550785049
+            "calls": 14402,
+            "rough_inclusive_ms_per_game_frame": 0.08589690148673058
           },
           "AeroJobSettings.SetArgs_Update": {
-            "calls": 12602,
-            "rough_inclusive_ms_per_game_frame": 0.04223287480894817
+            "calls": 14402,
+            "rough_inclusive_ms_per_game_frame": 0.047776851465888566
           },
           "BattlefieldGrid.GetUnitsInRangeNonAlloc": {
-            "calls": 28180,
-            "rough_inclusive_ms_per_game_frame": 0.019779074614422677
+            "calls": 32318,
+            "rough_inclusive_ms_per_game_frame": 0.022856745866333194
           },
           "ControlJobSettings.FinishJob": {
-            "calls": 12602,
-            "rough_inclusive_ms_per_game_frame": 0.0012505210504376823
+            "calls": 14402,
+            "rough_inclusive_ms_per_game_frame": 0.0014033625121578435
           },
           "ControlJobSettings.Schedule": {
-            "calls": 12602,
-            "rough_inclusive_ms_per_game_frame": 0.018813394469918022
+            "calls": 14402,
+            "rough_inclusive_ms_per_game_frame": 0.021001806308183966
           },
           "DetectorManager.FinishJob": {
-            "calls": 12602,
-            "rough_inclusive_ms_per_game_frame": 0.05844796442962345
+            "calls": 14402,
+            "rough_inclusive_ms_per_game_frame": 0.06566624982631653
           },
           "DetectorManager.Schedule": {
-            "calls": 12602,
-            "rough_inclusive_ms_per_game_frame": 0.04189245518966236
+            "calls": 14402,
+            "rough_inclusive_ms_per_game_frame": 0.04711685424482424
           },
           "FactionHQ.Update": {
-            "calls": 25190,
-            "rough_inclusive_ms_per_game_frame": 0.013040155620397387
+            "calls": 28788,
+            "rough_inclusive_ms_per_game_frame": 0.014804779769348339
           },
           "GroundVehicle.ApplyJobFields": {
-            "calls": 5305891,
-            "rough_inclusive_ms_per_game_frame": 0.1861886897318327
+            "calls": 6088891,
+            "rough_inclusive_ms_per_game_frame": 0.2158746700013895
           },
           "GroundVehicle.ObstacleCopy": {
-            "calls": 441457,
-            "rough_inclusive_ms_per_game_frame": 0.01118521606224816
+            "calls": 506707,
+            "rough_inclusive_ms_per_game_frame": 0.0129915242462137
           },
           "GroundVehicle.UpdateJobFields_Pathfinder": {
-            "calls": 442158,
-            "rough_inclusive_ms_per_game_frame": 0.07698346533277754
+            "calls": 507408,
+            "rough_inclusive_ms_per_game_frame": 0.08788384048909267
           },
           "GroundVehicleJobSettings.FinishJob": {
-            "calls": 12602,
-            "rough_inclusive_ms_per_game_frame": 0.39107961650687784
+            "calls": 14402,
+            "rough_inclusive_ms_per_game_frame": 0.4462692788661943
           },
           "GroundVehicleJobSettings.Schedule_1_inner": {
-            "calls": 12602,
-            "rough_inclusive_ms_per_game_frame": 0.02886619424760317
+            "calls": 14402,
+            "rough_inclusive_ms_per_game_frame": 0.03276365152146728
           },
           "GroundVehicleJobSettings.Schedule_2": {
-            "calls": 12602,
-            "rough_inclusive_ms_per_game_frame": 0.1858413227733778
+            "calls": 14402,
+            "rough_inclusive_ms_per_game_frame": 0.20859385855217452
           },
           "GroundVehicleJobSettings.SetArgs_Update": {
-            "calls": 12602,
-            "rough_inclusive_ms_per_game_frame": 0.39581075448103376
+            "calls": 14402,
+            "rough_inclusive_ms_per_game_frame": 0.4522856745866333
           },
           "JobManager.FinishJobs": {
-            "calls": 12602,
-            "rough_inclusive_ms_per_game_frame": 0.5773099902737251
+            "calls": 14402,
+            "rough_inclusive_ms_per_game_frame": 0.6554119772127275
           },
           "JobManager.FixedUpdateEarly": {
-            "calls": 12602,
-            "rough_inclusive_ms_per_game_frame": 0.9398290954564401
+            "calls": 14402,
+            "rough_inclusive_ms_per_game_frame": 1.0653675142420453
           },
           "JobManager.PilotAeroInputs": {
-            "calls": 12602,
-            "rough_inclusive_ms_per_game_frame": 0.14382381547867165
+            "calls": 14402,
+            "rough_inclusive_ms_per_game_frame": 0.1617479505349451
           },
           "JobManager.ScheduleJobs": {
-            "calls": 12602,
-            "rough_inclusive_ms_per_game_frame": 0.7903362512157843
+            "calls": 14402,
+            "rough_inclusive_ms_per_game_frame": 0.8972141169931916
           },
           "MissionManager.Update": {
-            "calls": 12595,
-            "rough_inclusive_ms_per_game_frame": 0.1654369876337363
+            "calls": 14394,
+            "rough_inclusive_ms_per_game_frame": 0.1898221481172711
           },
           "PathfindingAgent.GetSteerpoint": {
-            "calls": 454292,
-            "rough_inclusive_ms_per_game_frame": 0.02055022926219258
+            "calls": 521342,
+            "rough_inclusive_ms_per_game_frame": 0.02346811171321384
           },
           "Pilot.Pilot_OnAeroInputsApplied": {
-            "calls": 249802,
-            "rough_inclusive_ms_per_game_frame": 0.16988328470195915
+            "calls": 285802,
+            "rough_inclusive_ms_per_game_frame": 0.1900930943448659
           },
           "Pilot.Update": {
-            "calls": 253248,
-            "rough_inclusive_ms_per_game_frame": 0.0037932471863276365
+            "calls": 289228,
+            "rough_inclusive_ms_per_game_frame": 0.00417535084062804
           },
           "Radar.RadarCheck": {
-            "calls": 2347,
-            "rough_inclusive_ms_per_game_frame": 0.0044046130332082815
+            "calls": 2671,
+            "rough_inclusive_ms_per_game_frame": 0.004807558705015979
           },
           "RoadPathfinder.TryPathfind": {
-            "calls": 18,
-            "rough_inclusive_ms_per_game_frame": 0.0004376823676531888
+            "calls": 19,
+            "rough_inclusive_ms_per_game_frame": 0.0004446297068222871
           },
           "SendTransformBatcher.LateUpdate": {
-            "calls": 12595,
-            "rough_inclusive_ms_per_game_frame": 0.3300750312630263
+            "calls": 14394,
+            "rough_inclusive_ms_per_game_frame": 0.38016534667222457
           },
           "TargetDetector.VisualCheck": {
-            "calls": 25232,
-            "rough_inclusive_ms_per_game_frame": 0.06706266499930527
+            "calls": 28941,
+            "rough_inclusive_ms_per_game_frame": 0.07697651799360845
           },
           "ThreatTracker.CheckThreats": {
-            "calls": 25190,
-            "rough_inclusive_ms_per_game_frame": 0.011129637348895372
+            "calls": 28788,
+            "rough_inclusive_ms_per_game_frame": 0.012623315270251493
           }
         },
+        "windowBoundary": "closing frames row",
         "limits": "Instrumented observations; nested inclusive estimates overlap, fixed-stride sampling can alias workload order."
       }
     },
@@ -2636,144 +2638,145 @@
         "game_frames": 14389,
         "phases": {
           "PhysicsFixedUpdate": {
-            "calls": 12603,
-            "calls_per_game_frame": 0.8758774063520745,
-            "weighted_mean_ms": 1.891972895342379,
+            "calls": 14404,
+            "calls_per_game_frame": 1.0010424629925638,
+            "weighted_mean_ms": 1.8996534157178562,
             "max_ms": 16.719
           },
           "ScriptRunBehaviourFixedUpdate": {
-            "calls": 12603,
-            "calls_per_game_frame": 0.8758774063520745,
-            "weighted_mean_ms": 1.1192734190272158,
+            "calls": 14404,
+            "calls_per_game_frame": 1.0010424629925638,
+            "weighted_mean_ms": 1.120664627881144,
             "max_ms": 11.73
           },
           "ScriptRunBehaviourLateUpdate": {
-            "calls": 12590,
-            "calls_per_game_frame": 0.8749739384251859,
-            "weighted_mean_ms": 0.47125815726767273,
+            "calls": 14389,
+            "calls_per_game_frame": 1.0,
+            "weighted_mean_ms": 0.46985059420390574,
             "max_ms": 6.529
           },
           "ScriptRunBehaviourUpdate": {
-            "calls": 12590,
-            "calls_per_game_frame": 0.8749739384251859,
-            "weighted_mean_ms": 1.1350121286735504,
+            "calls": 14389,
+            "calls_per_game_frame": 1.0,
+            "weighted_mean_ms": 1.1365734380429495,
             "max_ms": 12.104
           }
         },
         "methods": {
           "AeroJobSettings.FinishJob": {
-            "calls": 12603,
-            "rough_inclusive_ms_per_game_frame": 0.07993606226978943
+            "calls": 14404,
+            "rough_inclusive_ms_per_game_frame": 0.09040934046841338
           },
           "AeroJobSettings.SetArgs_Update": {
-            "calls": 12603,
-            "rough_inclusive_ms_per_game_frame": 0.044388074223365076
+            "calls": 14404,
+            "rough_inclusive_ms_per_game_frame": 0.05001042462992564
           },
           "BattlefieldGrid.GetUnitsInRangeNonAlloc": {
-            "calls": 27932,
-            "rough_inclusive_ms_per_game_frame": 0.021926471610257837
+            "calls": 32063,
+            "rough_inclusive_ms_per_game_frame": 0.025053860587949128
           },
           "ControlJobSettings.FinishJob": {
-            "calls": 12603,
-            "rough_inclusive_ms_per_game_frame": 0.001271804850927792
+            "calls": 14404,
+            "rough_inclusive_ms_per_game_frame": 0.0014246994231704774
           },
           "ControlJobSettings.Schedule": {
-            "calls": 12603,
-            "rough_inclusive_ms_per_game_frame": 0.0181041073041907
+            "calls": 14404,
+            "rough_inclusive_ms_per_game_frame": 0.020411425394398497
           },
           "DetectorManager.FinishJob": {
-            "calls": 12603,
-            "rough_inclusive_ms_per_game_frame": 0.05248453679894364
+            "calls": 14404,
+            "rough_inclusive_ms_per_game_frame": 0.06076864271318368
           },
           "DetectorManager.Schedule": {
-            "calls": 12603,
-            "rough_inclusive_ms_per_game_frame": 0.041629022169712974
+            "calls": 14404,
+            "rough_inclusive_ms_per_game_frame": 0.04811314198345958
           },
           "FactionHQ.Update": {
-            "calls": 25180,
-            "rough_inclusive_ms_per_game_frame": 0.0130724859267496
+            "calls": 28778,
+            "rough_inclusive_ms_per_game_frame": 0.014524984363055111
           },
           "GroundVehicle.ApplyJobFields": {
-            "calls": 5261520,
-            "rough_inclusive_ms_per_game_frame": 0.18243102369865868
+            "calls": 6044779,
+            "rough_inclusive_ms_per_game_frame": 0.20949336298561402
           },
           "GroundVehicle.ObstacleCopy": {
-            "calls": 437787,
-            "rough_inclusive_ms_per_game_frame": 0.011411494891931336
+            "calls": 503034,
+            "rough_inclusive_ms_per_game_frame": 0.013204531239141011
           },
           "GroundVehicle.UpdateJobFields_Pathfinder": {
-            "calls": 438462,
-            "rough_inclusive_ms_per_game_frame": 0.08083258044339425
+            "calls": 503734,
+            "rough_inclusive_ms_per_game_frame": 0.09227882410174439
           },
           "GroundVehicleJobSettings.FinishJob": {
-            "calls": 12603,
-            "rough_inclusive_ms_per_game_frame": 0.38794217805267917
+            "calls": 14404,
+            "rough_inclusive_ms_per_game_frame": 0.4466189450274515
           },
           "GroundVehicleJobSettings.Schedule_1_inner": {
-            "calls": 12603,
-            "rough_inclusive_ms_per_game_frame": 0.030106331225241503
+            "calls": 14404,
+            "rough_inclusive_ms_per_game_frame": 0.03422058516922649
           },
           "GroundVehicleJobSettings.Schedule_2": {
-            "calls": 12603,
-            "rough_inclusive_ms_per_game_frame": 0.21984849537841408
+            "calls": 14404,
+            "rough_inclusive_ms_per_game_frame": 0.2496976857321565
           },
           "GroundVehicleJobSettings.SetArgs_Update": {
-            "calls": 12603,
-            "rough_inclusive_ms_per_game_frame": 0.3958231982764612
+            "calls": 14404,
+            "rough_inclusive_ms_per_game_frame": 0.4543887691986934
           },
           "JobManager.FinishJobs": {
-            "calls": 12603,
-            "rough_inclusive_ms_per_game_frame": 0.5750920842310098
+            "calls": 14404,
+            "rough_inclusive_ms_per_game_frame": 0.6599346723191326
           },
           "JobManager.FixedUpdateEarly": {
-            "calls": 12603,
-            "rough_inclusive_ms_per_game_frame": 0.989526721801376
+            "calls": 14404,
+            "rough_inclusive_ms_per_game_frame": 1.1283410938911669
           },
           "JobManager.PilotAeroInputs": {
-            "calls": 12603,
-            "rough_inclusive_ms_per_game_frame": 0.15417332684689694
+            "calls": 14404,
+            "rough_inclusive_ms_per_game_frame": 0.17458475224129544
           },
           "JobManager.ScheduleJobs": {
-            "calls": 12603,
-            "rough_inclusive_ms_per_game_frame": 0.8296684967683647
+            "calls": 14404,
+            "rough_inclusive_ms_per_game_frame": 0.9472444228229897
           },
           "MissionManager.Update": {
-            "calls": 12590,
-            "rough_inclusive_ms_per_game_frame": 0.170943081520606
+            "calls": 14389,
+            "rough_inclusive_ms_per_game_frame": 0.194044061435819
           },
           "PathfindingAgent.GetSteerpoint": {
-            "calls": 450926,
-            "rough_inclusive_ms_per_game_frame": 0.019966641184237962
+            "calls": 519120,
+            "rough_inclusive_ms_per_game_frame": 0.023219125721036904
           },
           "Pilot.Pilot_OnAeroInputsApplied": {
-            "calls": 249415,
-            "rough_inclusive_ms_per_game_frame": 0.1849746334005143
+            "calls": 285148,
+            "rough_inclusive_ms_per_game_frame": 0.19938842171102925
           },
           "Pilot.Update": {
-            "calls": 253766,
-            "rough_inclusive_ms_per_game_frame": 0.0020710264785600107
+            "calls": 292034,
+            "rough_inclusive_ms_per_game_frame": 0.002439363402599208
           },
           "Radar.RadarCheck": {
-            "calls": 2316,
-            "rough_inclusive_ms_per_game_frame": 0.005003822364306067
+            "calls": 2653,
+            "rough_inclusive_ms_per_game_frame": 0.005705747445965668
           },
           "RoadPathfinder.TryPathfind": {
-            "calls": 19,
+            "calls": 20,
             "rough_inclusive_ms_per_game_frame": 0.0011953575648064494
           },
           "SendTransformBatcher.LateUpdate": {
-            "calls": 12590,
-            "rough_inclusive_ms_per_game_frame": 0.3360622697894225
+            "calls": 14389,
+            "rough_inclusive_ms_per_game_frame": 0.3843352560984085
           },
           "TargetDetector.VisualCheck": {
-            "calls": 24929,
-            "rough_inclusive_ms_per_game_frame": 0.06691917436930989
+            "calls": 28629,
+            "rough_inclusive_ms_per_game_frame": 0.07628049204253248
           },
           "ThreatTracker.CheckThreats": {
-            "calls": 25180,
-            "rough_inclusive_ms_per_game_frame": 0.011383695878796304
+            "calls": 28778,
+            "rough_inclusive_ms_per_game_frame": 0.012599902703454029
           }
         },
+        "windowBoundary": "closing frames row",
         "limits": "Instrumented observations; nested inclusive estimates overlap, fixed-stride sampling can alias workload order."
       }
     }
@@ -2787,5 +2790,6 @@
       "runtime_native_assertions": 12809,
       "scope": "Partial real workload trace, not completed flight or cache-hit shadow parity; candidate not released"
     }
-  ]
+  ],
+  "profiling_window_correction": "Method and phase rows belong to the following closing frames row, as verified in runtime logs and source. Job profile aggregates were regenerated from their saved logs; unmatched trailing rows are discarded. Resource charts and gameplay outcomes are unchanged."
 }

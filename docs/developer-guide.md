@@ -198,6 +198,10 @@ for investigation, then remove method profiling from baseline/mod comparisons.
 Do not sum method times into a CPU chart or treat an instrumented run as a speedup.
 See the [reviewed Ryzen measurements](../evidence/ryzen-resources-20261001.json).
 
+Timing rows belong to the following closing `frames=` log row. The published
+job aggregates were corrected to use that boundary and discard unfinished
+windows. This correction does not change resource charts or gameplay outcomes.
+
 ### Ground input traversal experiment
 
 `src/NOPerf.GroundInputs` is an independent, source-only experiment, disabled by
