@@ -19,6 +19,9 @@ out differently. A later four-client flight comparison also showed no clear
 whole-server gain: 0.757 baseline versus 0.761 Spatial CPU cores, inside ordinary
 baseline variation.
 
+The [two 20-minute stock-server flight tests](docs/stock-server-resources.md)
+report observed CPU, memory and aircraft replacement, with their limits.
+
 The [server-audio experiment](docs/audio-screen.md) also showed no CPU saving.
 It is not a recommended optimization or part of the download.
 
