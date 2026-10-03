@@ -28,6 +28,40 @@ lower-bound check, which does not prove every call was observed.
 
 Detailed results: [network profiling evidence](../evidence/NetworkProfilingValidation.json).
 
+## Scalar memory counters
+
+`MemoryCounters = true` enables optional scalar observations in current source;
+it is disabled by default. Build Diagnostics against the supported game assemblies,
+set `[General] Enabled = true` and `[Profiling] MemoryCounters = true` in
+`BepInEx/config/agent.noperf.diagnostics.cfg`, and restart the server. Leave the
+other investigation modes disabled when collecting these counters.
+
+The first report waits at least 120 seconds after Diagnostics initializes.
+Reports occur at aggregation boundaries at least 30 seconds apart. The BepInEx
+log separates managed GC bytes, Unity allocated/reserved/unused-reserved bytes,
+and Mono used/heap-capacity bytes. These scopes overlap: do not sum them into
+process RSS, retained object classes or a reclaimable-memory budget. Unsupported
+calls, errors and nonpositive values report `UNKNOWN` with an availability reason.
+The GC query does not request a collection. Observation adds overhead and is not
+a memory optimization.
+
+A separate Linux Escalation run with four headless UDP clients completed an
+eight-minute flight task and produced 14 reports. All six counters returned
+positive values on the supported build. Managed GC memory ranged from 86–102 MiB;
+Unity allocated memory rose from 637 to 682 MiB. The server had Diagnostics
+installed, so this establishes counter availability, not a stock comparison,
+memory saving or production-capacity recommendation.
+
+The standalone output checks need .NET 8 and no game or vendor assemblies:
+
+```sh
+dotnet run --project tests/NOPerf.MemoryCounterTests -c Release
+```
+
+They compile the actual counter source against test doubles and check unavailable
+values, exceptions, 64-bit values, separate scopes and log context. They do not
+verify native Unity API availability or the plugin's runtime sampling schedule.
+
 ## Asset memory
 
 `AssetMemory = true` inventories loaded meshes, textures and other selected

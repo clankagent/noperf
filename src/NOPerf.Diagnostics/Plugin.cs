@@ -24,6 +24,8 @@ public sealed class DiagnosticsPlugin : BaseUnityPlugin
     private bool requestJobProfiler;
     private bool requestNetworkProfiler;
     private bool requestAssetMemory;
+    private bool requestMemoryCounters;
+    private double nextMemoryCounters;
     private float assetMemoryInterval;
     private AssetMemoryScanner? assetMemory;
     private bool requestNative;
@@ -46,6 +48,8 @@ public sealed class DiagnosticsPlugin : BaseUnityPlugin
         requestJobProfiler = Config.Bind("Profiling", "JobMethods", false, "Instrument job scheduling, input collection and result application separately. Inclusive main-thread timings include waits; sampling adds overhead. Restart to apply.").Value;
         requestNetworkProfiler = Config.Bind("Profiling", "NetworkMethods", false, "Instrument transform eligibility, serialization, batching and transport separately. Inclusive main-thread timings overlap and sampling adds overhead. Restart to apply.").Value;
         requestAssetMemory = Config.Bind("Profiling", "AssetMemory", false, "Read-only typed asset memory and mesh-reference inventory in main-thread slices. Enumeration calls cannot be sliced; reports may overlap or be unavailable. Adds overhead, not total RSS or reclaimable memory. Restart to apply.").Value;
+        requestMemoryCounters = Config.Bind("Profiling", "MemoryCounters", false, "Read scalar GC/Unity/Mono memory counters after 120 seconds, at aggregation boundaries at least 30 seconds apart. Overlapping scopes, not RSS or reclaimable memory; zero reports unavailable. Adds observation overhead; restart to apply.").Value;
+        nextMemoryCounters = Time.realtimeSinceStartupAsDouble + 120;
         assetMemoryInterval = Mathf.Clamp(Config.Bind("Profiling", "AssetMemoryIntervalSeconds", 120f, "Seconds between completed asset inventories, 30-600; first scan starts after 120 seconds. Restart to apply.").Value, 30f, 600f);
         requestNative = Config.Bind("Profiling", "NativeMarkers", false, "Record available Unity main-thread physics/job markers. Adds overhead; restart to apply.").Value;
         requestPhases = Config.Bind("Profiling", "PlayerLoopPhases", false, "Observe native physics and script phase timings through adjacent player-loop probes; restart to apply.").Value;
@@ -97,6 +101,11 @@ public sealed class DiagnosticsPlugin : BaseUnityPlugin
         }
         if (!subscribed || Time.realtimeSinceStartupAsDouble < next) return;
         next = Time.realtimeSinceStartupAsDouble + interval;
+        if (requestMemoryCounters && Time.realtimeSinceStartupAsDouble >= nextMemoryCounters)
+        {
+            MemoryCounters.Report(Logger, Time.realtimeSinceStartupAsDouble);
+            nextMemoryCounters = Time.realtimeSinceStartupAsDouble + 30;
+        }
         profiler?.Report();
         native?.Report();
         phases?.Report();
