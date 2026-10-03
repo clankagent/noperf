@@ -19,6 +19,9 @@ out differently. A later four-client flight comparison also showed no clear
 whole-server gain: 0.757 baseline versus 0.761 Spatial CPU cores, inside ordinary
 baseline variation.
 
+The [server-audio experiment](docs/audio-screen.md) also showed no CPU saving.
+It is not a recommended optimization or part of the download.
+
 **Real players joining a server with NOPerf has not been tested yet.** Players
 do not need to install anything, but treat player connections as untested.
 
